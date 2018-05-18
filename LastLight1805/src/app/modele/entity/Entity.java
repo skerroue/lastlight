@@ -6,7 +6,7 @@ import javafx.beans.property.IntegerProperty;
 
 public abstract class Entity {
 	
-	final static protected Integer[] CROSSABLE_TILES = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	final static protected Integer[] CROSSABLE_TILES = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 19};
 	protected ArrayList<Integer> CROSSABLE_TILES_LIST;
 	
 	protected IntegerProperty x;
@@ -28,6 +28,14 @@ public abstract class Entity {
 
 	public int getIndiceY() {
 		return y.get()/32;
+	}
+	
+	public void setX(int x) {
+		this.x.set(x);
+	}
+	
+	public void setY(int y) {
+		this.y.set(y);
 	}
 	
 }
