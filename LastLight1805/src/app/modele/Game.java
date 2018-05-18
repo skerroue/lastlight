@@ -36,10 +36,6 @@ public class Game {
 		this.mapChanged = new SimpleBooleanProperty(true);
 	}
 	
-	public void firstLoad() {
-		this.mapChanged.set(!this.mapChanged.get());
-	}
-	
 	private int[][] readFileMaps() { 
 		int[][] fieldsMap = new int [1][2];	// taille à modifier
 		
@@ -91,6 +87,10 @@ public class Game {
 		return this.mapChanged;
 	}
 	
+	public void mapOnChange() {
+		this.mapChanged.set(!this.mapChanged.get());
+	}
+	
 	public boolean loadField(int direction) {
 		int i = this.map.getI();
 		int j = this.map.getJ();
@@ -100,6 +100,7 @@ public class Game {
 				return false;
 			else {
 				this.map = new Field(i, j - 1, this.fieldsMap[i][j - 1], 25, 25);
+				this.mapOnChange();
 				return true;
 			}
 		case 2 : // Nord
@@ -107,6 +108,7 @@ public class Game {
 				return false;
 			else {
 				this.map = new Field(i - 1, j, this.fieldsMap[i - 1][j], 25, 25);
+				this.mapOnChange();
 				return true;
 			}
 		case 3 : // Est
@@ -114,6 +116,7 @@ public class Game {
 				return false;
 			else {
 				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25);
+				this.mapOnChange();
 				return true;
 			}
 		case 4 : // Sud
@@ -121,6 +124,7 @@ public class Game {
 				return false;
 			else {
 				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25);
+				this.mapOnChange();
 				return true;
 			}
 		default :
