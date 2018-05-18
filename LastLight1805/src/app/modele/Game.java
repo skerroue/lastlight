@@ -14,6 +14,8 @@ import app.modele.field.Field;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Game {
 
@@ -22,20 +24,24 @@ public class Game {
 								// valeurs allant de 1 à ... (0 = pas de map)
 	private Field map;
 	private Player player;
-	private ArrayList<Entity> entities;
-	private BooleanProperty mapChange;
+	private ObservableList<Entity> entities;
+	private BooleanProperty mapChanged;
 	
 	public Game() {
 		this.gameloop = new Timeline();
 		this.fieldsMap = readFileMaps();
 		this.map = new Field(0, 0, this.fieldsMap[0][0] , 25, 25);	// coordonnées à modifier
-		this.player = new Player(0, 0, 0, 0, 0);	// coordonnées à modifier
-		this.entities = new ArrayList<>();
-		this.mapChange = new SimpleBooleanProperty(true);
+		this.player = new Player(32, 512, 0, 0, 32, map);	// coordonnées à modifier
+		this.entities = FXCollections.observableArrayList();
+		this.mapChanged = new SimpleBooleanProperty(true);
+	}
+	
+	public void firstLoad() {
+		this.mapChanged.set(!this.mapChanged.get());
 	}
 	
 	private int[][] readFileMaps() { 
-		int[][] fieldsMap = new int[100][100];	// taille à modifier
+		int[][] fieldsMap = new int [1][2];	// taille à modifier
 		
 		ArrayList<String> lines = new ArrayList<>();
         
@@ -48,8 +54,8 @@ public class Game {
 			
 			try {
 												
-				for (int i = 0; i < 100; i++) {
-					for (int j = 0; j < 100; j++) {	// taille à modifier
+				for (int i = 0; i < 1; i++) {
+					for (int j = 0; j < 2; j++) {	// taille à modifier
 						fieldsMap[i][j] = s.nextInt();
 					}
 				}
@@ -77,12 +83,12 @@ public class Game {
 		return this.player;
 	}
 	
-	public ArrayList<Entity> getEntities() {
+	public ObservableList<Entity> getEntities() {
 		return this.entities;
 	}
 	
-	public BooleanProperty getMapChange() {
-		return this.mapChange;
+	public BooleanProperty getMapChanged() {
+		return this.mapChanged;
 	}
 	
 	public boolean loadField(int direction) {
