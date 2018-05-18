@@ -76,68 +76,10 @@ public class Field {
 	}
 	
 	public ImageView intToTiles(ImageView img, int fieldValue) {
-    	switch (fieldValue) {
-    	case 1 :
-    		img.setViewport(new Rectangle2D(0, 0, 32, 32));
-    		break;
-    	case 2 :
-    		img.setViewport(new Rectangle2D(32, 0, 32, 32));
-    		break;
-    	case 3 :
-    		img.setViewport(new Rectangle2D(64, 0, 32, 32));
-    		break;
-    	case 4 :
-    		img.setViewport(new Rectangle2D(96, 0, 32, 32));
-    		break;
-    	case 5 :
-    		img.setViewport(new Rectangle2D(128, 0, 32, 32));
-    		break;
-    	case 6 :
-    		img.setViewport(new Rectangle2D(160, 0, 32, 32));
-    		break;
-    	case 7 :
-    		img.setViewport(new Rectangle2D(192, 0, 32, 32));
-    		break;
-    	case 8 :
-    		img.setViewport(new Rectangle2D(224, 0, 32, 32));
-    		break;
-    	case 9 :
-    		img.setViewport(new Rectangle2D(0, 32, 32, 32));
-    		break;
-    	case 10 :
-    		img.setViewport(new Rectangle2D(32, 32, 32, 32));
-    		break;
-    	case 11 :
-    		img.setViewport(new Rectangle2D(64, 32, 32, 32));
-    		break;
-    	case 12 :
-    		img.setViewport(new Rectangle2D(96, 32, 32, 32));
-    		break;
-    	case 13 :
-    		img.setViewport(new Rectangle2D(128, 32, 32, 32));
-    		break;
-    	case 14 :
-    		img.setViewport(new Rectangle2D(160, 32, 32, 32));
-    		break;
-    	case 15 :
-    		img.setViewport(new Rectangle2D(192, 32, 32, 32));
-    		break;
-    	case 16 :
-    		img.setViewport(new Rectangle2D(224, 32, 32, 32));
-    		break;
-    	case 17 :
-    		img.setViewport(new Rectangle2D(0, 64, 32, 32));
-    		break;
-    	case 18 :
-    		img.setViewport(new Rectangle2D(32, 64, 32, 32));
-    		break;
-    	case 19 :
-    		img.setViewport(new Rectangle2D(64, 64, 32, 32));
-    		break;
-    	case 20 :
-    		img.setViewport(new Rectangle2D(96, 64, 32, 32));
-    		break;
-    	}
+    	
+		int x = 32 * ((fieldValue-1)%8);
+		int y = 32 * ((fieldValue-1)/8);
+		img.setViewport(new Rectangle2D(x, y, 32, 32));
 
     	return img;
     }
