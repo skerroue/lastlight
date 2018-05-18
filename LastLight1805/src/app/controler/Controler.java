@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import app.modele.Game;
+import app.modele.entity.Ennemy;
 import app.modele.entity.Entity;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,6 +36,7 @@ public class Controler implements Initializable {
     	game = new Game();
     	tileset = new Image("file:src/img/tileset.png");
     	playerImage = new ImageView();
+    	entitiesImages = new ArrayList<>();
     	
     }
     
@@ -47,6 +49,8 @@ public class Controler implements Initializable {
 		
 		// Generation des entites
 		entityLoading();
+		
+		game.playGameLoop();
 		
 	}
 
@@ -87,6 +91,8 @@ public class Controler implements Initializable {
     		else
     			game.getPlayer().moveRight();
     		break;
+    	case S:
+    		game.addEnnemi(new Ennemy(288, 288, 0, 0, 32));
 		default:
 			break;
     	}
