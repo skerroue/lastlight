@@ -43,15 +43,10 @@ public class Controler implements Initializable {
 		
 		// Generation de la map
 		mapGeneration();
+		game.mapOnChange();
 		
 		// Generation des entites
 		entityLoading();
-		
-		// Ecoute sur la position du personnage afin de lancer le changement de map
-		listenerX();
-		listenerY();
-
-    	game.firstLoad();
 		
 	}
 
@@ -60,16 +55,37 @@ public class Controler implements Initializable {
     	
     	switch (event.getCode()) {
     	case UP:
-    		game.getPlayer().moveUp();
+    		if (game.getPlayer().getY().getValue() == 0) {
+    			if (game.loadField(2))
+    				game.getPlayer().setY(768);
+    		}
+    		else {
+    			game.getPlayer().moveUp();
+    		}
     		break;
     	case DOWN:
-    		game.getPlayer().moveDown();
+    		if (game.getPlayer().getY().getValue() == 768) {
+    			if (game.loadField(4))
+    				game.getPlayer().setY(0);
+    		}
+    		else
+    			game.getPlayer().moveDown();
     		break;
     	case LEFT:
-    		game.getPlayer().moveLeft();
+    		if (game.getPlayer().getX().getValue() == 0) {
+    			if (game.loadField(1))
+    				game.getPlayer().setX(768);
+    		}
+    		else
+    			game.getPlayer().moveLeft();
     		break;
     	case RIGHT:
-    		game.getPlayer().moveRight();
+    		if (game.getPlayer().getX().getValue() == 768) {
+    			if (game.loadField(3))
+    				game.getPlayer().setX(0);
+    		}
+    		else
+    			game.getPlayer().moveRight();
     		break;
 		default:
 			break;
@@ -138,59 +154,4 @@ public class Controler implements Initializable {
     	
     }
 
-    void listenerX()  {
-    	
-    	game.getPlayer().getX().addListener(new ChangeListener<Number>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				
-				switch (game.getPlayer().getX().getValue()) {
-				case 0 :
-						if (game.loadField(1)) {
-							//Ajouter nouvelles coordonnées personnage;
-						}
-					break;
-				case 768 :
-					if (game.loadField(3)) {
-						
-					}
-					break;
-				default :
-					break;
-				}
-				
-			}
-    		
-    	});
-    	
-    }
-
-    void listenerY() {
-    	
-    	game.getPlayer().getY().addListener(new ChangeListener<Number>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-				
-				switch (game.getPlayer().getY().getValue()) {
-				case 0 :
-					if (game.loadField(2)) {
-						
-					}
-					break;
-				case 768 :
-					if (game.loadField(4)) {
-						
-					}
-					break;
-				default :
-					break;
-				}
-				
-			}
-    		
-    	});
-    	
-    }
 }
