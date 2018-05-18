@@ -5,9 +5,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class AnimatedEntity extends Entity {
 	
-	private IntegerProperty pv;
-	private int attaque;
-	private int velocity;
+	protected IntegerProperty pv;
+	protected int attaque;
+	protected int velocity;
 	
 	public AnimatedEntity(int x, int y, int pv, int att, int v) {
 		this.x = new SimpleIntegerProperty(x);
