@@ -34,6 +34,7 @@ public class Controler implements Initializable {
     	
     	game = new Game();
     	tileset = new Image("file:src/img/tileset.png");
+    	playerImage = new ImageView();
     	
     }
     
@@ -49,6 +50,8 @@ public class Controler implements Initializable {
 		// Ecoute sur la position du personnage afin de lancer le changement de map
 		listenerX();
 		listenerY();
+
+    	game.firstLoad();
 		
 	}
 
@@ -142,15 +145,31 @@ public class Controler implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				
+				switch (game.getPlayer().getX().getValue()) {
+				case 0 :
+					System.out.println("O");
+					
+					break;
+				case 768 :
+					if (game.loadField(3)) {
+						System.out.println("ok");
+					}
+					System.out.println("768");
+					break;
+				default :
+					break;
+				}
+				
 				if (game.getPlayer().getX().getValue() == 0)
 					if (game.loadField(1)) {
 						
 					}
-				else if (game.getPlayer().getX().getValue() == 768)
+				else if (game.getPlayer().getX().getValue() >= 767) {
+					System.out.println("1er if");
 					if (game.loadField(3)) {
 						
 					}
-				
+				}
 			}
     		
     	});
@@ -168,7 +187,7 @@ public class Controler implements Initializable {
 					if (game.loadField(2)) {
 						
 					}
-				else if (game.getPlayer().getY().getValue() == 0)
+				else if (game.getPlayer().getY().getValue() == 768)
 					if (game.loadField(4)) {
 							
 					}
