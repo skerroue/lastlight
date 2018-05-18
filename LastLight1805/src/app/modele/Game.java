@@ -22,7 +22,7 @@ public class Game {
 	private Timeline gameloop;
 	private int[][] fieldsMap;	// contient les indices des fichiers de chaque map
 								// valeurs allant de 1 à ... (0 = pas de map)
-	private Field map;
+	private static Field map;
 	private Player player;
 	private ObservableList<Entity> entities;
 	private BooleanProperty mapChanged;
@@ -31,7 +31,7 @@ public class Game {
 		this.gameloop = new Timeline();
 		this.fieldsMap = readFileMaps();
 		this.map = new Field(0, 0, this.fieldsMap[0][0] , 25, 25);	// coordonnées à modifier
-		this.player = new Player(32, 512, 0, 0, 32, map);	// coordonnées à modifier
+		this.player = new Player(32, 512, 0, 0, 32);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
 	}
@@ -71,8 +71,8 @@ public class Game {
 		return fieldsMap;
 	}
 	
-	public Field getMap() {
-		return this.map;
+	public static Field getMap() {
+		return map;
 	}
 	
 	public Player getPlayer() {
@@ -112,7 +112,7 @@ public class Game {
 				return true;
 			}
 		case 3 : // Est
-			if (j == 100 || this.fieldsMap[i][j + 1] == 0)	// valeur max du tableau à modifier
+			if (j == 1 || this.fieldsMap[i][j + 1] == 0)	// valeur max du tableau à modifier
 				return false;
 			else {
 				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25);
@@ -120,7 +120,7 @@ public class Game {
 				return true;
 			}
 		case 4 : // Sud
-			if (i == 100 || this.fieldsMap[i + 1][j] == 0)	// valeur max du tableau à modifier
+			if (i == 0 || this.fieldsMap[i + 1][j] == 0)	// valeur max du tableau à modifier
 				return false;
 			else {
 				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25);
