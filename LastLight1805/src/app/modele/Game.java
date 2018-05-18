@@ -1,6 +1,6 @@
 package app.modele;
 
-import java.io.BufferedReader;
+import java.io.BufferedReader; 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,11 +11,15 @@ import java.util.Scanner;
 import app.modele.entity.Entity;
 import app.modele.entity.Player;
 import app.modele.field.Field;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.util.Duration;
 
 public class Game {
 
@@ -131,5 +135,24 @@ public class Game {
 			return false;
 		}
 	}
+	
+    public void addKeyFrame(EventHandler<ActionEvent> e) {
+    	gameloop.pause();
+    	KeyFrame k = new KeyFrame(Duration.seconds(0.5), e);
+    	gameloop.getKeyFrames().add(k);
+    	gameloop.play();
+    }
+    
+    public void addEnnemi(Entity e) {
+    	entities.add(e);
+    	addKeyFrame(event -> {
+    		e.update();
+    	});
+    }
+    
+    public void playGameLoop() {
+    	gameloop.setCycleCount(Timeline.INDEFINITE);
+    	gameloop.play();
+    }
 	
 }
