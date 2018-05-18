@@ -147,29 +147,19 @@ public class Controler implements Initializable {
 				
 				switch (game.getPlayer().getX().getValue()) {
 				case 0 :
-					System.out.println("O");
-					
+						if (game.loadField(1)) {
+							//Ajouter nouvelles coordonnées personnage;
+						}
 					break;
 				case 768 :
 					if (game.loadField(3)) {
-						System.out.println("ok");
+						
 					}
-					System.out.println("768");
 					break;
 				default :
 					break;
 				}
 				
-				if (game.getPlayer().getX().getValue() == 0)
-					if (game.loadField(1)) {
-						
-					}
-				else if (game.getPlayer().getX().getValue() >= 767) {
-					System.out.println("1er if");
-					if (game.loadField(3)) {
-						
-					}
-				}
 			}
     		
     	});
@@ -183,14 +173,20 @@ public class Controler implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 				
-				if (game.getPlayer().getY().getValue() == 0)
+				switch (game.getPlayer().getY().getValue()) {
+				case 0 :
 					if (game.loadField(2)) {
 						
 					}
-				else if (game.getPlayer().getY().getValue() == 768)
+					break;
+				case 768 :
 					if (game.loadField(4)) {
-							
+						
 					}
+					break;
+				default :
+					break;
+				}
 				
 			}
     		
