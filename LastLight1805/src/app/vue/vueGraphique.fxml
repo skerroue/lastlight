@@ -2,10 +2,9 @@
 
 <?import javafx.scene.layout.Pane?>
 
-
 <Pane maxHeight="800.0" maxWidth="800.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controler.Controler">
    <children>
       <Pane fx:id="TileContainer" maxHeight="800.0" maxWidth="800.0" prefHeight="800.0" prefWidth="800.0" />
-      <Pane fx:id="EntityContainer" maxHeight="800.0" maxWidth="800.0" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="800.0" prefWidth="800.0" />
+      <Pane fx:id="EntityContainer" focusTraversable="true" maxHeight="800.0" maxWidth="800.0" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="800.0" prefWidth="800.0" />
    </children>
 </Pane>
