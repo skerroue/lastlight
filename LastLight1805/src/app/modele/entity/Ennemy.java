@@ -1,9 +1,11 @@
 package app.modele.entity;
 
+import app.modele.field.Field;
+
 public class Ennemy extends AnimatedEntity {
 
-	public Ennemy(int x, int y, int pv, int att, int v) {
-		super(x, y, pv, att, v);
+	public Ennemy(int x, int y, int pv, int att, int v, Field map) {
+		super(x, y, pv, att, v, map);
 	}
 	
 	public void update() {
