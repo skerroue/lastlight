@@ -98,42 +98,44 @@ public class Game {
 	public boolean loadField(int direction) {
 		int i = this.map.getI();
 		int j = this.map.getJ();
+		
+		boolean result = false;
+		
 		switch (direction) {
 		case 1 : // Ouest
-			if (j == 0 || this.fieldsMap[i][j - 1] == 0)
-				return false;
-			else {
+			if (j > 0 && this.fieldsMap[i][j - 1] != 0) {
 				this.map = new Field(i, j - 1, this.fieldsMap[i][j - 1], 25, 25);
 				this.mapOnChange();
-				return true;
+				result = true;
 			}
+			break;
 		case 2 : // Nord
-			if (i == 0 || this.fieldsMap[i - 1][j] == 0)
-				return false;
-			else {
+			if (i > 0 && this.fieldsMap[i - 1][j] != 0) {
 				this.map = new Field(i - 1, j, this.fieldsMap[i - 1][j], 25, 25);
 				this.mapOnChange();
-				return true;
+				result = true;
 			}
+			break;
 		case 3 : // Est
-			if (j == 1 || this.fieldsMap[i][j + 1] == 0)	// valeur max du tableau à modifier
-				return false;
-			else {
+			if (j < 1 && this.fieldsMap[i][j + 1] != 0) {
 				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25);
 				this.mapOnChange();
-				return true;
+				result = true;
 			}
+			break;
 		case 4 : // Sud
-			if (i == 0 || this.fieldsMap[i + 1][j] == 0)	// valeur max du tableau à modifier
-				return false;
-			else {
+			if (i < 0 && this.fieldsMap[i + 1][j] != 0) {
 				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25);
 				this.mapOnChange();
-				return true;
+				result = true;
 			}
-		default :
-			return false;
+			break;
 		}
+		
+		if (result) {
+		}
+		
+		return result;
 	}
 	
     public void addKeyFrame(EventHandler<ActionEvent> e) {
