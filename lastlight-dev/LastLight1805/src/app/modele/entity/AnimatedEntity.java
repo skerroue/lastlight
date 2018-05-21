@@ -14,6 +14,10 @@ public abstract class AnimatedEntity extends Entity {
 	private int attaque;
 	private int velocity;
 	
+	// TODO : Ajouter des booleens "possible d'avancer dans une direction donnee", les activer grace a une methode "colliding with"
+	// avec en parametre une autre entity, cette methode verifierait si l'entity est sur une case adjacente et si oui, mettrait
+	// a false le booleen de cette direction et empecherait l'execution de la methode "move"
+	
 	public AnimatedEntity(int x, int y, int pv, int att, int v) {
 		this.x = new SimpleIntegerProperty(x);
 		this.y = new SimpleIntegerProperty(y);
