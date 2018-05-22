@@ -20,9 +20,6 @@ public abstract class AnimatedEntity extends Entity {
 		this.pv = new SimpleIntegerProperty(pv);
 		this.attaque = att;
 		this.velocity = v;
-		
-		CROSSABLE_TILES_LIST = new ArrayList<Integer>();
-		Collections.addAll(CROSSABLE_TILES_LIST, CROSSABLE_TILES);
 	}
 	
 	@Override
@@ -35,7 +32,7 @@ public abstract class AnimatedEntity extends Entity {
 		if (x.get() % 32 != 0)
 			x.set(x.get() - velocity);
 		else {
-			if (x.getValue() > 31 && CROSSABLE_TILES_LIST.contains(Game.getMap().getField()[this.getIndiceY()][this.getIndiceX()-1])) // y correspond au i, x au j
+			if (x.getValue() > 31 && crossableTiles.contains(Game.getMap().getField()[this.getIndiceY()][this.getIndiceX()-1])) // y correspond au i, x au j
 				x.set(x.get() - velocity);
 		}
 	}
@@ -44,7 +41,7 @@ public abstract class AnimatedEntity extends Entity {
 		if (x.get() % 32 != 0)
 			x.set(x.get() + velocity);
 		else
-			if (x.getValue() < 768 && CROSSABLE_TILES_LIST.contains(Game.getMap().getField()[this.getIndiceY()][this.getIndiceX()+1]))
+			if (x.getValue() < 768 && crossableTiles.contains(Game.getMap().getField()[this.getIndiceY()][this.getIndiceX()+1]))
 				x.set(x.get() + velocity);
 	}
 
@@ -52,7 +49,7 @@ public abstract class AnimatedEntity extends Entity {
 		if (y.get() % 32 != 0)
 			y.set(y.get() + velocity);
 		else
-			if (y.getValue() < 768 && CROSSABLE_TILES_LIST.contains(Game.getMap().getField()[this.getIndiceY()+1][this.getIndiceX()]))
+			if (y.getValue() < 768 && crossableTiles.contains(Game.getMap().getField()[this.getIndiceY()+1][this.getIndiceX()]))
 				y.set(y.get() + velocity);
 	}
 	
@@ -60,7 +57,7 @@ public abstract class AnimatedEntity extends Entity {
 		if (y.get() % 32 != 0)
 			y.set(y.get() - velocity);
 		else
-			if (y.getValue() > 31 && CROSSABLE_TILES_LIST.contains(Game.getMap().getField()[this.getIndiceY()-1][this.getIndiceX()]))
+			if (y.getValue() > 31 && crossableTiles.contains(Game.getMap().getField()[this.getIndiceY()-1][this.getIndiceX()]))
 				y.set(y.get() - velocity);
 	}
 

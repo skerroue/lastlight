@@ -1,16 +1,55 @@
 package app.modele.entity;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javafx.beans.property.IntegerProperty;
 
 public abstract class Entity {
 	
-	final static protected Integer[] CROSSABLE_TILES = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 19};
-	protected ArrayList<Integer> CROSSABLE_TILES_LIST;
+	static protected ArrayList<Integer> crossableTiles;
 	
 	protected IntegerProperty x;
 	protected IntegerProperty y;
+	
+	public Entity() {
+		this.crossableTiles = readFileCrossableTiles();
+	}
+	
+	private ArrayList<Integer> readFileCrossableTiles() {
+		ArrayList<Integer> crossableTiles = new ArrayList<>();
+		
+		try {
+        	
+			File f = new File("src/map/crossableTiles.txt");	// nom du fichier à modifier
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			Scanner s = new Scanner(br).useDelimiter(",");
+			
+			try {
+				
+				while (s.hasNextInt())
+					crossableTiles.add(s.nextInt());
+				
+				s.close();
+				br.close();
+				fr.close();
+				
+			} catch (IOException e) {
+				System.out.println("Erreur lecture");
+			}
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Fichier introuvable");
+		}System.out.println(crossableTiles.size());
+				
+		return crossableTiles;
+	}
 	
 	public abstract void update();
 	
