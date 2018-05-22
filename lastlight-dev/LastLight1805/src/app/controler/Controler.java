@@ -34,7 +34,7 @@ public class Controler implements Initializable {
     public Controler() {	
     	
     	game = new Game();
-    	tileset = new Image("file:src/img/tileset.png");
+    	tileset = new Image("file:src/img/tilesetLastLight.png");
     	playerImage = new ImageView();
     	entitiesImages = new ArrayList<>();
     	
