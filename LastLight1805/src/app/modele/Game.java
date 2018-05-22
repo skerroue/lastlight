@@ -35,25 +35,23 @@ public class Game {
 		this.gameloop = new Timeline();
 		this.fieldsMap = readFileMaps();
 		this.map = new Field(0, 0, this.fieldsMap[0][0] , 25, 25);	// coordonnées à modifier
-		this.player = new Player(32, 512, 0, 0, 32);	// coordonnées à modifier
+		this.player = new Player(416, 416, 0, 0, 32);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
 	}
 	
 	private int[][] readFileMaps() { 
 		int[][] fieldsMap = new int [1][2];	// taille à modifier
-		
-		ArrayList<String> lines = new ArrayList<>();
-        
+		        
         try {
         	
-			File f = new File("src/map/Maps.txt");	// nom du fichier à modifier
+			File f = new File("src/map/maps.txt");	// nom du fichier à modifier
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
 			Scanner s = new Scanner(br).useDelimiter(",");
 			
 			try {
-												
+				
 				for (int i = 0; i < 1; i++) {
 					for (int j = 0; j < 2; j++) {	// taille à modifier
 						fieldsMap[i][j] = s.nextInt();
@@ -98,44 +96,42 @@ public class Game {
 	public boolean loadField(int direction) {
 		int i = this.map.getI();
 		int j = this.map.getJ();
-		
-		boolean result = false;
-		
 		switch (direction) {
 		case 1 : // Ouest
-			if (j > 0 && this.fieldsMap[i][j - 1] != 0) {
+			if (j == 0 || this.fieldsMap[i][j - 1] == 0)
+				return false;
+			else {
 				this.map = new Field(i, j - 1, this.fieldsMap[i][j - 1], 25, 25);
 				this.mapOnChange();
-				result = true;
+				return true;
 			}
-			break;
 		case 2 : // Nord
-			if (i > 0 && this.fieldsMap[i - 1][j] != 0) {
+			if (i == 0 || this.fieldsMap[i - 1][j] == 0)
+				return false;
+			else {
 				this.map = new Field(i - 1, j, this.fieldsMap[i - 1][j], 25, 25);
 				this.mapOnChange();
-				result = true;
+				return true;
 			}
-			break;
 		case 3 : // Est
-			if (j < 1 && this.fieldsMap[i][j + 1] != 0) {
+			if (j == 1 || this.fieldsMap[i][j + 1] == 0)	// valeur max du tableau à modifier
+				return false;
+			else {
 				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25);
 				this.mapOnChange();
-				result = true;
+				return true;
 			}
-			break;
 		case 4 : // Sud
-			if (i < 0 && this.fieldsMap[i + 1][j] != 0) {
+			if (i == 0 || this.fieldsMap[i + 1][j] == 0)	// valeur max du tableau à modifier
+				return false;
+			else {
 				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25);
 				this.mapOnChange();
-				result = true;
+				return true;
 			}
-			break;
+		default :
+			return false;
 		}
-		
-		if (result) {
-		}
-		
-		return result;
 	}
 	
     public void addKeyFrame(EventHandler<ActionEvent> e) {
