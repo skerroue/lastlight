@@ -29,7 +29,7 @@ public class Field {
         
         try {
         	
-			File f = new File("src/map/Map" + fileIndex + ".json");
+			File f = new File("src/map/map" + fileIndex + ".json");
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
 			
