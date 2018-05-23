@@ -29,7 +29,7 @@ public class Field {
         
         try {
         	
-			File f = new File("src/map/map" + fileIndex + "test.json");
+			File f = new File("src/map/map" + fileIndex + ".json");
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
 			
@@ -57,7 +57,7 @@ public class Field {
 			}
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("map" + fileIndex + " : Fichier introuvable");
+			System.out.println("map" + fileIndex + "Fichier introuvable");
 		}
 		
 		return field;
@@ -65,6 +65,10 @@ public class Field {
 	
 	public int[][] getField() {
 		return this.field;
+	}
+	
+	public int getNextTile(int i, int j) {
+		return this.field[i][j];
 	}
 	
 	public int getI() {
