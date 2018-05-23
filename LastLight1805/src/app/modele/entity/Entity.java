@@ -26,7 +26,7 @@ public abstract class Entity {
 		
 		try {
         	
-			File f = new File("src/map/crossableTiles.txt");	// nom du fichier à modifier
+			File f = new File("src/map/crossableTilesTest.txt");	// nom du fichier à modifier
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
 			Scanner s = new Scanner(br).useDelimiter(",");
@@ -41,12 +41,12 @@ public abstract class Entity {
 				fr.close();
 				
 			} catch (IOException e) {
-				System.out.println("Erreur lecture");
+				System.out.println("crossableTiles : Erreur lecture");
 			}
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("Fichier introuvable");
-		}System.out.println(crossableTiles.size());
+			System.out.println("crossableTiles : Fichier introuvable");
+		}
 				
 		return crossableTiles;
 	}

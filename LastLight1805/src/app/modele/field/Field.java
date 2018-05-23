@@ -29,7 +29,7 @@ public class Field {
         
         try {
         	
-			File f = new File("src/map/map" + fileIndex + ".json");
+			File f = new File("src/map/map" + fileIndex + "test.json");
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
 			
@@ -53,11 +53,11 @@ public class Field {
 				s.close();
 				
 			} catch (IOException e) {
-				System.out.println("Erreur lecture");
+				System.out.println("map" + fileIndex + " : Erreur lecture");
 			}
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("Fichier introuvable");
+			System.out.println("map" + fileIndex + " : Fichier introuvable");
 		}
 		
 		return field;

@@ -63,11 +63,11 @@ public class Game {
 				fr.close();
 				
 			} catch (IOException e) {
-				System.out.println("Erreur lecture");
+				System.out.println("maps : Erreur lecture");
 			}
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("Fichier introuvable");
+			System.out.println("maps : Fichier introuvable");
 		}
 		
 		return fieldsMap;
@@ -119,6 +119,8 @@ public class Game {
 			else {
 				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25);
 				this.mapOnChange();
+//				for (Entity e : this.entities)
+//					this.entities.remove(e);
 				return true;
 			}
 		case 4 : // Sud

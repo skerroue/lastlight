@@ -149,10 +149,16 @@ public class Controler implements Initializable {
 			@Override
 			public void onChanged(Change<? extends Entity> c) {
 				
-				entitiesImages.add(new ImageView(new Image("file:src/img/p.png")));
-				entitiesImages.get(entitiesImages.size()-1).translateXProperty().bind(game.getEntities().get(game.getEntities().size()-1).getX());
-				entitiesImages.get(entitiesImages.size()-1).translateYProperty().bind(game.getEntities().get(game.getEntities().size()-1).getY());
-				EntityContainer.getChildren().add(entitiesImages.get(entitiesImages.size()-1));
+				while (c.next()) {
+					if (c.wasAdded()) {
+						entitiesImages.add(new ImageView(new Image("file:src/img/p.png")));
+						entitiesImages.get(entitiesImages.size()-1).translateXProperty().bind(game.getEntities().get(game.getEntities().size()-1).getX());
+						entitiesImages.get(entitiesImages.size()-1).translateYProperty().bind(game.getEntities().get(game.getEntities().size()-1).getY());
+						EntityContainer.getChildren().add(entitiesImages.get(entitiesImages.size()-1));
+					} else if (c.wasRemoved()) {
+						entitiesImages.remove(0);
+					}
+				}
 				
 			}
     		
