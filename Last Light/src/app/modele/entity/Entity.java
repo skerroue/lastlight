@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import app.modele.Game;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
 public abstract class Entity {
@@ -18,10 +19,18 @@ public abstract class Entity {
 	
 	protected IntegerProperty x;
 	protected IntegerProperty y;
+	private int leftTopLimit;
+	private int rightBottomLimit;
+	private IntegerProperty orientation;
+	private int frame;
 	protected int velocity;
 	
 	public Entity() {
 		this.crossableTiles = readFileCrossableTiles();
+		this.leftTopLimit = 31;
+		this.rightBottomLimit = 768;
+		this.orientation = new SimpleIntegerProperty(0);
+		this.frame = 0;
 	}
 	
 	private ArrayList<Integer> readFileCrossableTiles() {
@@ -80,36 +89,59 @@ public abstract class Entity {
 		this.y.set(y);
 	}
 	
+	public IntegerProperty getOrientation() {
+		return orientation;
+	}
+	
+	public int getFrame() {
+		return frame;
+	}
+	
+	public void incrementeFrame() {
+		if (frame > 18)
+			frame = 0;
+		else 
+			frame++;
+	}
+	
 	public void moveLeft(ObservableList<Entity> entities) {
 		if (x.get() % 32 != 0) // ajouter canMove
 			x.set(x.get() - velocity);
 		else 
-			if (x.getValue() > 31 && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) && canMove(entities, 32, 0)) // y correspond au i, x au j
+			if (x.getValue() > leftTopLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) && canMove(entities, 32, 0)) // y correspond au i, x au j
 				x.set(x.get() - velocity);
+		
+		this.orientation.set(2);
 	}
 	
 	public void moveRight(ObservableList<Entity> entities) {
 		if (x.get() % 32 != 0) // ajouter canMove
 			x.set(x.get() + velocity);
 		else
-			if (x.getValue() < 768 && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) && canMove(entities, -32, 0))
+			if (x.getValue() < rightBottomLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) && canMove(entities, -32, 0))
 				x.set(x.get() + velocity);
+		
+		this.orientation.set(1);
 	}
 
 	public void moveDown(ObservableList<Entity> entities) {
 		if (y.get() % 32 != 0) // ajouter canMove
 			y.set(y.get() + velocity);
 		else
-			if (y.getValue() < 768 && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && canMove(entities, 0, -32))
+			if (y.getValue() < rightBottomLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && canMove(entities, 0, -32))
 				y.set(y.get() + velocity);
+		
+		this.orientation.set(0);
 	}
 	
 	public void moveUp(ObservableList<Entity> entities) {
 		if (y.get() % 32 != 0) // ajouter canMove
 			y.set(y.get() - velocity);
 		else
-			if (y.getValue() > 31 && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && canMove(entities, 0, 32))
+			if (y.getValue() > leftTopLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && canMove(entities, 0, 32))
 				y.set(y.get() - velocity);
+		
+		this.orientation.set(3);
 	}
 	
 	public boolean canMove(ObservableList<Entity> entities, int x, int y) {

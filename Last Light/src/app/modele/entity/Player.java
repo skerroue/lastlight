@@ -12,6 +12,7 @@ public class Player extends AnimatedEntity {
 	private IntegerProperty money;
 	private BooleanProperty boots;
 	private BooleanProperty necklace;
+	private boolean hpAdded;
 	
 	public Player(int x, int y, int pv, int att, int v, int m) {
 		super(x, y, pv, att, v);
