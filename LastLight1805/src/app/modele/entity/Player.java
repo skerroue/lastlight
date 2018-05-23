@@ -1,6 +1,7 @@
 package app.modele.entity;
 
 import app.modele.field.Field;
+import javafx.collections.ObservableList;
 
 public class Player extends AnimatedEntity {
 
@@ -8,7 +9,7 @@ public class Player extends AnimatedEntity {
 		super(x, y, pv, att, v);
 	}
 	
-	public void update() {
+	public void update(ObservableList<Entity> entities) {
 		
 	}
 	
