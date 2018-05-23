@@ -38,6 +38,7 @@ public class Game {
 		this.player = new Player(416, 416, 0, 0, 32);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
+		this.entities.add(player);
 	}
 	
 	private int[][] readFileMaps() { 
@@ -146,7 +147,7 @@ public class Game {
     public void addEnnemi(Entity e) {
     	entities.add(e);
     	addKeyFrame(event -> {
-    		e.update();
+    		e.update(entities);
     	});
     }
     
