@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class Controler implements Initializable {
 
@@ -190,24 +191,36 @@ public class Controler implements Initializable {
     public void interfaceGeneration() {
     	/*
     	 * Indice 0 : Potions
-    	 * Indice 1 : Argent
+    	 * Indice 1 : Image potions
+    	 * Indice 2 : Argent
+    	 * Indice 3 : Image argent
     	 */
     	
     	// Premier démarrage
     	// Potions
-    	interfaceContainer.getChildren().add(new Label("Potions : " + game.getPlayer().getPotion().getValue().toString()));
-    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateX(20);
-    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateY(730);
+    	interfaceContainer.getChildren().add(new Label(game.getPlayer().getPotion().getValue().toString()));
+    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateX(50);
+    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateY(55);
     	((Labeled) interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1)).setTextFill(Color.web("#ffffff"));
+    	((Labeled) interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1)).setFont(Font.font ("Roboto", 18));
+    	interfaceContainer.getChildren().add(new ImageView(new Image("file:src/img/soda.png")));
+    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateX(20);
+    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateY(50);
+    	
     	// Argent
-    	interfaceContainer.getChildren().add(new Label("Argent : " + game.getPlayer().getMoney().getValue().toString()));
-    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateX(20);
-    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateY(750);
+    	interfaceContainer.getChildren().add(new Label(game.getPlayer().getMoney().getValue().toString()));
+    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateX(110);
+    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateY(55);
     	((Labeled) interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1)).setTextFill(Color.web("#ffffff"));
+    	((Labeled) interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1)).setFont(Font.font ("Roboto", 18));
+    	interfaceContainer.getChildren().add(new ImageView(new Image("file:src/img/money.png")));
+    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateX(80);
+    	interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateY(50);
+    	
     	// Coeurs
     	for (int i = 1; i < game.getPlayer().getPv().getValue() +1; i++) {
     		interfaceContainer.getChildren().add(new ImageView(heart));
-    		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateX(i*30);
+    		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateX(i*17);
     		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateY(15);
 		}
     	
@@ -216,12 +229,12 @@ public class Controler implements Initializable {
 	    	
 	 	@Override
 	    	public void changed(ObservableValue<? extends Object> observableValue, Object oldValue, Object newValue) {
-	    		for (int i = interfaceContainer.getChildren().size()-1; i > game.getPlayer().getPv().getValue()+1; i--)
+	    		for (int i = interfaceContainer.getChildren().size()-1; i > game.getPlayer().getPv().getValue()+3; i--)
 	    			interfaceContainer.getChildren().remove(interfaceContainer.getChildren().size()-1);
 	    		
 	    		for (int i =1; i < game.getPlayer().getPv().getValue()+1; i++) {
 	        		interfaceContainer.getChildren().add(new ImageView(heart));
-	        		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateX(i*30);
+	        		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateX(i*17);
 	        		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size()-1).setTranslateY(15);
 	    		}
 	    		
@@ -232,7 +245,7 @@ public class Controler implements Initializable {
 			    	
 			    	@Override
 			    	public void changed(ObservableValue<? extends Object> observableValue, Object oldValue, Object newValue) {
-			    			((Labeled) interfaceContainer.getChildren().get(0)).setText("Potions : " + game.getPlayer().getPotion().getValue());
+			    			((Labeled) interfaceContainer.getChildren().get(0)).setText(game.getPlayer().getPotion().getValue().toString());
 			    	}
 		});
 		
@@ -240,7 +253,7 @@ public class Controler implements Initializable {
 	    	
 	    	@Override
 	    	public void changed(ObservableValue<? extends Object> observableValue, Object oldValue, Object newValue) {
-	    			((Labeled) interfaceContainer.getChildren().get(1)).setText("Argent : " + game.getPlayer().getMoney().getValue());
+	    			((Labeled) interfaceContainer.getChildren().get(2)).setText(game.getPlayer().getMoney().getValue().toString());
 	    	}
 	});
 	    
