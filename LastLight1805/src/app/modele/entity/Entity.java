@@ -29,7 +29,7 @@ public abstract class Entity {
 		
 		try {
         	
-			File f = new File("src/map/crossableTiles.txt");	// nom du fichier à modifier
+			File f = new File("src/map/crossableTilesTest.txt");	// nom du fichier à modifier
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
 			Scanner s = new Scanner(br).useDelimiter(",");
