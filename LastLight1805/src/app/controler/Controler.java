@@ -24,6 +24,9 @@ public class Controler implements Initializable {
 
     @FXML
     private Pane entityContainer;
+	
+    @FXML
+    private Pane InterfaceContainer;
     
     private ArrayList<ImageView> entitiesImages;
     
@@ -33,6 +36,7 @@ public class Controler implements Initializable {
     public Controler() {	
     	
     	this.game = new Game();
+	this.heart = new Image("file:src/img/h.png");
     	this.tileset = new Image("file:src/img/tileset.png");
     	this.entitiesImages = new ArrayList<>();
     	
@@ -169,4 +173,64 @@ public class Controler implements Initializable {
 		this.entityContainer.getChildren().add(this.entitiesImages.get(this.entitiesImages.size()-1));
     }
 
+	    // TODO
+    // Gère toute l'interface
+    public void interfaceGeneration() {
+    	/*
+    	 * Indice 0 : Potions
+    	 * Indice 1 : Argent
+    	 */
+    	
+    	// Premier démarrage
+    	// Potions
+    	InterfaceContainer.getChildren().add(new Label("Potions : " + game.getPlayer().getPotion().getValue().toString()));
+    	InterfaceContainer.getChildren().get(InterfaceContainer.getChildren().size()-1).setTranslateX(20);
+    	InterfaceContainer.getChildren().get(InterfaceContainer.getChildren().size()-1).setTranslateY(730);
+    	((Labeled) InterfaceContainer.getChildren().get(InterfaceContainer.getChildren().size()-1)).setTextFill(Color.web("#ffffff"));
+    	// Argent
+    	InterfaceContainer.getChildren().add(new Label("Argent : " + game.getPlayer().getMoney().getValue().toString()));
+    	InterfaceContainer.getChildren().get(InterfaceContainer.getChildren().size()-1).setTranslateX(20);
+    	InterfaceContainer.getChildren().get(InterfaceContainer.getChildren().size()-1).setTranslateY(750);
+    	((Labeled) InterfaceContainer.getChildren().get(InterfaceContainer.getChildren().size()-1)).setTextFill(Color.web("#ffffff"));
+    	// Coeurs
+    	for (int i = 1; i < game.getPlayer().getPv().getValue() +1; i++) {
+    		InterfaceContainer.getChildren().add(new ImageView(heart));
+    		InterfaceContainer.getChildren().get(InterfaceContainer.getChildren().size()-1).setTranslateX(i*30);
+    		InterfaceContainer.getChildren().get(InterfaceContainer.getChildren().size()-1).setTranslateY(15);
+		}
+    	
+    	
+	 game.getPlayer().getPv().addListener(new ChangeListener<Object>() {
+	    	
+	 	@Override
+	    	public void changed(ObservableValue<? extends Object> observableValue, Object oldValue, Object newValue) {
+	    		for (int i = InterfaceContainer.getChildren().size()-1; i > game.getPlayer().getPv().getValue()+1; i--)
+	    			InterfaceContainer.getChildren().remove(InterfaceContainer.getChildren().size()-1);
+	    		
+	    		for (int i =1; i < game.getPlayer().getPv().getValue()+1; i++) {
+	        		InterfaceContainer.getChildren().add(new ImageView(heart));
+	        		InterfaceContainer.getChildren().get(InterfaceContainer.getChildren().size()-1).setTranslateX(i*30);
+	        		InterfaceContainer.getChildren().get(InterfaceContainer.getChildren().size()-1).setTranslateY(15);
+	    		}
+	    		
+	    	}
+	    });
+	    
+		game.getPlayer().getPotion().addListener(new ChangeListener<Object>() {
+			    	
+			    	@Override
+			    	public void changed(ObservableValue<? extends Object> observableValue, Object oldValue, Object newValue) {
+			    			((Labeled) InterfaceContainer.getChildren().get(0)).setText("Potions : " + game.getPlayer().getPotion().getValue());
+			    	}
+		});
+		
+		game.getPlayer().getMoney().addListener(new ChangeListener<Object>() {
+	    	
+	    	@Override
+	    	public void changed(ObservableValue<? extends Object> observableValue, Object oldValue, Object newValue) {
+	    			((Labeled) InterfaceContainer.getChildren().get(1)).setText("Argent : " + game.getPlayer().getMoney().getValue());
+	    	}
+	});
+	    
+    }
 }
