@@ -63,9 +63,8 @@ public class Controler implements Initializable {
     			if (game.loadField(2))
     				game.getPlayer().setY(768);
     		}
-    		else {
-    			game.getPlayer().moveUp();
-    		}
+    		else 
+    			game.getPlayer().moveUp(game.getEntities());
     		break;
     	case DOWN:
     		if (game.getPlayer().getY().getValue() == 768) {
@@ -73,7 +72,7 @@ public class Controler implements Initializable {
     				game.getPlayer().setY(0);
     		}
     		else
-    			game.getPlayer().moveDown();
+    			game.getPlayer().moveDown(game.getEntities());
     		break;
     	case LEFT:
     		if (game.getPlayer().getX().getValue() == 0) {
@@ -81,7 +80,7 @@ public class Controler implements Initializable {
     				game.getPlayer().setX(768);
     		}
     		else
-    			game.getPlayer().moveLeft();
+    			game.getPlayer().moveLeft(game.getEntities());
     		break;
     	case RIGHT:
     		if (game.getPlayer().getX().getValue() == 768) {
@@ -89,10 +88,11 @@ public class Controler implements Initializable {
     				game.getPlayer().setX(0);
     		}
     		else
-    			game.getPlayer().moveRight();
+    			game.getPlayer().moveRight(game.getEntities());
     		break;
     	case S:
-    		game.addEnnemi(new Ennemy(288, 288, 0, 0, 32));
+    		game.addEnnemi(new Ennemy(384, 384, 0, 0, 32));
+    		break;
 		default:
 			break;
     	}
