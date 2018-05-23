@@ -20,12 +20,11 @@ import javafx.scene.layout.Pane;
 public class Controler implements Initializable {
 
     @FXML
-    private Pane TileContainer;
+    private Pane tileContainer;
 
     @FXML
-    private Pane EntityContainer;
+    private Pane entityContainer;
     
-    private ImageView playerImage;
     private ArrayList<ImageView> entitiesImages;
     
     private Game game;
@@ -33,10 +32,9 @@ public class Controler implements Initializable {
     
     public Controler() {	
     	
-    	game = new Game();
-    	tileset = new Image("file:src/img/tileset.png");
-    	playerImage = new ImageView();
-    	entitiesImages = new ArrayList<>();
+    	this.game = new Game();
+    	this.tileset = new Image("file:src/img/tileset.png");
+    	this.entitiesImages = new ArrayList<>();
     	
     }
     
@@ -45,53 +43,55 @@ public class Controler implements Initializable {
 		
 		// Generation de la map
 		mapGeneration();
-		game.mapOnChange();
+		this.game.mapOnChange();
 		
 		// Generation des entites
 		entityLoading();
 		
-		game.playGameLoop();
+		this.game.playGameLoop();
 		
 	}
 
     @FXML
     void onKeyPressed(KeyEvent event) {
     	
+    	int rightLimit = 0, leftLimit = 768;
+    	
     	switch (event.getCode()) {
     	case UP:
-    		if (game.getPlayer().getY().getValue() == 0) {
-    			if (game.loadField(2))
-    				game.getPlayer().setY(768);
+    		if (this.game.getPlayer().getY().getValue() == rightLimit) {
+    			if (this.game.loadField(2))
+    				this.game.getPlayer().setY(leftLimit);
     		}
     		else 
-    			game.getPlayer().moveUp(game.getEntities());
+    			this.game.getPlayer().moveUp(this.game.getEntities());
     		break;
     	case DOWN:
-    		if (game.getPlayer().getY().getValue() == 768) {
-    			if (game.loadField(4))
-    				game.getPlayer().setY(0);
+    		if (this.game.getPlayer().getY().getValue() == leftLimit) {
+    			if (this.game.loadField(4))
+    				this.game.getPlayer().setY(rightLimit);
     		}
     		else
-    			game.getPlayer().moveDown(game.getEntities());
+    			this.game.getPlayer().moveDown(this.game.getEntities());
     		break;
     	case LEFT:
-    		if (game.getPlayer().getX().getValue() == 0) {
-    			if (game.loadField(1))
-    				game.getPlayer().setX(768);
+    		if (this.game.getPlayer().getX().getValue() == rightLimit) {
+    			if (this.game.loadField(1))
+    				this.game.getPlayer().setX(leftLimit);
     		}
     		else
-    			game.getPlayer().moveLeft(game.getEntities());
+    			this.game.getPlayer().moveLeft(this.game.getEntities());
     		break;
     	case RIGHT:
-    		if (game.getPlayer().getX().getValue() == 768) {
-    			if (game.loadField(3))
-    				game.getPlayer().setX(0);
+    		if (this.game.getPlayer().getX().getValue() == leftLimit) {
+    			if (this.game.loadField(3))
+    				this.game.getPlayer().setX(rightLimit);
     		}
     		else
-    			game.getPlayer().moveRight(game.getEntities());
+    			this.game.getPlayer().moveRight(this.game.getEntities());
     		break;
     	case S:
-    		game.addEnnemi(new Ennemy(384, 384, 0, 0, 32));
+    		this.game.addEnnemi(new Ennemy(384, 384, 0, 0, 32));
     		break;
 		default:
 			break;
@@ -117,18 +117,20 @@ public class Controler implements Initializable {
     	
     }
     
-    void mapGeneration() {
+    private void mapGeneration() {
     	
-    	game.getMapChanged().addListener(new ChangeListener<Boolean>() {
+    	this.game.getMapChanged().addListener(new ChangeListener<Boolean>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				
+				tileContainer.getChildren().clear();
+				
 				for (int i = 0 ; i < game.getMap().getField().length ; i++) 
 					for (int j = 0 ; j < game.getMap().getField().length ; j++) {
-						TileContainer.getChildren().add(game.getMap().intToTiles(new ImageView(tileset), game.getMap().getField()[i][j]));
-						TileContainer.getChildren().get(TileContainer.getChildren().size()-1).setTranslateX(j*32);
-						TileContainer.getChildren().get(TileContainer.getChildren().size()-1).setTranslateY(i*32);
+						tileContainer.getChildren().add(game.getMap().intToTiles(new ImageView(tileset), game.getMap().getField()[i][j]));
+						tileContainer.getChildren().get(tileContainer.getChildren().size()-1).setTranslateX(j*32);
+						tileContainer.getChildren().get(tileContainer.getChildren().size()-1).setTranslateY(i*32);
 					}
 				
 			}
@@ -137,12 +139,9 @@ public class Controler implements Initializable {
     	
     }
     
-    void entityLoading() {
+    private void entityLoading() {
     	
-    	playerImage.translateXProperty().bind(game.getPlayer().getX());
-    	playerImage.translateYProperty().bind(game.getPlayer().getY());
-    	playerImage.setImage(new Image("file:src/img/pbas.png"));
-    	EntityContainer.getChildren().add(playerImage);
+    	imageBinding("file:src/img/pbas.png");	// Image du perso
     	
     	game.getEntities().addListener(new ListChangeListener<Entity>() {
 
@@ -151,12 +150,9 @@ public class Controler implements Initializable {
 				
 				while (c.next()) {
 					if (c.wasAdded()) {
-						entitiesImages.add(new ImageView(new Image("file:src/img/p.png")));
-						entitiesImages.get(entitiesImages.size()-1).translateXProperty().bind(game.getEntities().get(game.getEntities().size()-1).getX());
-						entitiesImages.get(entitiesImages.size()-1).translateYProperty().bind(game.getEntities().get(game.getEntities().size()-1).getY());
-						EntityContainer.getChildren().add(entitiesImages.get(entitiesImages.size()-1));
+						imageBinding("file:src/img/p.png");
 					} else if (c.wasRemoved()) {
-						entitiesImages.remove(0);
+						
 					}
 				}
 				
@@ -164,6 +160,13 @@ public class Controler implements Initializable {
     		
     	});
     	
+    }
+    
+    private void imageBinding(String filePath) {
+    	this.entitiesImages.add(new ImageView(new Image(filePath)));
+		this.entitiesImages.get(this.entitiesImages.size()-1).translateXProperty().bind(this.game.getEntities().get(this.game.getEntities().size()-1).getX());
+		this.entitiesImages.get(this.entitiesImages.size()-1).translateYProperty().bind(this.game.getEntities().get(this.game.getEntities().size()-1).getY());
+		this.entityContainer.getChildren().add(this.entitiesImages.get(this.entitiesImages.size()-1));
     }
 
 }
