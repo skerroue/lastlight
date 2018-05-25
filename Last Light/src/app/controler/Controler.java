@@ -113,6 +113,9 @@ public class Controler implements Initializable {
     		this.game.getPlayer().earnPotion();
     		this.game.getPlayer().earnMoney(50);
     		break;
+    	case X:
+    		this.game.getPlayer().usePotion();
+    		break;
 		default:
 			break;
     	}
