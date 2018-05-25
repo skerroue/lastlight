@@ -114,6 +114,10 @@ public abstract class Entity {
 			frame++;
 	}
 	
+	public void resetFrame() {
+		frame = 0;
+	}
+	
 	public void die() {
 		this.isDead.set(true);
 	}
@@ -148,7 +152,7 @@ public abstract class Entity {
 		
 		switch (this.orientation.getValue()) {
 		case LEFT :
-			emptyTile = tileIsEmpty(entities, 32, 0);
+			emptyTile = tileIsEmpty(entities, LEFT);
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
@@ -168,7 +172,7 @@ public abstract class Entity {
 					canMove = true;
 			break;
 		case UP :
-			emptyTile = tileIsEmpty(entities, 0, 32);
+			emptyTile = tileIsEmpty(entities, UP);
 			if (y.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
@@ -188,7 +192,7 @@ public abstract class Entity {
 					canMove = true;
 			break;
 		case DOWN :
-			emptyTile = tileIsEmpty(entities, 0, -32);
+			emptyTile = tileIsEmpty(entities, DOWN);
 			if (y.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
@@ -208,7 +212,7 @@ public abstract class Entity {
 					canMove = true;
 			break;
 		case RIGHT :
-			emptyTile = tileIsEmpty(entities, -32, 0);
+			emptyTile = tileIsEmpty(entities, RIGHT);
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
@@ -253,11 +257,37 @@ public abstract class Entity {
 		}
  	}
 	
-	public boolean tileIsEmpty(ObservableList<Entity> entities, int x, int y) {
-    	for (Entity e : entities)
-    		if ((int)this.getX().getValue() == (int)e.getX().getValue() + x && (int)this.getY().getValue() == (int)e.getY().getValue() + y)
-    			return false;
+	public boolean tileIsEmpty(ObservableList<Entity> entities, int DIRECTION) {
     	
+		switch (DIRECTION) {
+		case LEFT :
+			for (Entity e : entities)
+	    		if (this.getX().get() == e.getX().get() + 32 && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
+	    			return false;
+			break;
+		case UP :
+			for (Entity e : entities)
+	    		if (this.getY().get() == e.getY().get() + 32 && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
+	    			return false;
+			break;
+		case RIGHT :
+			for (Entity e : entities)
+	    		if (this.getX().get() == e.getX().get() - 32 && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
+	    			return false;
+			break;
+		case DOWN :
+			for (Entity e : entities)
+	    		if (this.getY().get() == e.getY().get() - 32 && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
+	    			return false;
+			break;
+		default :
+			break;
+		}
+		
     	return true;
 	}
 }
