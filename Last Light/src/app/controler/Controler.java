@@ -136,6 +136,8 @@ public class Controler implements Initializable {
     @FXML
     void onKeyReleased(KeyEvent event) {
     	
+    	entitiesView.get(0).resetImage();
+    	
     	switch (event.getCode()) {
     	case UP:
     		break;
