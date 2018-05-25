@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
 import app.modele.entity.Player;
 import app.modele.field.Field;
@@ -38,6 +39,7 @@ public class Game {
 		this.entities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
 		this.entities.add(player);
+		spawnEntities();
 	}
 	
 	private int[][] readFileMaps() { 
@@ -97,57 +99,97 @@ public class Game {
 		int i = this.map.getI();
 		int j = this.map.getJ();
 		
-		boolean result = false;
+		boolean changing = false;
 		
 		switch (direction) {
 		case 1 : // Ouest
 			if (j > 0 && this.fieldsMap[i][j - 1] != 0) {
 				this.map = new Field(i, j - 1, this.fieldsMap[i][j - 1], 25, 25);
-				this.mapOnChange();
-				result = true;
+				changing = true;
 			}
 			break;
 		case 2 : // Nord
 			if (i > 0 && this.fieldsMap[i - 1][j] != 0) {
 				this.map = new Field(i - 1, j, this.fieldsMap[i - 1][j], 25, 25);
-				this.mapOnChange();
-				result = true;
+				changing = true;
 			}
 			break;
 		case 3 : // Est
 			if (j < 1 && this.fieldsMap[i][j + 1] != 0) {
 				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25);
-				this.mapOnChange();
-				result = true;
+				changing = true;
 			}
 			break;
 		case 4 : // Sud
 			if (i < 0 && this.fieldsMap[i + 1][j] != 0) {
 				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25);
-				this.mapOnChange();
-				result = true;
+				changing = true;
 			}
 			break;
 		}
 		
-		if (result) {
+		if (changing) {
+			this.mapOnChange();
+			for (int k = 1; k < this.entities.size(); k++)
+				this.entities.get(k).die();
+			spawnEntities();
 		}
 		
-		return result;
+		return changing;
 	}
 	
-    public void addKeyFrame(EventHandler<ActionEvent> e) {
+	private void spawnEntities() {
+		int noMap = this.fieldsMap[this.map.getI()][this.map.getJ()];
+		String line;
+		
+		try {
+        	
+			File f = new File("src/map/entityLocations.txt");
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			
+			try {
+				
+				line = br.readLine();
+				
+				while (br.ready() && Integer.parseInt("" + line.charAt(0)) != noMap)
+					line = br.readLine();
+				
+				if (Integer.parseInt("" + line.charAt(0)) == noMap) {
+					Scanner s = new Scanner(line).useDelimiter(",");
+					s.nextInt();
+					
+					while (s.hasNext())
+						this.addEnnemy(s.nextInt(), s.nextInt());
+					
+					s.close();
+				}
+				
+				br.close();
+				fr.close();
+				
+			} catch (IOException e) {
+				System.out.println("entityLocations : Erreur lecture");
+			}
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("entityLocations : Fichier introuvable");
+		}
+	}
+	
+    public void addKeyFrame(EventHandler<ActionEvent> e, double duration) {
     	gameloop.pause();
-    	KeyFrame k = new KeyFrame(Duration.seconds(0.5), e);
+    	KeyFrame k = new KeyFrame(Duration.seconds(duration), e);
     	gameloop.getKeyFrames().add(k);
     	gameloop.play();
     }
     
-    public void addEnnemi(Entity e) {
+    public void addEnnemy(int x, int y) {
+    	Entity e = new Enemy(x, y, 0, 0, 4);
     	entities.add(e);
     	addKeyFrame(event -> {
     		e.update(entities);
-    	});
+    	}, 0.5);
     }
     
     public void playGameLoop() {

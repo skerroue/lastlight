@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import app.modele.Game;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.input.KeyCode;
@@ -30,6 +32,7 @@ public abstract class Entity {
 	private IntegerProperty orientation;
 	private int frame;
 	protected int velocity;
+	protected BooleanProperty isDead;
 	
 	public Entity() {
 		this.crossableTiles = readFileCrossableTiles();
@@ -37,6 +40,7 @@ public abstract class Entity {
 		this.rightBottomLimit = 768;
 		this.orientation = new SimpleIntegerProperty(0);
 		this.frame = 0;
+		this.isDead = new SimpleBooleanProperty(false);
 	}
 	
 	private ArrayList<Integer> readFileCrossableTiles() {
@@ -64,7 +68,7 @@ public abstract class Entity {
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("CrossableTiles : Fichier introuvable");
-		}
+		}System.out.println(crossableTiles.size());
 				
 		return crossableTiles;
 	}
@@ -110,6 +114,14 @@ public abstract class Entity {
 			frame++;
 	}
 	
+	public void die() {
+		this.isDead.set(true);
+	}
+	
+	public BooleanProperty getIsDead() {
+		return this.isDead;
+	}
+	
 	public void moveLeft(ObservableList<Entity> entities) {
 		if (canMove(entities))
 			x.set(x.get() - velocity);
@@ -137,7 +149,7 @@ public abstract class Entity {
 		switch (this.orientation.getValue()) {
 		case LEFT :
 			emptyTile = tileIsEmpty(entities, 32, 0);
-			if (x.get() % 32 != 0)
+			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
 				if (y.get() < rightBottomLimit) {
@@ -157,7 +169,7 @@ public abstract class Entity {
 			break;
 		case UP :
 			emptyTile = tileIsEmpty(entities, 0, 32);
-			if (y.get() % 32 != 0)
+			if (y.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
 				if (x.get() < rightBottomLimit) {
@@ -177,7 +189,7 @@ public abstract class Entity {
 			break;
 		case DOWN :
 			emptyTile = tileIsEmpty(entities, 0, -32);
-			if (y.get() % 32 != 0)
+			if (y.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
 				if (x.get() < rightBottomLimit) {
@@ -197,7 +209,7 @@ public abstract class Entity {
 			break;
 		case RIGHT :
 			emptyTile = tileIsEmpty(entities, -32, 0);
-			if (x.get() % 32 != 0)
+			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
 				if (y.get() < rightBottomLimit) {

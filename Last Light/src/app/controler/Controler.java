@@ -58,6 +58,18 @@ public class Controler implements Initializable {
 		// Generation de l'interface
 		interfaceGeneration();
 		
+		this.game.addKeyFrame(e -> {
+			for (int k = 0; k < entitiesView.size(); k++)
+				if (entitiesView.get(k).getIsDead()) {
+					entityContainer.getChildren().remove(entitiesView.get(k));
+					entitiesView.remove(entitiesView.get(k));
+				}
+			for (int k = 0; k < game.getEntities().size(); k++)
+				if (game.getEntities().get(k).getIsDead().get()) {
+					game.getEntities().remove(game.getEntities().get(k));
+				}
+		}, 0.017);
+		
 		this.game.playGameLoop();
 		
 	}
@@ -69,7 +81,7 @@ public class Controler implements Initializable {
     	
     	switch (event.getCode()) {
     	case UP:
-		this.game.getPlayer().setOrientation(event.getCode());
+    		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getY().getValue() == rightLimit) {
     			if (this.game.loadField(2))
     				this.game.getPlayer().setY(leftLimit);
@@ -78,7 +90,7 @@ public class Controler implements Initializable {
     			this.game.getPlayer().moveUp(this.game.getEntities());
     		break;
     	case DOWN:
-		this.game.getPlayer().setOrientation(event.getCode());
+    		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getY().getValue() == leftLimit) {
     			if (this.game.loadField(4))
     				this.game.getPlayer().setY(rightLimit);
@@ -87,7 +99,7 @@ public class Controler implements Initializable {
     			this.game.getPlayer().moveDown(this.game.getEntities());
     		break;
     	case LEFT:
-		this.game.getPlayer().setOrientation(event.getCode());
+    		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getX().getValue() == rightLimit) {
     			if (this.game.loadField(1))
     				this.game.getPlayer().setX(leftLimit);
@@ -96,7 +108,7 @@ public class Controler implements Initializable {
     			this.game.getPlayer().moveLeft(this.game.getEntities());
     		break;
     	case RIGHT:
-		this.game.getPlayer().setOrientation(event.getCode());
+    		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getX().getValue() == leftLimit) {
     			if (this.game.loadField(3))
     				this.game.getPlayer().setX(rightLimit);
@@ -105,7 +117,7 @@ public class Controler implements Initializable {
     			this.game.getPlayer().moveRight(this.game.getEntities());
     		break;
     	case S:
-    		this.game.addEnnemi(new Enemy(384, 384, 0, 0, 32));
+    		this.game.addEnnemy(384, 384);
     		break;
     	case E:
     		this.game.getPlayer().loosePv(1);
@@ -222,19 +234,19 @@ public class Controler implements Initializable {
     	
     	// Potions
     	for (int i = 0 ; i < 3 ; i++) {
-    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/soda.png"), (i+1)*17, 45));
+    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/soda.png"), (i+1)*17, 45, ""));
     		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size() -1).setVisible(false);
     	}
     	
     	// Argent
     	for (int i = 0 ; i < 5 ; i++) {
-    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/money.png"), (i+1)*17, 72));
+    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/money.png"), (i+1)*17, 72, ""));
     		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size() -1).setVisible(false);
     	}
     	
     	// Coeurs
     	for (int i = 0 ; i < 6 ; i++) {
-    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), (i+1)*17, 15));
+    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), (i+1)*17, 15, ""));
     		if (i > 2)
     			interfaceContainer.getChildren().get(interfaceContainer.getChildren().size() -1).setVisible(false);
     	}
