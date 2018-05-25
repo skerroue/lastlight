@@ -15,6 +15,11 @@ import javafx.collections.ObservableList;
 
 public abstract class Entity {
 	
+	final static int LEFT = 0;
+	final static int UP = 1;
+	final static int RIGHT = 2;
+	final static int DOWN = 3;
+	
 	static protected ArrayList<Integer> crossableTiles;
 	
 	protected IntegerProperty x;
@@ -111,7 +116,7 @@ public abstract class Entity {
 			if (x.getValue() > leftTopLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) && canMove(entities, 32, 0)) // y correspond au i, x au j
 				x.set(x.get() - velocity);
 		
-		this.orientation.set(2);
+		this.orientation.set(LEFT);
 	}
 	
 	public void moveRight(ObservableList<Entity> entities) {
@@ -121,7 +126,7 @@ public abstract class Entity {
 			if (x.getValue() < rightBottomLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) && canMove(entities, -32, 0))
 				x.set(x.get() + velocity);
 		
-		this.orientation.set(1);
+		this.orientation.set(RIGHT);
 	}
 
 	public void moveDown(ObservableList<Entity> entities) {
@@ -131,7 +136,7 @@ public abstract class Entity {
 			if (y.getValue() < rightBottomLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && canMove(entities, 0, -32))
 				y.set(y.get() + velocity);
 		
-		this.orientation.set(0);
+		this.orientation.set(DOWN);
 	}
 	
 	public void moveUp(ObservableList<Entity> entities) {
@@ -141,7 +146,7 @@ public abstract class Entity {
 			if (y.getValue() > leftTopLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && canMove(entities, 0, 32))
 				y.set(y.get() - velocity);
 		
-		this.orientation.set(3);
+		this.orientation.set(UP);
 	}
 	
 	public boolean canMove(ObservableList<Entity> entities, int x, int y) {
