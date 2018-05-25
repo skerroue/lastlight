@@ -195,18 +195,18 @@ public class Controler implements Initializable {
     	*/
     	
     	// Potions
-    	ItemView potions = new ItemView(game.getPlayer(), new Image("file:src/img/soda.png"), 20, 50);
+    	ItemView potions = new ItemView(game.getPlayer(), new Image("file:src/img/soda.png"), 20, 50, "0");
     	interfaceContainer.getChildren().add(potions);
     	interfaceContainer.getChildren().add(potions.getLabel());
     	
     	// Argent
-    	ItemView money = new ItemView(game.getPlayer(), new Image("file:src/img/money.png"), 80, 50);
+    	ItemView money = new ItemView(game.getPlayer(), new Image("file:src/img/money.png"), 80, 50, "0");
     	interfaceContainer.getChildren().add(money);
     	interfaceContainer.getChildren().add(money.getLabel());
     	
     	// Coeurs
     	for (int i = 0 ; i < game.getPlayer().getPv().getValue() ; i++)
-    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), (i+1)*17, 15));
+    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), (i+1)*17, 15, ""));
     	
     	game.getPlayer().getPv().addListener(new ChangeListener<Number>() {
     		
@@ -215,7 +215,7 @@ public class Controler implements Initializable {
     			if (oldValue.intValue() > newValue.intValue())
     				interfaceContainer.getChildren().remove(interfaceContainer.getChildren().size()-1);
     			else 
-    				interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), newValue.intValue()*17, 15));
+    				interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), newValue.intValue()*17, 15, ""));
     		}
 	 	
 	    });
