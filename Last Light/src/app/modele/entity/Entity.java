@@ -12,6 +12,7 @@ import app.modele.Game;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.input.KeyCode;
 
 public abstract class Entity {
 	
@@ -110,52 +111,141 @@ public abstract class Entity {
 	}
 	
 	public void moveLeft(ObservableList<Entity> entities) {
-		if (x.get() % 32 != 0) // ajouter canMove
+		if (canMove(entities))
 			x.set(x.get() - velocity);
-		else 
-			if (x.getValue() > leftTopLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) && canMove(entities, 32, 0)) // y correspond au i, x au j
-				x.set(x.get() - velocity);
-		
-		this.orientation.set(LEFT);
 	}
 	
 	public void moveRight(ObservableList<Entity> entities) {
-		if (x.get() % 32 != 0) // ajouter canMove
+		if (canMove(entities))
 			x.set(x.get() + velocity);
-		else
-			if (x.getValue() < rightBottomLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) && canMove(entities, -32, 0))
-				x.set(x.get() + velocity);
-		
-		this.orientation.set(RIGHT);
 	}
 
 	public void moveDown(ObservableList<Entity> entities) {
-		if (y.get() % 32 != 0) // ajouter canMove
+		if (canMove(entities))
 			y.set(y.get() + velocity);
-		else
-			if (y.getValue() < rightBottomLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && canMove(entities, 0, -32))
-				y.set(y.get() + velocity);
-		
-		this.orientation.set(DOWN);
 	}
 	
 	public void moveUp(ObservableList<Entity> entities) {
-		if (y.get() % 32 != 0) // ajouter canMove
+		if (canMove(entities))
 			y.set(y.get() - velocity);
-		else
-			if (y.getValue() > leftTopLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && canMove(entities, 0, 32))
-				y.set(y.get() - velocity);
-		
-		this.orientation.set(UP);
 	}
 	
-	public boolean canMove(ObservableList<Entity> entities, int x, int y) {
+	public boolean canMove(ObservableList<Entity> entities) {
+		boolean canMove = false;
+		boolean emptyTile = true;
+		
+		switch (this.orientation.getValue()) {
+		case LEFT :
+			emptyTile = tileIsEmpty(entities, 32, 0);
+			if (x.get() % 32 != 0)
+				canMove = true;
+			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
+				if (y.get() < rightBottomLimit) {
+					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) &&
+						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1)) && emptyTile)
+						canMove = true;
+				}
+				else {
+					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) &&
+						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()-1)) && emptyTile)
+						canMove = true;
+				}
+			}
+			else
+				if (x.getValue() > leftTopLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) && emptyTile)
+					canMove = true;
+			break;
+		case UP :
+			emptyTile = tileIsEmpty(entities, 0, 32);
+			if (y.get() % 32 != 0)
+				canMove = true;
+			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
+				if (x.get() < rightBottomLimit) {
+					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && 
+						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1)) && emptyTile)
+						canMove = true;
+				}
+				else {
+					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && 
+						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()-1)) && emptyTile)
+						canMove = true;
+				}
+			}
+			else 
+				if (y.get() > leftTopLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && emptyTile)
+					canMove = true;
+			break;
+		case DOWN :
+			emptyTile = tileIsEmpty(entities, 0, -32);
+			if (y.get() % 32 != 0)
+				canMove = true;
+			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
+				if (x.get() < rightBottomLimit) {
+					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && 
+						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1)) && emptyTile)
+						canMove = true;
+				}
+				else {
+					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && 
+						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1)) && emptyTile)
+						canMove = true;
+				}
+			}
+			else 
+				if (y.get() < rightBottomLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && emptyTile)
+					canMove = true;
+			break;
+		case RIGHT :
+			emptyTile = tileIsEmpty(entities, -32, 0);
+			if (x.get() % 32 != 0)
+				canMove = true;
+			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
+				if (y.get() < rightBottomLimit) {
+					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) &&
+						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1)) && emptyTile)
+						canMove = true;
+				}
+				else {
+					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) &&
+						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1)) && emptyTile)
+						canMove = true;
+				}
+			}
+			else
+				if (x.getValue() < rightBottomLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) && emptyTile)
+					canMove = true;
+			break;
+		default :
+			break;
+		}
+		
+		return canMove;
+	}
+	
+	public void setOrientation(KeyCode k) {
+		switch (k) {
+		case LEFT :
+			this.orientation.set(this.LEFT);
+			break;
+		case UP :
+			this.orientation.set(this.UP);
+			break;
+		case RIGHT :
+			this.orientation.set(this.RIGHT);
+			break;
+		case DOWN :
+			this.orientation.set(this.DOWN);
+			break;
+		default :
+			break;
+		}
+ 	}
+	
+	public boolean tileIsEmpty(ObservableList<Entity> entities, int x, int y) {
     	for (Entity e : entities)
     		if ((int)this.getX().getValue() == (int)e.getX().getValue() + x && (int)this.getY().getValue() == (int)e.getY().getValue() + y)
     			return false;
     	
     	return true;
 	}
-	
-	
 }
