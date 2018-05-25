@@ -1,10 +1,7 @@
 package app.modele.entity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-import app.modele.Game;
-import app.modele.field.Field;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 

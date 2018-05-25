@@ -1,8 +1,5 @@
 package app.modele.entity;
 
-import java.util.ArrayList;
-
-import app.modele.field.Field;
 import javafx.collections.ObservableList;
 
 public class Ennemy extends AnimatedEntity {
