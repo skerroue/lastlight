@@ -69,7 +69,6 @@ public class Controler implements Initializable {
     	
     	switch (event.getCode()) {
     	case UP:
-		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getY().getValue() == rightLimit) {
     			if (this.game.loadField(2))
     				this.game.getPlayer().setY(leftLimit);
@@ -78,7 +77,6 @@ public class Controler implements Initializable {
     			this.game.getPlayer().moveUp(this.game.getEntities());
     		break;
     	case DOWN:
-		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getY().getValue() == leftLimit) {
     			if (this.game.loadField(4))
     				this.game.getPlayer().setY(rightLimit);
@@ -86,8 +84,7 @@ public class Controler implements Initializable {
     		else
     			this.game.getPlayer().moveDown(this.game.getEntities());
     		break;
-	case LEFT:
-		this.game.getPlayer().setOrientation(event.getCode());
+    	case LEFT:
     		if (this.game.getPlayer().getX().getValue() == rightLimit) {
     			if (this.game.loadField(1))
     				this.game.getPlayer().setX(leftLimit);
@@ -96,7 +93,6 @@ public class Controler implements Initializable {
     			this.game.getPlayer().moveLeft(this.game.getEntities());
     		break;
     	case RIGHT:
-		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getX().getValue() == leftLimit) {
     			if (this.game.loadField(3))
     				this.game.getPlayer().setX(rightLimit);
@@ -185,8 +181,33 @@ public class Controler implements Initializable {
     	});
     	
     }
+    
+    public void interfaceUpdate(int min, int max, Number oldValue, Number newValue) {
+    	if (oldValue.intValue() == 0)
+			interfaceContainer.getChildren().get(min).setVisible(true);
+		else {
+			// Loose
+			if (oldValue.intValue() > newValue.intValue()) {
+				for (int i = max; i > min; i--) {
+					if (!interfaceContainer.getChildren().get(i).isVisible()&& interfaceContainer.getChildren().get(i-1).isVisible()) {
+    					interfaceContainer.getChildren().get(i-1).setVisible(false);
+    					break;
+    				}
+				}
+			}
+			// Gain
+			else {
+				for (int i = min; i < max; i++) {
+    				if (interfaceContainer.getChildren().get(i).isVisible()&& !interfaceContainer.getChildren().get(i+1).isVisible()) {
+    					interfaceContainer.getChildren().get(i+1).setVisible(true);
+    					break;
+    				}
+    			}
+			}
+			
+		}
+    }
 
-	    // TODO REFAIRE EN METHODES POUR NE PAS REPETER LE CODE
     // Gère toute l'interface
     public void interfaceGeneration() {
     	/*
@@ -219,24 +240,7 @@ public class Controler implements Initializable {
     		
     		@Override
     		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			// Loose heart
-    			if (oldValue.intValue() > newValue.intValue()) {
-    				for (int i = 13; i > 8; i--) {
-    					if (!interfaceContainer.getChildren().get(i).isVisible()&& interfaceContainer.getChildren().get(i-1).isVisible()) {
-        					interfaceContainer.getChildren().get(i-1).setVisible(false);
-        					break;
-        				}
-    				}
-    			}
-    			// Gain heart
-    			else {
-    				for (int i = 8; i < 13; i++) {
-        				if (interfaceContainer.getChildren().get(i).isVisible()&& !interfaceContainer.getChildren().get(i+1).isVisible()) {
-        					interfaceContainer.getChildren().get(i+1).setVisible(true);
-        					break;
-        				}
-        			}
-    			}
+    			interfaceUpdate(8, 13, oldValue, newValue);
     		}
 	    });
 	   
@@ -245,29 +249,7 @@ public class Controler implements Initializable {
     		
     		@Override
     		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			if (oldValue.intValue() == 0)
-    				interfaceContainer.getChildren().get(0).setVisible(true);
-    			else {
-    				// Loose potion
-        			if (oldValue.intValue() > newValue.intValue()) {
-        				for (int i = 2; i > 0; i--) {
-        					if (!interfaceContainer.getChildren().get(i).isVisible()&& interfaceContainer.getChildren().get(i-1).isVisible()) {
-            					interfaceContainer.getChildren().get(i-1).setVisible(false);
-            					break;
-            				}
-        				}
-        			}
-        			// Gain potion
-        			else {
-        				for (int i = 0; i < 2; i++) {
-            				if (interfaceContainer.getChildren().get(i).isVisible()&& !interfaceContainer.getChildren().get(i+1).isVisible()) {
-            					interfaceContainer.getChildren().get(i+1).setVisible(true);
-            					break;
-            				}
-            			}
-        			}
-        			
-    			}
+    			interfaceUpdate(0, 2, oldValue, newValue);
     		}
 	    });
 		
@@ -276,29 +258,7 @@ public class Controler implements Initializable {
     		
     		@Override
     		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			if (oldValue.intValue() == 0)
-    				interfaceContainer.getChildren().get(3).setVisible(true);
-    			else {
-    				// Loose Jeton
-        			if (oldValue.intValue() > newValue.intValue()) {
-        				for (int i = 7; i > 3; i--) {
-        					if (!interfaceContainer.getChildren().get(i).isVisible()&& interfaceContainer.getChildren().get(i-1).isVisible()) {
-            					interfaceContainer.getChildren().get(i-1).setVisible(false);
-            					break;
-            				}
-        				}
-        			}
-        			// Gain Jeton
-        			else {
-        				for (int i = 3; i < 7; i++) {
-            				if (interfaceContainer.getChildren().get(i).isVisible()&& !interfaceContainer.getChildren().get(i+1).isVisible()) {
-            					interfaceContainer.getChildren().get(i+1).setVisible(true);
-            					break;
-            				}
-            			}
-        			}
-        			
-    			}
+    			interfaceUpdate(3, 7, oldValue, newValue);
     		}
 	    });
 	    
