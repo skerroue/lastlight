@@ -12,7 +12,7 @@ public class ItemView extends ImageView {
 	private Label label;
 	private Player player;
 	
-	public ItemView(Player p, Image img, int x, int y) {
+	public ItemView(Player p, Image img, int x, int y, String l) {
 		
 		this.setImage(img);
 		this.setTranslateX(x);
@@ -20,7 +20,7 @@ public class ItemView extends ImageView {
 		
 		this.player = p;
 		
-		this.label = new Label(player.getPotion().getValue().toString());
+		this.label = new Label(l);
 		this.label.setTextFill(Color.web("#ffffff"));
 		this.label.setFont(Font.font ("Roboto", 18));
 		this.label.setTranslateX(x+30);
