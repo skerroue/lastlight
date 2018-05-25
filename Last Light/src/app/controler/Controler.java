@@ -40,7 +40,7 @@ public class Controler implements Initializable {
     public Controler() {	
     	
     	this.game = new Game();
-    	this.tileset = new Image("file:src/img/tileset.png");
+    	this.tileset = new Image("file:src/img/tilesetLastLight.png");
     	this.entitiesView = new ArrayList<>();
     	
     }
