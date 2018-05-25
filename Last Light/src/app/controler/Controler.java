@@ -69,6 +69,7 @@ public class Controler implements Initializable {
     	
     	switch (event.getCode()) {
     	case UP:
+		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getY().getValue() == rightLimit) {
     			if (this.game.loadField(2))
     				this.game.getPlayer().setY(leftLimit);
@@ -77,6 +78,7 @@ public class Controler implements Initializable {
     			this.game.getPlayer().moveUp(this.game.getEntities());
     		break;
     	case DOWN:
+		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getY().getValue() == leftLimit) {
     			if (this.game.loadField(4))
     				this.game.getPlayer().setY(rightLimit);
@@ -85,6 +87,7 @@ public class Controler implements Initializable {
     			this.game.getPlayer().moveDown(this.game.getEntities());
     		break;
     	case LEFT:
+		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getX().getValue() == rightLimit) {
     			if (this.game.loadField(1))
     				this.game.getPlayer().setX(leftLimit);
@@ -93,6 +96,7 @@ public class Controler implements Initializable {
     			this.game.getPlayer().moveLeft(this.game.getEntities());
     		break;
     	case RIGHT:
+		this.game.getPlayer().setOrientation(event.getCode());
     		if (this.game.getPlayer().getX().getValue() == leftLimit) {
     			if (this.game.loadField(3))
     				this.game.getPlayer().setX(rightLimit);
