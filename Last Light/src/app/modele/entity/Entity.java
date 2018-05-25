@@ -64,7 +64,7 @@ public abstract class Entity {
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("CrossableTiles : Fichier introuvable");
-		}System.out.println(crossableTiles.size());
+		}
 				
 		return crossableTiles;
 	}
