@@ -106,7 +106,7 @@ public class Controler implements Initializable {
     	case E:
     		this.game.getPlayer().loosePv(1);
     		this.game.getPlayer().earnPotion();
-    		this.game.getPlayer().earnMoney(50);
+    		this.game.getPlayer().earnMoney(1);
     		break;
     	case X:
     		this.game.getPlayer().usePotion();
@@ -182,59 +182,121 @@ public class Controler implements Initializable {
     	
     }
 
-	    // TODO
+	    // TODO REFAIRE EN METHODES POUR NE PAS REPETER LE CODE
     // Gère toute l'interface
     public void interfaceGeneration() {
     	/*
-    	* Indice 0 : Label Potions
-    	* Indice 1 : Image Potions
-    	* Indice 2 : Label Argent
-    	* Indice 3 : Image Argent
+    	* Indice 0-2 : Potions
+    	* Indice 3-7 : Jetons
+    	* Indice 8-13 : Coeurs
     	*/
     	
     	// Potions
-    	ItemView potions = new ItemView(game.getPlayer(), new Image("file:src/img/soda.png"), 20, 50, "0");
-    	interfaceContainer.getChildren().add(potions);
-    	interfaceContainer.getChildren().add(potions.getLabel());
+    	for (int i = 0 ; i < 3 ; i++) {
+    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/soda.png"), (i+1)*17, 45));
+    		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size() -1).setVisible(false);
+    	}
     	
     	// Argent
-    	ItemView money = new ItemView(game.getPlayer(), new Image("file:src/img/money.png"), 80, 50, "0");
-    	interfaceContainer.getChildren().add(money);
-    	interfaceContainer.getChildren().add(money.getLabel());
+    	for (int i = 0 ; i < 5 ; i++) {
+    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/money.png"), (i+1)*17, 72));
+    		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size() -1).setVisible(false);
+    	}
     	
     	// Coeurs
-    	for (int i = 0 ; i < game.getPlayer().getPv().getValue() ; i++)
-    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), (i+1)*17, 15, ""));
-    	
+    	for (int i = 0 ; i < 6 ; i++) {
+    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), (i+1)*17, 15));
+    		if (i > 2)
+    			interfaceContainer.getChildren().get(interfaceContainer.getChildren().size() -1).setVisible(false);
+    	}
+    		
+    	// MAJ Heart
     	game.getPlayer().getPv().addListener(new ChangeListener<Number>() {
     		
     		@Override
     		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			if (oldValue.intValue() > newValue.intValue())
-    				interfaceContainer.getChildren().remove(interfaceContainer.getChildren().size()-1);
-    			else 
-    				interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), newValue.intValue()*17, 15, ""));
+    			// Loose heart
+    			if (oldValue.intValue() > newValue.intValue()) {
+    				for (int i = 13; i > 8; i--) {
+    					if (!interfaceContainer.getChildren().get(i).isVisible()&& interfaceContainer.getChildren().get(i-1).isVisible()) {
+        					interfaceContainer.getChildren().get(i-1).setVisible(false);
+        					break;
+        				}
+    				}
+    			}
+    			// Gain heart
+    			else {
+    				for (int i = 8; i < 13; i++) {
+        				if (interfaceContainer.getChildren().get(i).isVisible()&& !interfaceContainer.getChildren().get(i+1).isVisible()) {
+        					interfaceContainer.getChildren().get(i+1).setVisible(true);
+        					break;
+        				}
+        			}
+    			}
     		}
-	 	
 	    });
-	    
-		game.getPlayer().getPotion().addListener(new ChangeListener<Object>() {
-			    	
-	    	@Override
-	    	public void changed(ObservableValue<? extends Object> observableValue, Object oldValue, Object newValue) {
-	    			potions.getLabel().setText(game.getPlayer().getPotion().getValue().toString());
-	    	}
-	    	
-		});
+	   
+    	// MAJ Potion
+    	game.getPlayer().getPotion().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			if (oldValue.intValue() == 0)
+    				interfaceContainer.getChildren().get(0).setVisible(true);
+    			else {
+    				// Loose potion
+        			if (oldValue.intValue() > newValue.intValue()) {
+        				for (int i = 2; i > 0; i--) {
+        					if (!interfaceContainer.getChildren().get(i).isVisible()&& interfaceContainer.getChildren().get(i-1).isVisible()) {
+            					interfaceContainer.getChildren().get(i-1).setVisible(false);
+            					break;
+            				}
+        				}
+        			}
+        			// Gain potion
+        			else {
+        				for (int i = 0; i < 2; i++) {
+            				if (interfaceContainer.getChildren().get(i).isVisible()&& !interfaceContainer.getChildren().get(i+1).isVisible()) {
+            					interfaceContainer.getChildren().get(i+1).setVisible(true);
+            					break;
+            				}
+            			}
+        			}
+        			
+    			}
+    		}
+	    });
 		
-		game.getPlayer().getMoney().addListener(new ChangeListener<Object>() {
-	    	
-	    	@Override
-	    	public void changed(ObservableValue<? extends Object> observableValue, Object oldValue, Object newValue) {
-	    			money.getLabel().setText(game.getPlayer().getMoney().getValue().toString());
-	    	}
-	    	
-		});
+    	// MAJ Jetons
+    	game.getPlayer().getMoney().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			if (oldValue.intValue() == 0)
+    				interfaceContainer.getChildren().get(3).setVisible(true);
+    			else {
+    				// Loose Jeton
+        			if (oldValue.intValue() > newValue.intValue()) {
+        				for (int i = 7; i > 3; i--) {
+        					if (!interfaceContainer.getChildren().get(i).isVisible()&& interfaceContainer.getChildren().get(i-1).isVisible()) {
+            					interfaceContainer.getChildren().get(i-1).setVisible(false);
+            					break;
+            				}
+        				}
+        			}
+        			// Gain Jeton
+        			else {
+        				for (int i = 3; i < 7; i++) {
+            				if (interfaceContainer.getChildren().get(i).isVisible()&& !interfaceContainer.getChildren().get(i+1).isVisible()) {
+            					interfaceContainer.getChildren().get(i+1).setVisible(true);
+            					break;
+            				}
+            			}
+        			}
+        			
+    			}
+    		}
+	    });
 	    
     }
     
