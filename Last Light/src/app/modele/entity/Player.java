@@ -45,7 +45,10 @@ public class Player extends AnimatedEntity {
 	
 	// TODO
 	public void usePotion() {
-		
+		if (this.potion.getValue() > 0) {
+			this.potion.set(this.potion.getValue() -1);
+			this.pv.set(this.pv.getValue() + 1);
+		}
 	}
 	
 	public void earnMoney(int a) {
