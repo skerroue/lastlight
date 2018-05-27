@@ -9,26 +9,28 @@ import javafx.scene.text.Font;
 
 public class ItemView extends ImageView {
 	
-	private Label label;
 	private Player player;
+	private boolean isEmpty;
 	
-	public ItemView(Player p, Image img, int x, int y, String l) {
+	public ItemView(Player p, Image img, int x, int y, boolean b) {
 		
 		this.setImage(img);
 		this.setTranslateX(x);
 		this.setTranslateY(y);
 		
 		this.player = p;
-		
-		this.label = new Label(l);
-		this.label.setTextFill(Color.web("#ffffff"));
-		this.label.setFont(Font.font ("Roboto", 18));
-		this.label.setTranslateX(x+30);
-		this.label.setTranslateY(y+5);
+		this.isEmpty = b;
 	}
 	
-	public Label getLabel() {
-		return label;
+	public void switchIsEmpty() {
+		if (this.isEmpty)
+			this.isEmpty = false;
+		else
+			this.isEmpty = true;
+	}
+	
+	public boolean getIsEmpty() {
+		return this.isEmpty;
 	}
 
 }

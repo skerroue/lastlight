@@ -34,6 +34,7 @@ public class Controler implements Initializable {
     private Pane interfaceContainer;
    
     private ArrayList<EntityView> entitiesView;
+    private ArrayList<ItemView> listItemView;
     
     private Game game;
     
@@ -42,6 +43,7 @@ public class Controler implements Initializable {
     	this.game = new Game();
     	this.tileset = new Image("file:src/img/tilesetLastLight.png");
     	this.entitiesView = new ArrayList<>();
+    	this.listItemView = new ArrayList<>();
     	
     }
     
@@ -154,6 +156,8 @@ public class Controler implements Initializable {
     		break;
     	case RIGHT:
     		break;
+    	case SPACE :
+    		break;
 		default:
 			break;
     	}
@@ -196,8 +200,6 @@ public class Controler implements Initializable {
 					if (c.wasAdded()) {
 						entitiesView.add(new EnemyView(game.getEntities().get(game.getEntities().size()-1)));
 						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
-					} else if (c.wasRemoved()) {
-						
 					}
 				}
 				
@@ -206,31 +208,46 @@ public class Controler implements Initializable {
     	});
     	
     }
-    
-    public void interfaceUpdate(int min, int max, Number oldValue, Number newValue) {
-    	if (oldValue.intValue() == 0)
-			interfaceContainer.getChildren().get(min).setVisible(true);
-		else {
-			// Loose
-			if (oldValue.intValue() > newValue.intValue()) {
-				for (int i = max; i > min; i--) {
-					if (!interfaceContainer.getChildren().get(i).isVisible()&& interfaceContainer.getChildren().get(i-1).isVisible()) {
-    					interfaceContainer.getChildren().get(i-1).setVisible(false);
-    					break;
-    				}
-				}
-			}
-			// Gain
-			else {
-				for (int i = min; i < max; i++) {
-    				if (interfaceContainer.getChildren().get(i).isVisible()&& !interfaceContainer.getChildren().get(i+1).isVisible()) {
-    					interfaceContainer.getChildren().get(i+1).setVisible(true);
-    					break;
-    				}
+
+    public void interfaceUpdate(int min, int max, int nbmax, Number oldValue, Number newValue, String imageName) {
+    	if (newValue.intValue() > oldValue.intValue()) {
+        	if (oldValue.intValue() == 0) {
+        		listItemView.get(min).setImage(new Image("file:src/img/" + imageName + ".png"));
+            	listItemView.get(min).switchIsEmpty();
+        	}
+        	else if (newValue.intValue() == nbmax) {
+        		listItemView.get(max).setImage(new Image("file:src/img/" + imageName + ".png"));
+            	listItemView.get(max).switchIsEmpty();
+        	}
+        	else {
+        		for (int i = min; i < max; i++) {
+        			if (!listItemView.get(i).getIsEmpty() && listItemView.get(i+1).getIsEmpty()) {
+        				listItemView.get(i+1).setImage(new Image("file:src/img/" + imageName + ".png"));
+        		    	listItemView.get(i+1).switchIsEmpty();
+        				break;
+        			}
+        		}
+        	}
+    	}
+    	else {
+    		if (oldValue.intValue() == nbmax) {
+    			listItemView.get(max).setImage(new Image("file:src/img/" + imageName + "-empty.png"));
+            	listItemView.get(max).switchIsEmpty();
+    		}
+    		else if (newValue.intValue() == 0) {
+    			listItemView.get(min).setImage(new Image("file:src/img/" + imageName + "-empty.png"));
+            	listItemView.get(min).switchIsEmpty();
+    		}
+    		else {
+    			for (int i = min; i < max; i++) {
+	    			if (!listItemView.get(i).getIsEmpty() && listItemView.get(i+1).getIsEmpty()) {
+	    				listItemView.get(i).setImage(new Image("file:src/img/" + imageName + "-empty.png"));
+	    		    	listItemView.get(i).switchIsEmpty();
+	    				break;
+	    			}
     			}
-			}
-			
-		}
+    		}
+    	}
     }
 
     // Gère toute l'interface
@@ -243,29 +260,30 @@ public class Controler implements Initializable {
     	
     	// Potions
     	for (int i = 0 ; i < 3 ; i++) {
-    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/soda.png"), (i+1)*17, 45, ""));
-    		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size() -1).setVisible(false);
+    		listItemView.add(new ItemView(game.getPlayer(), new Image("file:src/img/soda-empty.png"), 330+((i+1)*28), 10, true));
     	}
     	
     	// Argent
     	for (int i = 0 ; i < 5 ; i++) {
-    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/money.png"), (i+1)*17, 72, ""));
-    		interfaceContainer.getChildren().get(interfaceContainer.getChildren().size() -1).setVisible(false);
+    		listItemView.add(new ItemView(game.getPlayer(), new Image("file:src/img/money-empty.png"), 530+((i+4)*28), 10, true));
     	}
     	
     	// Coeurs
     	for (int i = 0 ; i < 6 ; i++) {
-    		interfaceContainer.getChildren().add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), (i+1)*17, 15, ""));
     		if (i > 2)
-    			interfaceContainer.getChildren().get(interfaceContainer.getChildren().size() -1).setVisible(false);
+        		listItemView.add(new ItemView(game.getPlayer(), new Image("file:src/img/h-empty.png"), (i+1)*28, 10, true));
+    		else
+    			listItemView.add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), (i+1)*28, 10, false));
     	}
-    		
+    	
+		interfaceContainer.getChildren().addAll(listItemView);
+
     	// MAJ Heart
     	game.getPlayer().getPv().addListener(new ChangeListener<Number>() {
     		
     		@Override
     		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			interfaceUpdate(8, 13, oldValue, newValue);
+    		interfaceUpdate(8, 13, 6, oldValue, newValue, "h");
     		}
 	    });
 	   
@@ -274,7 +292,7 @@ public class Controler implements Initializable {
     		
     		@Override
     		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			interfaceUpdate(0, 2, oldValue, newValue);
+    			interfaceUpdate(0, 2, 3, oldValue, newValue, "soda");
     		}
 	    });
 		
@@ -283,7 +301,7 @@ public class Controler implements Initializable {
     		
     		@Override
     		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			interfaceUpdate(3, 7, oldValue, newValue);
+    			interfaceUpdate(3, 7, 5, oldValue, newValue, "money");
     		}
 	    });
 	    
