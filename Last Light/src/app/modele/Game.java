@@ -185,7 +185,7 @@ public class Game {
     }
     
     public void addEnnemy(int x, int y) {
-    	Entity e = new Enemy(x, y, 0, 0, 4);
+    	Entity e = new Enemy(x, y, 1, 0, 4);
     	entities.add(e);
     	addKeyFrame(event -> {
     		e.update(entities);

@@ -12,7 +12,6 @@ public class Player extends AnimatedEntity {
 	private IntegerProperty money;
 	private BooleanProperty boots;
 	private BooleanProperty necklace;
-	private boolean hpAdded;
 	
 	public Player(int x, int y, int pv, int att, int v, int m) {
 		super(x, y, pv, att, v);
@@ -24,10 +23,6 @@ public class Player extends AnimatedEntity {
 	
 	public void update(ObservableList<Entity> entities) {
 		
-	}
-	
-	public void loosePv(int a) {
-		pv.set(pv.getValue()-a);
 	}
 	
 	public IntegerProperty getPotion() {

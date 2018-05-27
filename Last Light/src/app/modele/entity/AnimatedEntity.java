@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
 
 public abstract class AnimatedEntity extends Entity {
 	
-	protected IntegerProperty pv;
 	protected int attaque;
 	
 	public AnimatedEntity(int x, int y, int pv, int att, int v) {
@@ -23,8 +23,39 @@ public abstract class AnimatedEntity extends Entity {
 		
 	}
 	
-	public IntegerProperty getPv() {
-		return this.pv;
+	public void attack(ObservableList<Entity> entities) {
+		
+		switch (this.getOrientation().get()) {
+		case LEFT :
+			for (Entity e : entities)
+	    		if (this.getX().get() <= e.getX().get() + 64 && this.getX().get() >= e.getX().get() + 32 && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
+	    			e.loosePv(1);
+			break;
+		case UP :
+			for (Entity e : entities)
+	    		if (this.getY().get() <= e.getY().get() + 64 && this.getY().get() >= e.getY().get() + 32 && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
+	    			e.loosePv(1);
+			break;
+		case RIGHT :
+			for (Entity e : entities) {
+				if (this.getX().get() >= e.getX().get() - 64 && this.getX().get() <= e.getX().get() - 32 && 
+		    		this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
+					e.loosePv(1);
+			}
+			break;
+		case DOWN :
+			for (Entity e : entities)
+	    		if (this.getY().get() >= e.getY().get() - 64 && this.getY().get() <= e.getY().get() - 32 && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
+	    			e.loosePv(1);
+			break;
+		default :
+			break;
+			
+		}
+		
 	}
 
 }

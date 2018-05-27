@@ -68,6 +68,10 @@ public class Controler implements Initializable {
 				if (game.getEntities().get(k).getIsDead().get()) {
 					game.getEntities().remove(game.getEntities().get(k));
 				}
+			for (int k = 0; k < game.getEntities().size(); k++) {
+				if (game.getEntities().get(k).getPv().get() == 0)
+					game.getEntities().get(k).die();
+			}
 		}, 0.017);
 		
 		this.game.playGameLoop();
@@ -126,6 +130,9 @@ public class Controler implements Initializable {
     		break;
     	case X:
     		this.game.getPlayer().usePotion();
+    		break;
+    	case SPACE :
+    		this.game.getPlayer().attack(game.getEntities());
     		break;
 		default:
 			break;

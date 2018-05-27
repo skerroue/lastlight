@@ -32,6 +32,7 @@ public abstract class Entity {
 	private IntegerProperty orientation;
 	private int frame;
 	protected int velocity;
+	protected IntegerProperty pv;
 	protected BooleanProperty isDead;
 	
 	public Entity() {
@@ -68,7 +69,7 @@ public abstract class Entity {
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("CrossableTiles : Fichier introuvable");
-		}System.out.println(crossableTiles.size());
+		}
 				
 		return crossableTiles;
 	}
@@ -124,6 +125,14 @@ public abstract class Entity {
 	
 	public BooleanProperty getIsDead() {
 		return this.isDead;
+	}
+	
+	public IntegerProperty getPv() {
+		return this.pv;
+	}
+	
+	public void loosePv(int a) {
+		this.pv.set(this.pv.get() - a);
 	}
 	
 	public void moveLeft(ObservableList<Entity> entities) {
