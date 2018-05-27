@@ -1,6 +1,6 @@
 # Last Light
 
-## Why Last Light ?
+## What is Last Light ?
 Last Light is a school project. The goal is to create a Zelda-like.
 
 ## Who made this ?
