@@ -1,5 +1,6 @@
 package app.vue;
 
+import app.modele.entity.AnimatedEntity;
 import app.modele.entity.Entity;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -9,10 +10,10 @@ import javafx.scene.image.ImageView;
 
 public class EntityView extends ImageView {
 	
-	protected Entity entity;
+	protected AnimatedEntity entity;
 	protected boolean isDead;
 	
-	public EntityView(Image img, Entity e) {
+	public EntityView(Image img, AnimatedEntity e) {
 		this.setImage(img);
 		this.entity = e;
 		

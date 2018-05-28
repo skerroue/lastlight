@@ -1,5 +1,6 @@
 package app.vue;
 
+import app.modele.entity.AnimatedEntity;
 import app.modele.entity.Entity;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -8,7 +9,7 @@ import javafx.scene.image.Image;
 
 public class PlayerView extends EntityView {
 
-	public PlayerView(Entity e) {
+	public PlayerView(AnimatedEntity e) {
 		super(new Image("file:src/img/tilesetsprite.png"), e);
 		this.actualiserImage();
 		this.initializeListeners();

@@ -8,7 +8,7 @@ public class Enemy extends AnimatedEntity {
 		super(x, y, pv, att, v);
 	}
 
-	public void update(ObservableList<Entity> entities) {
+	public void update(ObservableList<AnimatedEntity> entities) {
 		if (Math.random() < 0.25)
 			this.moveDown(entities);
 		else if (Math.random() < 0.5) 

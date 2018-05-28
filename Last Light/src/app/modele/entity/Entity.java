@@ -23,22 +23,20 @@ public abstract class Entity {
 	final static int RIGHT = 2;
 	final static int DOWN = 3;
 	
+	final static int LEFT_TOP_LIMIT = 31;
+	final static int RIGHT_BOTTOM_LIMIT = 768;
+	
 	static protected ArrayList<Integer> crossableTiles;
 	
 	protected IntegerProperty x;
 	protected IntegerProperty y;
-	private int leftTopLimit;
-	private int rightBottomLimit;
-	private IntegerProperty orientation;
-	private int frame;
+	protected IntegerProperty orientation;
+	protected int frame;
 	protected int velocity;
-	protected IntegerProperty pv;
 	protected BooleanProperty isDead;
 	
 	public Entity() {
 		this.crossableTiles = readFileCrossableTiles();
-		this.leftTopLimit = 31;
-		this.rightBottomLimit = 768;
 		this.orientation = new SimpleIntegerProperty(0);
 		this.frame = 0;
 		this.isDead = new SimpleBooleanProperty(false);
@@ -74,7 +72,7 @@ public abstract class Entity {
 		return crossableTiles;
 	}
 	
-	public abstract void update(ObservableList<Entity> entities);
+	public abstract void update(ObservableList<AnimatedEntity> entities);
 	
 	public IntegerProperty getX() {
 		return x;
@@ -100,25 +98,6 @@ public abstract class Entity {
 		this.y.set(y);
 	}
 	
-	public IntegerProperty getOrientation() {
-		return orientation;
-	}
-	
-	public int getFrame() {
-		return frame;
-	}
-	
-	public void incrementeFrame() {
-		if (frame > 18)
-			frame = 0;
-		else 
-			frame++;
-	}
-	
-	public void resetFrame() {
-		frame = 0;
-	}
-	
 	public void die() {
 		this.isDead.set(true);
 	}
@@ -127,35 +106,27 @@ public abstract class Entity {
 		return this.isDead;
 	}
 	
-	public IntegerProperty getPv() {
-		return this.pv;
-	}
-	
-	public void loosePv(int a) {
-		this.pv.set(this.pv.get() - a);
-	}
-	
-	public void moveLeft(ObservableList<Entity> entities) {
+	public void moveLeft(ObservableList<AnimatedEntity> entities) {
 		if (canMove(entities))
 			x.set(x.get() - velocity);
 	}
 	
-	public void moveRight(ObservableList<Entity> entities) {
+	public void moveRight(ObservableList<AnimatedEntity> entities) {
 		if (canMove(entities))
 			x.set(x.get() + velocity);
 	}
 
-	public void moveDown(ObservableList<Entity> entities) {
+	public void moveDown(ObservableList<AnimatedEntity> entities) {
 		if (canMove(entities))
 			y.set(y.get() + velocity);
 	}
 	
-	public void moveUp(ObservableList<Entity> entities) {
+	public void moveUp(ObservableList<AnimatedEntity> entities) {
 		if (canMove(entities))
 			y.set(y.get() - velocity);
 	}
 	
-	public boolean canMove(ObservableList<Entity> entities) {
+	public boolean canMove(ObservableList<AnimatedEntity> entities) {
 		boolean canMove = false;
 		boolean emptyTile = true;
 		
@@ -165,7 +136,7 @@ public abstract class Entity {
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
-				if (y.get() < rightBottomLimit) {
+				if (y.get() > LEFT_TOP_LIMIT) {
 					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) &&
 						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1)) && emptyTile)
 						canMove = true;
@@ -177,15 +148,15 @@ public abstract class Entity {
 				}
 			}
 			else
-				if (x.getValue() > leftTopLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) && emptyTile)
+				if (x.get() > LEFT_TOP_LIMIT && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) && emptyTile)
 					canMove = true;
 			break;
 		case UP :
 			emptyTile = tileIsEmpty(entities, UP);
 			if (y.get() % 32 != 0 && emptyTile)
 				canMove = true;
-			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
-				if (x.get() < rightBottomLimit) {
+			else if (y.get() % 32 == 0 && x.get() % 32 != 0 && y.get() > 0) {
+				if (x.get() < RIGHT_BOTTOM_LIMIT) {
 					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && 
 						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1)) && emptyTile)
 						canMove = true;
@@ -197,15 +168,15 @@ public abstract class Entity {
 				}
 			}
 			else 
-				if (y.get() > leftTopLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && emptyTile)
+				if (y.get() > LEFT_TOP_LIMIT && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && emptyTile)
 					canMove = true;
 			break;
 		case DOWN :
 			emptyTile = tileIsEmpty(entities, DOWN);
-			if (y.get() % 32 != 0 && emptyTile)
+			if (y.get() % 32 != 0 && emptyTile) 
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
-				if (x.get() < rightBottomLimit) {
+				if (x.get() < RIGHT_BOTTOM_LIMIT) {
 					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && 
 						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1)) && emptyTile)
 						canMove = true;
@@ -217,7 +188,7 @@ public abstract class Entity {
 				}
 			}
 			else 
-				if (y.get() < rightBottomLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && emptyTile)
+				if (y.get() < RIGHT_BOTTOM_LIMIT && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && emptyTile)
 					canMove = true;
 			break;
 		case RIGHT :
@@ -225,7 +196,7 @@ public abstract class Entity {
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
-				if (y.get() < rightBottomLimit) {
+				if (y.get() > LEFT_TOP_LIMIT) {
 					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) &&
 						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1)) && emptyTile)
 						canMove = true;
@@ -237,7 +208,7 @@ public abstract class Entity {
 				}
 			}
 			else
-				if (x.getValue() < rightBottomLimit && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) && emptyTile)
+				if (x.get() < RIGHT_BOTTOM_LIMIT && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) && emptyTile)
 					canMove = true;
 			break;
 		default :
@@ -266,7 +237,7 @@ public abstract class Entity {
 		}
  	}
 	
-	public boolean tileIsEmpty(ObservableList<Entity> entities, int DIRECTION) {
+	public boolean tileIsEmpty(ObservableList<AnimatedEntity> entities, int DIRECTION) {
     	
 		switch (DIRECTION) {
 		case LEFT :
@@ -299,4 +270,5 @@ public abstract class Entity {
 		
     	return true;
 	}
+
 }

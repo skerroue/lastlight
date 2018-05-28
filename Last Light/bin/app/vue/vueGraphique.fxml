@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="800.0" maxWidth="800.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controler.Controler">
+<Pane maxHeight="850.0" maxWidth="800.0" minHeight="850.0" minWidth="800.0" prefHeight="850.0" prefWidth="800.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controler.Controler">
    <children>
-      <Pane fx:id="tileContainer" maxHeight="800.0" maxWidth="800.0" prefHeight="800.0" prefWidth="800.0" />
-      <Pane fx:id="entityContainer" focusTraversable="true" maxHeight="800.0" maxWidth="800.0" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="800.0" prefWidth="800.0" />
-      <Pane fx:id="interfaceContainer" prefHeight="800.0" prefWidth="800.0" />
+      <Pane fx:id="tileContainer" layoutY="50.0" maxHeight="800.0" maxWidth="800.0" minHeight="800.0" minWidth="800.0" prefHeight="800.0" prefWidth="800.0" />
+      <Pane fx:id="entityContainer" focusTraversable="true" layoutY="50.0" maxHeight="800.0" maxWidth="800.0" minHeight="800.0" minWidth="800.0" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="800.0" prefWidth="800.0" />
+      <Pane fx:id="interfaceContainer" maxHeight="850.0" maxWidth="800.0" minHeight="850.0" minWidth="800.0" prefHeight="850.0" prefWidth="800.0" />
    </children>
 </Pane>

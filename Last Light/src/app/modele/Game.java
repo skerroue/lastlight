@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+import app.modele.entity.AnimatedEntity;
 import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
 import app.modele.entity.Player;
@@ -19,16 +20,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
 public class Game {
+	
+	final static int LEFT = 0;
+	final static int UP = 1;
+	final static int RIGHT = 2;
+	final static int DOWN = 3;
+	
+	final static int LEFT_TOP_LIMIT = 0;
+	final static int RIGHT_BOTTOM_LIMIT = 768;
 
 	private Timeline gameloop;
 	private int[][] fieldsMap;	// contient les indices des fichiers de chaque map
 								// valeurs allant de 1 à ... (0 = pas de map)
 	private static Field map;
 	private Player player;
-	private ObservableList<Entity> entities;
+	private ObservableList<AnimatedEntity> entities;
 	private BooleanProperty mapChanged;
 	
 	public Game() {
@@ -83,7 +93,7 @@ public class Game {
 		return this.player;
 	}
 	
-	public ObservableList<Entity> getEntities() {
+	public ObservableList<AnimatedEntity> getEntities() {
 		return this.entities;
 	}
 	
@@ -102,25 +112,25 @@ public class Game {
 		boolean changing = false;
 		
 		switch (direction) {
-		case 1 : // Ouest
+		case LEFT :
 			if (j > 0 && this.fieldsMap[i][j - 1] != 0) {
 				this.map = new Field(i, j - 1, this.fieldsMap[i][j - 1], 25, 25);
 				changing = true;
 			}
 			break;
-		case 2 : // Nord
+		case UP :
 			if (i > 0 && this.fieldsMap[i - 1][j] != 0) {
 				this.map = new Field(i - 1, j, this.fieldsMap[i - 1][j], 25, 25);
 				changing = true;
 			}
 			break;
-		case 3 : // Est
+		case RIGHT :
 			if (j < 1 && this.fieldsMap[i][j + 1] != 0) {
 				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25);
 				changing = true;
 			}
 			break;
-		case 4 : // Sud
+		case DOWN :
 			if (i < 0 && this.fieldsMap[i + 1][j] != 0) {
 				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25);
 				changing = true;
@@ -130,7 +140,7 @@ public class Game {
 		
 		if (changing) {
 			this.mapOnChange();
-			for (int k = 1; k < this.entities.size(); k++)
+			for (int k = 1 ; k < this.entities.size() ; k++)
 				this.entities.get(k).die();
 			spawnEntities();
 		}
@@ -185,7 +195,7 @@ public class Game {
     }
     
     public void addEnnemy(int x, int y) {
-    	Entity e = new Enemy(x, y, 1, 0, 4);
+    	AnimatedEntity e = new Enemy(x, y, 1, 0, 4);
     	entities.add(e);
     	addKeyFrame(event -> {
     		e.update(entities);
@@ -195,6 +205,49 @@ public class Game {
     public void playGameLoop() {
     	gameloop.setCycleCount(Timeline.INDEFINITE);
     	gameloop.play();
+    }
+    
+    public void movePlayer(KeyCode event) {
+    	
+    	player.setOrientation(event);
+    	
+    	switch (event) {
+    	case LEFT :
+    		if (player.getX().get() == LEFT_TOP_LIMIT) {
+    			if (loadField(LEFT))
+    				player.setX(RIGHT_BOTTOM_LIMIT);
+    		}
+    		else 
+    			player.moveLeft(entities);
+    		break;
+    	case UP :
+    		if (player.getY().get() == LEFT_TOP_LIMIT) {
+    			if (loadField(UP))
+    				player.setY(RIGHT_BOTTOM_LIMIT);
+    		}
+    		else 
+    			player.moveUp(entities);
+    		break;
+    	case RIGHT :
+    		if (player.getX().get() == RIGHT_BOTTOM_LIMIT) {
+    			if (loadField(RIGHT))
+    				player.setX(LEFT_TOP_LIMIT);
+    		}
+    		else 
+    			player.moveRight(entities);
+    		break;
+    	case DOWN :
+    		if (player.getY().get() == RIGHT_BOTTOM_LIMIT) {
+    			if (loadField(DOWN))
+    				player.setY(LEFT_TOP_LIMIT);
+    		}
+    		else 
+    			player.moveDown(entities);
+    		break;
+		default:
+			break;
+    	}
+    	
     }
 	
 }

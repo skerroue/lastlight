@@ -7,30 +7,57 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
 public class Player extends AnimatedEntity {
-
+	
+	private IntegerProperty maxHP;
+	private IntegerProperty potentialHP;
+	
+	private IntegerProperty maxPotion;
 	private IntegerProperty potion;
+	
+	private IntegerProperty maxMoney;
 	private IntegerProperty money;
+	
 	private BooleanProperty boots;
 	private BooleanProperty necklace;
 	
 	public Player(int x, int y, int pv, int att, int v, int m) {
 		super(x, y, pv, att, v);
+		this.maxPotion = new SimpleIntegerProperty(3);
 		this.potion = new SimpleIntegerProperty(0);
+		this.maxMoney = new SimpleIntegerProperty(5);
 		this.money = new SimpleIntegerProperty(m);
 		this.boots = new SimpleBooleanProperty(false);
 		this.necklace = new SimpleBooleanProperty(false);
+		this.maxHP = new SimpleIntegerProperty(3);
+		this.potentialHP = new SimpleIntegerProperty(6);
 	}
 	
-	public void update(ObservableList<Entity> entities) {
+	public void update(ObservableList<AnimatedEntity> entities) {
 		
+	}
+	
+	public IntegerProperty getMaxPotion() {
+		return this.maxPotion;
 	}
 	
 	public IntegerProperty getPotion() {
 		return this.potion;
 	}
 	
+	public IntegerProperty getMaxMoney() {
+		return this.maxMoney;
+	}
+	
 	public IntegerProperty getMoney() {
 		return this.money;
+	}
+	
+	public IntegerProperty getMaxHP() {
+		return maxHP;
+	}
+	
+	public IntegerProperty getPotentialHP() {
+		return potentialHP;
 	}
 	
 	// Gagne une potion 1 à 1
@@ -41,8 +68,8 @@ public class Player extends AnimatedEntity {
 	// TODO
 	public void usePotion() {
 		if (this.potion.getValue() > 0) {
-			this.potion.set(this.potion.getValue() -1);
-			this.pv.set(this.pv.getValue() + 1);
+			this.potion.set(this.potion.getValue() - 1);
+			this.hp.set(this.hp.getValue() + 1);
 		}
 	}
 	
