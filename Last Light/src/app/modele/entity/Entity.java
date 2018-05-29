@@ -26,8 +26,6 @@ public abstract class Entity {
 	final static int LEFT_TOP_LIMIT = 31;
 	final static int RIGHT_BOTTOM_LIMIT = 768;
 	
-	static protected ArrayList<Integer> crossableTiles;
-	
 	protected IntegerProperty x;
 	protected IntegerProperty y;
 	protected IntegerProperty orientation;
@@ -36,40 +34,9 @@ public abstract class Entity {
 	protected BooleanProperty isDead;
 	
 	public Entity() {
-		this.crossableTiles = readFileCrossableTiles();
 		this.orientation = new SimpleIntegerProperty(0);
 		this.frame = 0;
 		this.isDead = new SimpleBooleanProperty(false);
-	}
-	
-	private ArrayList<Integer> readFileCrossableTiles() {
-		ArrayList<Integer> crossableTiles = new ArrayList<>();
-		
-		try {
-        	
-			File f = new File("src/map/crossableTiles.txt");	// nom du fichier à modifier
-			FileReader fr = new FileReader(f);
-			BufferedReader br = new BufferedReader(fr);
-			Scanner s = new Scanner(br).useDelimiter(",");
-			
-			try {
-				
-				while (s.hasNextInt())
-					crossableTiles.add(s.nextInt());
-				
-				s.close();
-				br.close();
-				fr.close();
-				
-			} catch (IOException e) {
-				System.out.println("CrossableTiles : Erreur lecture");
-			}
-			
-		} catch (FileNotFoundException e) {
-			System.out.println("CrossableTiles : Fichier introuvable");
-		}
-				
-		return crossableTiles;
 	}
 	
 	public abstract void update(ObservableList<AnimatedEntity> entities);
@@ -137,18 +104,18 @@ public abstract class Entity {
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
 				if (y.get() > LEFT_TOP_LIMIT) {
-					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) &&
-						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1)) && emptyTile)
+					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() &&
+						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 				else {
-					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) &&
-						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()-1)) && emptyTile)
+					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() &&
+						Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()-1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 			}
 			else
-				if (x.get() > LEFT_TOP_LIMIT && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1)) && emptyTile)
+				if (x.get() > LEFT_TOP_LIMIT && Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() && emptyTile)
 					canMove = true;
 			break;
 		case UP :
@@ -157,18 +124,18 @@ public abstract class Entity {
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0 && y.get() > 0) {
 				if (x.get() < RIGHT_BOTTOM_LIMIT) {
-					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && 
-						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1)) && emptyTile)
+					if (Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()).isCrossable() && 
+						Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 				else {
-					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && 
-						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()-1)) && emptyTile)
+					if (Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()).isCrossable() && 
+					   	Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()-1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 			}
 			else 
-				if (y.get() > LEFT_TOP_LIMIT && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX())) && emptyTile)
+				if (y.get() > LEFT_TOP_LIMIT && Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()).isCrossable() && emptyTile)
 					canMove = true;
 			break;
 		case DOWN :
@@ -177,18 +144,18 @@ public abstract class Entity {
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
 				if (x.get() < RIGHT_BOTTOM_LIMIT) {
-					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && 
-						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1)) && emptyTile)
+					if (Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()).isCrossable() && 
+						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 				else {
-					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && 
-						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1)) && emptyTile)
+					if (Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()).isCrossable() && 
+						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 			}
 			else 
-				if (y.get() < RIGHT_BOTTOM_LIMIT && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX())) && emptyTile)
+				if (y.get() < RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()).isCrossable() && emptyTile)
 					canMove = true;
 			break;
 		case RIGHT :
@@ -197,18 +164,18 @@ public abstract class Entity {
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
 				if (y.get() > LEFT_TOP_LIMIT) {
-					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) &&
-						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1)) && emptyTile)
+					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() &&
+						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 				else {
-					if (crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) &&
-						crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1)) && emptyTile)
+					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() &&
+						Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 			}
 			else
-				if (x.get() < RIGHT_BOTTOM_LIMIT && crossableTiles.contains(Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1)) && emptyTile)
+				if (x.get() < RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() && emptyTile)
 					canMove = true;
 			break;
 		default :

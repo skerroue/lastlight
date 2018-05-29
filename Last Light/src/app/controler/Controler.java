@@ -9,6 +9,7 @@ import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
 import app.vue.EnemyView;
 import app.vue.EntityView;
+import app.vue.FieldView;
 import app.vue.InterfaceView;
 import app.vue.PlayerView;
 import javafx.beans.value.ChangeListener;
@@ -26,7 +27,7 @@ public class Controler implements Initializable {
 
     @FXML
     private Pane tileContainer;
-    private Image tileset;
+    private FieldView field;
 
     @FXML
     private Pane entityContainer;
@@ -42,20 +43,15 @@ public class Controler implements Initializable {
     public Controler() {	
     	
     	this.game = new Game();
-    	this.tileset = new Image("file:src/img/tilesetLastLight.png");
     	this.entitiesView = new ArrayList<>();
     	this.hud = new InterfaceView(game.getPlayer());
+    	this.field = new FieldView();
     	
     }
     
 	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {	
-		
-		// Generation de la map
-		mapGeneration();
-		this.game.mapOnChange();
-		
-		// Generation des entites (personnage, ennemis, objets, interface)
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		// Generation des entites (personnage, ennemis, objets, interface, map)
 		entityLoading();
 		
 		this.game.playGameLoop();
@@ -94,7 +90,7 @@ public class Controler implements Initializable {
     void onKeyReleased(KeyEvent event) {
     	
     	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
-    		game.getEntities().get(0).resetFrame();
+    		entitiesView.get(0).resetImage();
     	
     	switch (event.getCode()) {
     	case SPACE :
@@ -102,28 +98,6 @@ public class Controler implements Initializable {
 		default :
 			break;
     	}
-    	
-    }
-    
-    private void mapGeneration() {
-    	
-    	this.game.getMapChanged().addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				
-				tileContainer.getChildren().clear();
-				
-				for (int i = 0 ; i < game.getMap().getField().length ; i++) 
-					for (int j = 0 ; j < game.getMap().getField().length ; j++) {
-						tileContainer.getChildren().add(game.getMap().intToTiles(new ImageView(tileset), game.getMap().getNextTile(i, j)));
-						tileContainer.getChildren().get(tileContainer.getChildren().size()-1).setTranslateX(j*32);
-						tileContainer.getChildren().get(tileContainer.getChildren().size()-1).setTranslateY(i*32);
-					}
-				
-			}
-    		
-    	});
     	
     }
     
@@ -135,6 +109,8 @@ public class Controler implements Initializable {
     	interfaceContainer.getChildren().addAll(hud.getHearts());
     	interfaceContainer.getChildren().addAll(hud.getPotions());
     	interfaceContainer.getChildren().addAll(hud.getMoney());
+    	
+    	tileContainer.getChildren().addAll(this.field.getFieldView());
     	
     	game.getEntities().addListener(new ListChangeListener<Entity>() {
 
