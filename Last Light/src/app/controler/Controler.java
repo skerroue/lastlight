@@ -39,6 +39,7 @@ public class Controler implements Initializable {
     private InterfaceView hud;
     
     private Game game;
+    ImageView i;
     
     public Controler() {	
     	
@@ -47,12 +48,21 @@ public class Controler implements Initializable {
     	this.hud = new InterfaceView(game.getPlayer());
     	this.field = new FieldView();
     	
+    	i = new ImageView(new Image("file:src/img/0.png"));
+    	
     }
     
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// Generation des entites (personnage, ennemis, objets, interface, map)
-		entityLoading();
+		
+		//Initialisation de la map
+		initializeMap();
+		
+		//Initialisation de l'interface
+		initializeInterface();
+		
+		// Generation des entites (personnage, ennemis, objets)
+		initializeEntities();
 		
 		this.game.playGameLoop();
 		
@@ -94,6 +104,7 @@ public class Controler implements Initializable {
     	
     	switch (event.getCode()) {
     	case SPACE :
+    		game.getPlayer().resetIsAttacking();
     		break;
 		default :
 			break;
@@ -101,16 +112,124 @@ public class Controler implements Initializable {
     	
     }
     
-    private void entityLoading() {
+    private void initializeMap() {
     	
-    	entitiesView.add(new PlayerView(game.getPlayer()));
-    	entityContainer.getChildren().add(entitiesView.get(0));
+    	tileContainer.getChildren().addAll(this.field.getFieldView());
     	
+    	Game.getMapChanged().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+				field.refreshField();
+			}
+			
+		});
+    	
+    }
+    
+    private void initializeInterface() {
     	interfaceContainer.getChildren().addAll(hud.getHearts());
     	interfaceContainer.getChildren().addAll(hud.getPotions());
     	interfaceContainer.getChildren().addAll(hud.getMoney());
     	
-    	tileContainer.getChildren().addAll(this.field.getFieldView());
+    	hud.getPlayer().getHP().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (oldValue.intValue() > newValue.intValue()) {
+    				for (int i = hud.getHearts().size()-1 ; i >= 0 ; i--) 
+    					if (hud.getHearts().get(i).getFull()) {
+    						hud.getHearts().get(i).setEmpty();
+    						break;
+    					}
+    			}
+    			
+    			else {
+    				for (int i = 0 ; i < hud.getHearts().size() ; i++)
+    					if (hud.getHearts().get(i).getEmpty() && !hud.getHearts().get(i).getLocked()) {
+    						hud.getHearts().get(i).setFull();
+    						break;
+    					}
+    			}
+    				
+    		}
+    		
+	    });
+		
+    	hud.getPlayer().getMaxHP().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (newValue.intValue() > oldValue.intValue()) {
+    				for (int i = 0 ; i < hud.getHearts().size() ; i++)
+    					if (hud.getHearts().get(i).getLocked()) {
+    						hud.getHearts().get(i).setEmpty();
+    						break;
+    					}
+    				
+    			}
+    			
+    		}
+    		
+	    });
+    	
+		hud.getPlayer().getPotion().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (oldValue.intValue() > newValue.intValue()) {
+    				for (int i = hud.getPotions().size()-1 ; i >= 0 ; i--) 
+    					if (hud.getPotions().get(i).getFull()) {
+    						hud.getPotions().get(i).setEmpty();
+    						break;
+    					}
+    			}
+    			
+    			else {
+    				for (int i = 0 ; i < hud.getPotions().size() ; i++)
+    					if (hud.getPotions().get(i).getEmpty()) {
+    						hud.getPotions().get(i).setFull();
+    						break;
+    					}
+    			}
+    				
+    		}
+    		
+	    });
+		
+		hud.getPlayer().getMoney().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (oldValue.intValue() > newValue.intValue()) {
+    				for (int i = hud.getMoney().size()-1 ; i >= 0 ; i--) 
+    					if (hud.getMoney().get(i).getFull()) {
+    						hud.getMoney().get(i).setEmpty();
+    						break;
+    					}
+    			}
+    			
+    			else {
+    				for (int i = 0 ; i < hud.getMoney().size() ; i++)
+    					if (hud.getMoney().get(i).getEmpty()) {
+    						hud.getMoney().get(i).setFull();
+    						break;
+    					}
+    			}
+    				
+    		}
+    		
+	    });
+    }
+    
+    private void initializeEntities() {
+    	
+    	entitiesView.add(new PlayerView(game.getPlayer()));
+    	entityContainer.getChildren().add(entitiesView.get(0));
     	
     	game.getEntities().addListener(new ListChangeListener<Entity>() {
 
@@ -123,6 +242,42 @@ public class Controler implements Initializable {
 						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
 					}
 				}
+				
+			}
+    		
+    	});
+    	
+    	game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldValue, Boolean newValue) {
+				
+				if (newValue.booleanValue()) {
+					switch (game.getPlayer().getOrientation().get()) {
+					case 0 :
+						i.setTranslateX(entitiesView.get(0).getTranslateX() - 32);
+						i.setTranslateY(entitiesView.get(0).getTranslateY());
+						break;
+					case 1 :
+						i.setTranslateX(entitiesView.get(0).getTranslateX());
+						i.setTranslateY(entitiesView.get(0).getTranslateY() - 32);
+						break;
+					case 2 : 
+						i.setTranslateX(entitiesView.get(0).getTranslateX() + 32);
+						i.setTranslateY(entitiesView.get(0).getTranslateY());
+						break;
+					case 3 :
+						i.setTranslateX(entitiesView.get(0).getTranslateX());
+						i.setTranslateY(entitiesView.get(0).getTranslateY() + 32);
+						break;
+					default :
+						break;
+					}
+					
+					entityContainer.getChildren().add(i);
+				}
+				else
+					entityContainer.getChildren().remove(i);
 				
 			}
     		

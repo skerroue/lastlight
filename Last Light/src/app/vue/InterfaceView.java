@@ -13,7 +13,7 @@ public class InterfaceView {
 	private ObservableList<ComponentView> potions;
 	private ObservableList<ComponentView> money;
 	
-	public InterfaceView(Player player) {
+	public InterfaceView(Player player) {		
 		this.player = player;
 		
 		this.hearts = FXCollections.observableArrayList();
@@ -38,49 +38,6 @@ public class InterfaceView {
 			hearts.get(i).setTranslateY(10);
 		}
 		
-		player.getHP().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			
-    			if (oldValue.intValue() > newValue.intValue()) {
-    				for (int i = hearts.size()-1 ; i >= 0 ; i--) 
-    					if (hearts.get(i).getFull()) {
-    						hearts.get(i).setEmpty();
-    						break;
-    					}
-    			}
-    			
-    			else {
-    				for (int i = 0 ; i < hearts.size() ; i++)
-    					if (hearts.get(i).getEmpty() && !hearts.get(i).getLocked()) {
-    						hearts.get(i).setFull();
-    						break;
-    					}
-    			}
-    				
-    		}
-    		
-	    });
-		
-		player.getMaxHP().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			
-    			if (newValue.intValue() > oldValue.intValue()) {
-    				for (int i = 0 ; i < hearts.size() ; i++)
-    					if (hearts.get(i).getLocked()) {
-    						hearts.get(i).setEmpty();
-    						break;
-    					}
-    				
-    			}
-    			
-    		}
-    		
-	    });
-		
 	}
 
 	public void initializePotions() {
@@ -92,31 +49,6 @@ public class InterfaceView {
 			potions.get(i).setTranslateX(330+((i+1)*28));
 			potions.get(i).setTranslateY(10);
 		}
-		
-		player.getPotion().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			
-    			if (oldValue.intValue() > newValue.intValue()) {
-    				for (int i = potions.size()-1 ; i >= 0 ; i--) 
-    					if (potions.get(i).getFull()) {
-    						potions.get(i).setEmpty();
-    						break;
-    					}
-    			}
-    			
-    			else {
-    				for (int i = 0 ; i < potions.size() ; i++)
-    					if (potions.get(i).getEmpty()) {
-    						potions.get(i).setFull();
-    						break;
-    					}
-    			}
-    				
-    		}
-    		
-	    });
 		
 	}
 	
@@ -130,31 +62,6 @@ public class InterfaceView {
 			money.get(i).setTranslateY(10);
 		}
 		
-		player.getMoney().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			
-    			if (oldValue.intValue() > newValue.intValue()) {
-    				for (int i = money.size()-1 ; i >= 0 ; i--) 
-    					if (money.get(i).getFull()) {
-    						money.get(i).setEmpty();
-    						break;
-    					}
-    			}
-    			
-    			else {
-    				for (int i = 0 ; i < money.size() ; i++)
-    					if (money.get(i).getEmpty()) {
-    						money.get(i).setFull();
-    						break;
-    					}
-    			}
-    				
-    		}
-    		
-	    });
-		
 	}
 	
 	public ObservableList<ComponentView> getHearts() {
@@ -167,6 +74,10 @@ public class InterfaceView {
 	
 	public ObservableList<ComponentView> getMoney() {
 		return money;
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 
 }

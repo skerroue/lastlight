@@ -30,15 +30,6 @@ public class FieldView {
 			}
 		
 		refreshField();
-		
-		Game.getMapChanged().addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-				refreshField();
-			}
-			
-		});
 	}
 	
 	public void refreshField() {

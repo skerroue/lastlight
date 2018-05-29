@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
@@ -11,6 +12,7 @@ public abstract class AnimatedEntity extends Entity {
 	
 	protected int attaque;
 	protected IntegerProperty hp;
+	protected BooleanProperty isAttacking;
 	
 	public AnimatedEntity(int x, int y, int hp, int att, int v) {
 		this.x = new SimpleIntegerProperty(x);
@@ -18,6 +20,8 @@ public abstract class AnimatedEntity extends Entity {
 		this.hp = new SimpleIntegerProperty(hp);
 		this.attaque = att;
 		this.velocity = v;
+		
+		this.isAttacking = new SimpleBooleanProperty(false);
 	}
 	
 	@Override
@@ -27,6 +31,8 @@ public abstract class AnimatedEntity extends Entity {
 	}
 	
 	public void attack(ObservableList<AnimatedEntity> entities) {
+		
+		this.isAttacking.set(true);
 		
 		switch (this.getOrientation().get()) {
 		case LEFT :
@@ -59,6 +65,14 @@ public abstract class AnimatedEntity extends Entity {
 			
 		}
 		
+	}
+	
+	public void resetIsAttacking() {
+		this.isAttacking.set(false);
+	}
+	
+	public BooleanProperty getIsAttacking() {
+		return this.isAttacking;
 	}
 	
 	public IntegerProperty getOrientation() {

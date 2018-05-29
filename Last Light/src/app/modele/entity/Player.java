@@ -22,14 +22,16 @@ public class Player extends AnimatedEntity {
 	
 	public Player(int x, int y, int pv, int att, int v, int m) {
 		super(x, y, pv, att, v);
+		
 		this.maxPotion = new SimpleIntegerProperty(3);
 		this.potion = new SimpleIntegerProperty(0);
 		this.maxMoney = new SimpleIntegerProperty(5);
 		this.money = new SimpleIntegerProperty(m);
-		this.boots = new SimpleBooleanProperty(false);
-		this.necklace = new SimpleBooleanProperty(false);
 		this.maxHP = new SimpleIntegerProperty(3);
 		this.potentialHP = new SimpleIntegerProperty(6);
+		
+		this.boots = new SimpleBooleanProperty(false);
+		this.necklace = new SimpleBooleanProperty(false);
 	}
 	
 	public void update(ObservableList<AnimatedEntity> entities) {

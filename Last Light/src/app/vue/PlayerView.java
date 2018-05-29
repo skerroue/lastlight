@@ -6,13 +6,18 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class PlayerView extends EntityView {
+	
+	private ImageView attaque;
 
 	public PlayerView(AnimatedEntity e) {
 		super(new Image("file:src/img/tilesetsprite.png"), e);
 		this.actualiserImage();
 		this.initializeListeners();
+		
+		attaque = new ImageView("file:src/img/0.png");
 	}
 	
 	public void actualiserImage() {

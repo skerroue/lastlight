@@ -1,13 +1,5 @@
 package app.modele.entity;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
-
 import app.modele.Game;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -188,16 +180,16 @@ public abstract class Entity {
 	public void setOrientation(KeyCode k) {
 		switch (k) {
 		case LEFT :
-			this.orientation.set(this.LEFT);
+			this.orientation.set(LEFT);
 			break;
 		case UP :
-			this.orientation.set(this.UP);
+			this.orientation.set(UP);
 			break;
 		case RIGHT :
-			this.orientation.set(this.RIGHT);
+			this.orientation.set(RIGHT);
 			break;
 		case DOWN :
-			this.orientation.set(this.DOWN);
+			this.orientation.set(DOWN);
 			break;
 		default :
 			break;
