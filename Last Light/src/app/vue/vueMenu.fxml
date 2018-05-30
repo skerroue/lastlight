@@ -5,26 +5,25 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
-
-<Pane fx:id="paneTest" maxHeight="850.0" maxWidth="800.0" minHeight="850.0" minWidth="800.0" prefHeight="850.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controler.MenuControler">
+<Pane fx:id="panemenu" maxHeight="850.0" maxWidth="800.0" minHeight="850.0" minWidth="800.0" prefHeight="850.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controler.MenuControler">
    <children>
       <ImageView fitHeight="850.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../img/menu-background.jpeg" />
          </image>
       </ImageView>
-      <Button fx:id="playButton" layoutX="290.0" layoutY="250.0" mnemonicParsing="false" onAction="#play" prefHeight="54.0" prefWidth="218.0" style="-fx-background-color: transparent;">
+      <Button fx:id="playButton" layoutX="300.0" layoutY="250.0" mnemonicParsing="false" onAction="#play" prefHeight="92.0" prefWidth="181.0" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fx:id="imgQuit" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="92.0" fitWidth="181.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../img/play-button.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="quitButton" layoutX="290.0" layoutY="340.0" mnemonicParsing="false" onAction="#quit" style="-fx-background-color: transparent;">
+      <Button fx:id="quitButton" layoutX="285.0" layoutY="341.0" mnemonicParsing="false" onAction="#quit" prefHeight="71.0" prefWidth="173.0" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="95.0" fitWidth="212.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../img/quit-button.png" />
                </image>
