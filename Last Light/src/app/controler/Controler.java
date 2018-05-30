@@ -85,7 +85,7 @@ public class Controler implements Initializable {
 	    		this.game.getPlayer().attack(game.getEntities());
 	    		break;
 	    	case ESCAPE:
-	    		this.pausePane.setVisible(true);
+	    		showPauseMenu();// Le personnage peut encore se déplacer
 	    		break;
 			default:
 				break;
@@ -162,5 +162,12 @@ public class Controler implements Initializable {
     @FXML
     void resume(ActionEvent event) {
     	this.pausePane.setVisible(false);
+    	this.game.playGameLoop();
+    }
+    
+    private void showPauseMenu() {
+    	this.pausePane.setVisible(true);
+    	this.game.pauseGameLoop();
+    	this.pausePane.requestFocus();
     }
 }
