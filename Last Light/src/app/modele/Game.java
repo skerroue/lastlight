@@ -173,7 +173,6 @@ public class Game {
 		}
 		
 		if (changing) {
-			this.mapChanged();
 			for (int k = 1 ; k < this.entities.size() ; k++)
 				this.entities.get(k).die();
 			spawnEntities();
@@ -252,32 +251,40 @@ public class Game {
     	switch (event) {
     	case LEFT :
     		if (player.getX().get() == LEFT_TOP_LIMIT) {
-    			if (loadField(LEFT))
+    			if (loadField(LEFT)) {
     				player.setX(RIGHT_BOTTOM_LIMIT);
+    				this.mapChanged();
+    			}
     		}
     		else 
     			player.moveLeft(entities);
     		break;
     	case UP :
     		if (player.getY().get() == LEFT_TOP_LIMIT) {
-    			if (loadField(UP))
+    			if (loadField(UP)) {
     				player.setY(RIGHT_BOTTOM_LIMIT);
+    				this.mapChanged();
+    			}
     		}
     		else 
     			player.moveUp(entities);
     		break;
     	case RIGHT :
     		if (player.getX().get() == RIGHT_BOTTOM_LIMIT) {
-    			if (loadField(RIGHT))
+    			if (loadField(RIGHT)) {
     				player.setX(LEFT_TOP_LIMIT);
+    				this.mapChanged();
+    			}
     		}
     		else 
     			player.moveRight(entities);
     		break;
     	case DOWN :
     		if (player.getY().get() == RIGHT_BOTTOM_LIMIT) {
-    			if (loadField(DOWN))
+    			if (loadField(DOWN)) {
     				player.setY(LEFT_TOP_LIMIT);
+    				this.mapChanged();
+    			}
     		}
     		else 
     			player.moveDown(entities);

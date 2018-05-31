@@ -22,7 +22,7 @@ public class Main extends Application {
 		System.out.println(loader.getLocation());
 		Pane root = new Pane();
 		root=loader.load();
-     	Scene scene = new Scene(root,800,850);
+     	Scene scene = new Scene(root,512,512);
      	primaryStage.setTitle("Last Light");
      	primaryStage.setResizable(false);
 		primaryStage.setScene(scene);

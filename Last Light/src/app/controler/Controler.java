@@ -26,6 +26,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 public class Controler implements Initializable {
+	
+	final static int SCENE_WIDTH = 512;
+	final static int SCENE_HEIGHT = 512;
 
 	@FXML
 	private Pane pausePane;
@@ -61,35 +64,56 @@ public class Controler implements Initializable {
 		// Generation des entites (personnage, ennemis, objets, interface, map)
 		entityLoading();
 		this.game.playGameLoop();
+		initializeScrollField();
 	}
 
     @FXML
     void onKeyPressed(KeyEvent event) {
     	
-    	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
+    	switch (event.getCode()) {
+    	case UP:
     		game.movePlayer(event.getCode());
-    	else {
-	    	switch (event.getCode()) {
-	    	case S:
-	    		this.game.addEnnemy(384, 384);
-	    		break;
-	    	case E:
-	    		this.game.getPlayer().loseHP(1);
-	    		this.game.getPlayer().earnPotion();
-	    		this.game.getPlayer().earnMoney(1);
-	    		break;
-	    	case X:
-	    		this.game.getPlayer().usePotion();
-	    		break;
-	    	case SPACE :
-	    		this.game.getPlayer().attack(game.getEntities());
-	    		break;
-	    	case ESCAPE:
-	    		showPauseMenu();// Le personnage peut encore se déplacer
-	    		break;
-			default:
-				break;
-	    	}
+    		if (entitiesView.get(0).getTranslateY() - 231 > 0 && entitiesView.get(0).getTranslateY() + 231 < 800) {
+    			setScrollY((int) -entitiesView.get(0).getTranslateY() + (SCENE_HEIGHT - 50) / 2);
+    		}
+    		break;
+    	case DOWN:
+    		game.movePlayer(event.getCode());
+    		if (entitiesView.get(0).getTranslateY() - 231 > 0 && entitiesView.get(0).getTranslateY() + 231 < 800) {
+    			setScrollY((int) -entitiesView.get(0).getTranslateY() + (SCENE_HEIGHT - 50) / 2);
+    		}
+    		break;
+    	case LEFT:
+    		game.movePlayer(event.getCode());
+    		if (entitiesView.get(0).getTranslateX() - 256 > 0 && entitiesView.get(0).getTranslateX() + 256 < 800) {
+    			setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
+    		}
+    		break;
+    	case RIGHT:
+    		game.movePlayer(event.getCode());
+    		if (entitiesView.get(0).getTranslateX() - 256 > 0 && entitiesView.get(0).getTranslateX() + 256 < 800) {
+    			setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
+    		}
+    		break;
+    	case S:
+    		this.game.addEnnemy(384, 384);
+    		break;
+    	case E:
+    		this.game.getPlayer().loseHP(1);
+    		this.game.getPlayer().earnPotion();
+    		this.game.getPlayer().earnMoney(1);
+    		break;
+    	case X:
+    		this.game.getPlayer().usePotion();
+    		break;
+    	case SPACE :
+    		this.game.getPlayer().attack(game.getEntities());
+    		break;
+    	case ESCAPE:
+    		showPauseMenu();
+    		break;
+		default:
+			break;
     	}
     	
     }
@@ -152,6 +176,73 @@ public class Controler implements Initializable {
 			}
 		}, 0.017);
     	
+    }
+    
+    public void initializeScrollField() {
+    	
+    	setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
+		setScrollY((int) -entitiesView.get(0).getTranslateY() + (SCENE_HEIGHT - 50) / 2);
+    	
+    	this.game.getMapChanged().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				
+				field.refreshField();
+				
+				switch (game.getPlayer().getOrientation().get()) {
+				case 0:
+					if (entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2 < 0)
+						setScrollY(0);
+					else if (entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2 > SCENE_HEIGHT)
+						setScrollY(SCENE_HEIGHT);
+					else
+						setScrollY((int) -entitiesView.get(0).getTranslateY() + (SCENE_HEIGHT - 50) / 2);
+					setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH - 32);
+					break;
+				case 1:
+					if (entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2 < 0)
+						setScrollX(0);
+					else if (entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2 > SCENE_WIDTH)
+						setScrollX(SCENE_WIDTH);
+					else
+						setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
+					setScrollY((int) -entitiesView.get(0).getTranslateY() + SCENE_HEIGHT - 32);
+					break;
+				case 2:
+					if (entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2 < 0) {
+						setScrollY(0);
+					} else if (entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2 > SCENE_HEIGHT)  {
+						setScrollY(SCENE_HEIGHT);
+					} else {
+						setScrollY((int) -entitiesView.get(0).getTranslateY() + (SCENE_HEIGHT - 50) / 2);
+					}
+					setScrollX((int) -entitiesView.get(0).getTranslateX());
+					break;
+				case 3:
+					if (entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2 < 0)
+						setScrollX(0);
+					else if (entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2 > SCENE_WIDTH)
+						setScrollX(SCENE_WIDTH);
+					else
+						setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
+					setScrollY((int) -entitiesView.get(0).getTranslateY());
+					break;
+				}
+				
+			}
+    		
+    	});
+    }
+    
+    private void setScrollX(int a) {
+    	tileContainer.setTranslateX(a);
+		entityContainer.setTranslateX(a);
+    }
+    
+    private void setScrollY(int a) {
+    	tileContainer.setTranslateY(a);
+		entityContainer.setTranslateY(a);
     }
     
     @FXML
