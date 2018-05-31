@@ -34,7 +34,7 @@ public class InterfaceView {
 			else
 				hearts.get(i).setLocked();
 			
-			hearts.get(i).setTranslateX((i+1)*28);
+			hearts.get(i).setTranslateX(10+(i)*28);
 			hearts.get(i).setTranslateY(10);
 		}
 		
@@ -46,7 +46,7 @@ public class InterfaceView {
 			potions.add(new ComponentView("soda"));
 			potions.get(i).setEmpty();
 			
-			potions.get(i).setTranslateX(330+((i+1)*28));
+			potions.get(i).setTranslateX(205+((i+1)*28));
 			potions.get(i).setTranslateY(10);
 		}
 		
@@ -58,7 +58,7 @@ public class InterfaceView {
 			money.add(new ComponentView("money"));
 			money.get(i).setEmpty();
 			
-			money.get(i).setTranslateX(530+((i+4)*28));
+			money.get(i).setTranslateX(260+((i+4)*28));
 			money.get(i).setTranslateY(10);
 		}
 		
