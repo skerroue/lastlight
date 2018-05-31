@@ -229,7 +229,7 @@ public class Game {
     }
     
     public void addEnnemy(int x, int y) {
-    	AnimatedEntity e = new Enemy(x, y, 2, 0, 4);
+    	AnimatedEntity e = new Enemy(x, y, 1, 0, 4);
     	entities.add(e);
     	addKeyFrame(event -> {
     		e.update(entities);
@@ -239,6 +239,10 @@ public class Game {
     public void playGameLoop() {
     	gameloop.setCycleCount(Timeline.INDEFINITE);
     	gameloop.play();
+    }
+    
+    public void pauseGameLoop() {
+    	gameloop.pause();
     }
     
     public void movePlayer(KeyCode event) {
