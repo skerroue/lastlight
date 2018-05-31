@@ -30,7 +30,6 @@ public class MenuControler {
 			System.out.println(loader.getLocation());
 			Pane root = new Pane(); 
 			root=loader.load();
-	     	//stage.setResizable(false);
 	     	panemenu.getScene().setRoot(root);
 	     	
 			
