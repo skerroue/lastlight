@@ -13,7 +13,7 @@ public class EntityView extends ImageView {
 	protected AnimatedEntity entity;
 	protected boolean isDead;
 	
-	public EntityView( AnimatedEntity e) {
+	public EntityView(AnimatedEntity e) {
 		this.setImage(new Image("file:src/img/tileset" + e.getId() + ".png"));
 		this.entity = e;
 		
@@ -39,12 +39,12 @@ public class EntityView extends ImageView {
 	}
 	
 	public void actualiserImage() {
-		this.setViewport(new Rectangle2D((this.entity.getFrame()/3)*32, this.entity.getOrientation().getValue()*32, 32, 32));
+		this.setViewport(new Rectangle2D((this.entity.getFrame()/(entity.getFrameMax()/entity.getNbFrame()))*32, this.entity.getOrientation().getValue()*32, 32, 32));
 	}
 	
 	public void resetImage() {
 		this.entity.resetFrame();
-		this.setViewport(new Rectangle2D((this.entity.getFrame()/3)*32, this.entity.getOrientation().getValue()*32, 32, 32));
+		this.setViewport(new Rectangle2D((this.entity.getFrame()/(entity.getFrameMax()/entity.getNbFrame()))*32, this.entity.getOrientation().getValue()*32, 32, 32));
 	}
 	
 	public void initializeListeners() {
@@ -63,7 +63,7 @@ public class EntityView extends ImageView {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				entity.incrementeFrame();
-				if (entity.getFrame() % 3 == 0)
+				if (entity.getFrame() % (entity.getFrameMax()/entity.getNbFrame()) == 0)
 					actualiserImage();
 			}
 			
@@ -74,7 +74,7 @@ public class EntityView extends ImageView {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				entity.incrementeFrame();
-				if (entity.getFrame() % 3 == 0)
+				if (entity.getFrame() % (entity.getFrameMax()/entity.getNbFrame()) == 0)
 					actualiserImage();
 			}
 			

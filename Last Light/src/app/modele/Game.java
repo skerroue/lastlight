@@ -53,7 +53,7 @@ public class Game {
 		this.fieldsMap = readFileMaps();
 		this.crossableTiles = readFileCrossableTiles();
 		this.map = new Field(0, 0, this.fieldsMap[0][0] , 25, 25, crossableTiles);	// coordonnées à modifier
-		this.player = new Player(416, 416, 3, 0, 4, 0);	// coordonnées à modifier
+		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
 		this.entities.add(player);
@@ -234,12 +234,12 @@ public class Game {
     }
     
     public void addEnnemy(int x, int y) {
-    	AnimatedEntity e = new Enemy(x, y, 1, 0, 4);
+    	AnimatedEntity e = new Enemy(x, y, 1, 0, 4, 6, 18);
     	entities.add(e);
     	addKeyFrame(event -> {
     		//e.update(entities);
     		moveEnemy(e);
-    	}, 0.5);
+    	}, 0.03);
     }
     
     public void playGameLoop() {

@@ -20,8 +20,8 @@ public class Player extends AnimatedEntity {
 	private BooleanProperty boots;
 	private BooleanProperty necklace;
 	
-	public Player(int x, int y, int pv, int att, int v, int m) {
-		super(x, y, pv, att, v);
+	public Player(int x, int y, int pv, int att, int v, int m, int nb, int fmax) {
+		super(x, y, pv, att, v, nb, fmax);
 		
 		this.maxPotion = new SimpleIntegerProperty(3);
 		this.potion = new SimpleIntegerProperty(0);

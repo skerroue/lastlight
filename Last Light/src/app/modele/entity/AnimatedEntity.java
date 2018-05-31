@@ -15,12 +15,17 @@ public abstract class AnimatedEntity extends Entity {
 	protected IntegerProperty hp;
 	protected BooleanProperty isAttacking;
 	
-	public AnimatedEntity(int x, int y, int hp, int att, int v) {
+	protected int nbFrame;
+	protected int frameMax;
+	
+	public AnimatedEntity(int x, int y, int hp, int att, int v, int nb, int fmax) {
 		this.x = new SimpleIntegerProperty(x);
 		this.y = new SimpleIntegerProperty(y);
 		this.hp = new SimpleIntegerProperty(hp);
 		this.attaque = att;
 		this.velocity = v;
+		this.nbFrame = nb;
+		this.frameMax = fmax;
 		
 		this.isAttacking = new SimpleBooleanProperty(false);
 	}
@@ -84,12 +89,20 @@ public abstract class AnimatedEntity extends Entity {
 		return this.id;
 	}
 	
+	public int getFrameMax() {
+		return this.frameMax;
+	}
+	
+	public int getNbFrame() {
+		return this.nbFrame;
+	}
+	
 	public int getFrame() {
 		return frame;
 	}
 	
 	public void incrementeFrame() {
-		if (this.frame > 18)
+		if (this.frame > this.frameMax-1)
 			this.frame = 0;
 		else 
 			this.frame++;
