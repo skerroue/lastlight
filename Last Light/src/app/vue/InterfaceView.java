@@ -58,7 +58,7 @@ public class InterfaceView {
 			money.add(new ComponentView("money"));
 			money.get(i).setEmpty();
 			
-			money.get(i).setTranslateX(260+((i+4)*28));
+			money.get(i).setTranslateX(250+((i+4)*28));
 			money.get(i).setTranslateY(10);
 		}
 		
