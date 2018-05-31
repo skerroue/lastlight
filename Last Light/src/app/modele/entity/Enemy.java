@@ -6,6 +6,8 @@ public class Enemy extends AnimatedEntity {
 
 	public Enemy(int x, int y, int pv, int att, int v) {
 		super(x, y, pv, att, v);
+		
+		this.id = "rodeur";
 	}
 
 	public void update(ObservableList<AnimatedEntity> entities) {

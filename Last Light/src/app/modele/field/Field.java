@@ -27,7 +27,7 @@ public class Field {
 		this.tileField = new Tile[25][25];
 		for (int k = 0 ; k < 25 ; k++) 
 			for (int l = 0 ; l < 25 ; l++) 
-				this.tileField[k][l] = new Tile(field[k][l], crossableTiles.contains(field[k][l]));
+				this.tileField[k][l] = new Tile(field[k][l], crossableTiles.contains(field[k][l]), k, l);
 	}
 	
 	private int[][] readFile(int fileIndex, int height, int width) {

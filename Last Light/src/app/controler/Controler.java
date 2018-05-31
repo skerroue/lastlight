@@ -15,6 +15,7 @@ import app.vue.PlayerView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -62,7 +63,9 @@ public class Controler implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// Generation des entites (personnage, ennemis, objets, interface, map)
-		entityLoading();
+		initializeMap();
+		initializeInterface();
+		initializeEntities();
 		this.game.playGameLoop();
 		initializeScrollField();
 	}
@@ -133,51 +136,6 @@ public class Controler implements Initializable {
     	
     }
     
-    private void entityLoading() {
-    	
-    	entitiesView.add(new PlayerView(game.getPlayer()));
-    	entityContainer.getChildren().add(entitiesView.get(0));
-    	
-    	interfaceContainer.getChildren().addAll(hud.getHearts());
-    	interfaceContainer.getChildren().addAll(hud.getPotions());
-    	interfaceContainer.getChildren().addAll(hud.getMoney());
-    	
-    	tileContainer.getChildren().addAll(this.field.getFieldView());
-    	
-    	game.getEntities().addListener(new ListChangeListener<Entity>() {
-
-			@Override
-			public void onChanged(Change<? extends Entity> c) {
-				
-				while (c.next()) {
-					if (c.wasAdded()) {
-						entitiesView.add(new EnemyView(game.getEntities().get(game.getEntities().size()-1)));
-						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
-					}
-				}
-				
-			}
-    		
-    	});
-    	
-    	this.game.addKeyFrame(e -> {
-			for (int k = 0; k < entitiesView.size(); k++)
-				if (entitiesView.get(k).getIsDead()) {
-					entityContainer.getChildren().remove(entitiesView.get(k));
-					entitiesView.remove(entitiesView.get(k));
-				}
-			for (int k = 0; k < game.getEntities().size(); k++)
-				if (game.getEntities().get(k).getIsDead().get()) {
-					game.getEntities().remove(game.getEntities().get(k));
-				}
-			for (int k = 0; k < game.getEntities().size(); k++) {
-				if (game.getEntities().get(k).getHP().get() == 0)
-					game.getEntities().get(k).die();
-			}
-		}, 0.017);
-    	
-    }
-    
     public void initializeScrollField() {
     	
     	setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
@@ -243,6 +201,159 @@ public class Controler implements Initializable {
     private void setScrollY(int a) {
     	tileContainer.setTranslateY(a);
 		entityContainer.setTranslateY(a);
+    }
+    
+    private void initializeMap() {
+    	
+    	tileContainer.getChildren().addAll(this.field.getFieldView());
+    	
+    	Game.getMapChanged().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+				field.refreshField();
+			}
+			
+		});
+    	
+    }
+    
+    private void initializeInterface() {
+    	interfaceContainer.getChildren().addAll(hud.getHearts());
+    	interfaceContainer.getChildren().addAll(hud.getPotions());
+    	interfaceContainer.getChildren().addAll(hud.getMoney());
+    	
+    	hud.getPlayer().getHP().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (oldValue.intValue() > newValue.intValue()) {
+    				for (int i = hud.getHearts().size()-1 ; i >= 0 ; i--) 
+    					if (hud.getHearts().get(i).getFull()) {
+    						hud.getHearts().get(i).setEmpty();
+    						break;
+    					}
+    			}
+    			
+    			else {
+    				for (int i = 0 ; i < hud.getHearts().size() ; i++)
+    					if (hud.getHearts().get(i).getEmpty() && !hud.getHearts().get(i).getLocked()) {
+    						hud.getHearts().get(i).setFull();
+    						break;
+    					}
+    			}
+    				
+    		}
+    		
+	    });
+		
+    	hud.getPlayer().getMaxHP().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (newValue.intValue() > oldValue.intValue()) {
+    				for (int i = 0 ; i < hud.getHearts().size() ; i++)
+    					if (hud.getHearts().get(i).getLocked()) {
+    						hud.getHearts().get(i).setEmpty();
+    						break;
+    					}
+    				
+    			}
+    			
+    		}
+    		
+	    });
+    	
+		hud.getPlayer().getPotion().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (oldValue.intValue() > newValue.intValue()) {
+    				for (int i = hud.getPotions().size()-1 ; i >= 0 ; i--) 
+    					if (hud.getPotions().get(i).getFull()) {
+    						hud.getPotions().get(i).setEmpty();
+    						break;
+    					}
+    			}
+    			
+    			else {
+    				for (int i = 0 ; i < hud.getPotions().size() ; i++)
+    					if (hud.getPotions().get(i).getEmpty()) {
+    						hud.getPotions().get(i).setFull();
+    						break;
+    					}
+    			}
+    				
+    		}
+    		
+	    });
+		
+		hud.getPlayer().getMoney().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (oldValue.intValue() > newValue.intValue()) {
+    				for (int i = hud.getMoney().size()-1 ; i >= 0 ; i--) 
+    					if (hud.getMoney().get(i).getFull()) {
+    						hud.getMoney().get(i).setEmpty();
+    						break;
+    					}
+    			}
+    			
+    			else {
+    				for (int i = 0 ; i < hud.getMoney().size() ; i++)
+    					if (hud.getMoney().get(i).getEmpty()) {
+    						hud.getMoney().get(i).setFull();
+    						break;
+    					}
+    			}
+    				
+    		}
+    		
+	    });
+    }
+    
+    private void initializeEntities() {
+    	
+    	entitiesView.add(new PlayerView(game.getPlayer()));
+    	entityContainer.getChildren().add(entitiesView.get(0));
+    	
+    	game.getEntities().addListener(new ListChangeListener<Entity>() {
+
+			@Override
+			public void onChanged(Change<? extends Entity> c) {
+				
+				while (c.next()) {
+					if (c.wasAdded()) {
+						entitiesView.add(new EnemyView(game.getEntities().get(game.getEntities().size()-1)));
+						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
+					}
+				}
+				
+			}
+    		
+    	});
+    	
+    	this.game.addKeyFrame(e -> {
+			for (int k = 0; k < entitiesView.size(); k++)
+				if (entitiesView.get(k).getIsDead()) {
+					entityContainer.getChildren().remove(entitiesView.get(k));
+					entitiesView.remove(entitiesView.get(k));
+				}
+			for (int k = 0; k < game.getEntities().size(); k++)
+				if (game.getEntities().get(k).getIsDead().get()) {
+					game.getEntities().remove(game.getEntities().get(k));
+				}
+			for (int k = 0; k < game.getEntities().size(); k++) {
+				if (game.getEntities().get(k).getHP().get() == 0)
+					game.getEntities().get(k).die();
+			}
+		}, 0.017);
+    	
     }
     
     @FXML

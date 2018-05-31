@@ -32,6 +32,8 @@ public class Player extends AnimatedEntity {
 		
 		this.boots = new SimpleBooleanProperty(false);
 		this.necklace = new SimpleBooleanProperty(false);
+		
+		this.id = "player";
 	}
 	
 	public void update(ObservableList<AnimatedEntity> entities) {

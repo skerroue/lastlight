@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 
 public abstract class AnimatedEntity extends Entity {
 	
+	protected String id;
 	protected int attaque;
 	protected IntegerProperty hp;
 	protected BooleanProperty isAttacking;
@@ -77,6 +78,10 @@ public abstract class AnimatedEntity extends Entity {
 	
 	public IntegerProperty getOrientation() {
 		return this.orientation;
+	}
+	
+	public String getId() {
+		return this.id;
 	}
 	
 	public int getFrame() {

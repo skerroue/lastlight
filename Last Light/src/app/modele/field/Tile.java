@@ -4,10 +4,14 @@ public class Tile {
 	
 	private int id;
 	private boolean isCrossable;
+	private int i;
+	private int j;
 	
-	public Tile(int id, boolean cross) {
+	public Tile(int id, boolean cross, int i, int j) {
 		this.id = id;
 		this.isCrossable = cross;
+		this.i = i;
+		this.j = j;
 	}
 	
 	public boolean isCrossable() {
@@ -16,6 +20,14 @@ public class Tile {
 	
 	public int getId() {
 		return this.id;
+	}
+	
+	public int getI() {
+		return this.i;
+	}
+	
+	public int getJ() {
+		return this.j;
 	}
 	 
 }

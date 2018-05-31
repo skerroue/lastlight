@@ -13,8 +13,8 @@ public class EntityView extends ImageView {
 	protected AnimatedEntity entity;
 	protected boolean isDead;
 	
-	public EntityView(Image img, AnimatedEntity e) {
-		this.setImage(img);
+	public EntityView( AnimatedEntity e) {
+		this.setImage(new Image("file:src/img/tileset" + e.getId() + ".png"));
 		this.entity = e;
 		
 		this.translateXProperty().bind(e.getX());
@@ -29,15 +29,57 @@ public class EntityView extends ImageView {
 			
 		});
 		
+		this.actualiserImage();
+		this.initializeListeners();
+		
 	}
 	
 	public boolean getIsDead() {
 		return this.isDead;
 	}
 	
+	public void actualiserImage() {
+		this.setViewport(new Rectangle2D((this.entity.getFrame()/3)*32, this.entity.getOrientation().getValue()*32, 32, 32));
+	}
+	
 	public void resetImage() {
 		this.entity.resetFrame();
 		this.setViewport(new Rectangle2D((this.entity.getFrame()/3)*32, this.entity.getOrientation().getValue()*32, 32, 32));
 	}
+	
+	public void initializeListeners() {
+		
+		this.entity.getOrientation().addListener(new ChangeListener<Number>() {
 
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				actualiserImage();
+			}
+			
+		});
+		
+		this.entity.getX().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				entity.incrementeFrame();
+				if (entity.getFrame() % 3 == 0)
+					actualiserImage();
+			}
+			
+		});
+		
+		this.entity.getY().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				entity.incrementeFrame();
+				if (entity.getFrame() % 3 == 0)
+					actualiserImage();
+			}
+			
+		});
+		
+	}
+	
 }

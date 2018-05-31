@@ -66,21 +66,25 @@ public abstract class Entity {
 	}
 	
 	public void moveLeft(ObservableList<AnimatedEntity> entities) {
+		this.setOrientation(KeyCode.LEFT);
 		if (canMove(entities))
 			x.set(x.get() - velocity);
 	}
 	
 	public void moveRight(ObservableList<AnimatedEntity> entities) {
+		this.setOrientation(KeyCode.RIGHT);
 		if (canMove(entities))
 			x.set(x.get() + velocity);
 	}
 
 	public void moveDown(ObservableList<AnimatedEntity> entities) {
+		this.setOrientation(KeyCode.DOWN);
 		if (canMove(entities))
 			y.set(y.get() + velocity);
 	}
 	
 	public void moveUp(ObservableList<AnimatedEntity> entities) {
+		this.setOrientation(KeyCode.UP);
 		if (canMove(entities))
 			y.set(y.get() - velocity);
 	}

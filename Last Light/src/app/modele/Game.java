@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import app.modele.BFS.BFS;
 import app.modele.entity.AnimatedEntity;
 import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
 import app.modele.entity.Player;
 import app.modele.field.Field;
+import app.modele.field.Tile;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -44,6 +46,8 @@ public class Game {
 	private ObservableList<AnimatedEntity> entities;
 	private static BooleanProperty mapChanged;
 	
+	private BFS bfs;
+	
 	public Game() {
 		this.gameloop = new Timeline();
 		this.fieldsMap = readFileMaps();
@@ -54,6 +58,8 @@ public class Game {
 		this.mapChanged = new SimpleBooleanProperty(true);
 		this.entities.add(player);
 		spawnEntities();
+		
+		this.bfs = new BFS(player, map);
 	}
 	
 	private int[][] readFileMaps() { 
@@ -231,7 +237,8 @@ public class Game {
     	AnimatedEntity e = new Enemy(x, y, 1, 0, 4);
     	entities.add(e);
     	addKeyFrame(event -> {
-    		e.update(entities);
+    		//e.update(entities);
+    		moveEnemy(e);
     	}, 0.5);
     }
     
@@ -246,6 +253,7 @@ public class Game {
     
     public void movePlayer(KeyCode event) {
     	
+    	this.bfs.lancerBFS();
     	player.setOrientation(event);
     	
     	switch (event) {
@@ -293,6 +301,24 @@ public class Game {
 			break;
     	}
     	
+    }
+    
+    public void moveEnemy(AnimatedEntity e) {
+    	Tile temp = this.bfs.searchWay(e);
+    	Tile enemyAt = this.map.getNextTile(e.getIndiceY(), e.getIndiceX());
+    	
+    	if (temp.getI() == enemyAt.getI() && temp.getJ() < enemyAt.getJ()) {
+    		e.moveLeft(entities);
+    	}
+    	if (temp.getI() < enemyAt.getI() && temp.getJ() == enemyAt.getJ()) {
+    		e.moveUp(entities);
+    	}
+    	if (temp.getI() == enemyAt.getI() && temp.getJ() > enemyAt.getJ()) {
+    		e.moveRight(entities);
+    	}
+    	if (temp.getI() > enemyAt.getI() && temp.getJ() == enemyAt.getJ()) {
+    		e.moveDown(entities);
+    	}
     }
 	
 }
