@@ -77,25 +77,25 @@ public class Controler implements Initializable {
     	case UP:
     		game.movePlayer(event.getCode());
     		if (entitiesView.get(0).getTranslateY() - 231 > 0 && entitiesView.get(0).getTranslateY() + 231 < 800) {
-    			setScrollY((int) -entitiesView.get(0).getTranslateY() + (SCENE_HEIGHT - 50) / 2);
+    			setScrollY((int) entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2);
     		}
     		break;
     	case DOWN:
     		game.movePlayer(event.getCode());
     		if (entitiesView.get(0).getTranslateY() - 231 > 0 && entitiesView.get(0).getTranslateY() + 231 < 800) {
-    			setScrollY((int) -entitiesView.get(0).getTranslateY() + (SCENE_HEIGHT - 50) / 2);
+    			setScrollY((int) entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2);
     		}
     		break;
     	case LEFT:
     		game.movePlayer(event.getCode());
     		if (entitiesView.get(0).getTranslateX() - 256 > 0 && entitiesView.get(0).getTranslateX() + 256 < 800) {
-    			setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
+    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2);
     		}
     		break;
     	case RIGHT:
     		game.movePlayer(event.getCode());
     		if (entitiesView.get(0).getTranslateX() - 256 > 0 && entitiesView.get(0).getTranslateX() + 256 < 800) {
-    			setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
+    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2);
     		}
     		break;
     	case S:
@@ -138,8 +138,8 @@ public class Controler implements Initializable {
     
     public void initializeScrollField() {
     	
-    	setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
-		setScrollY((int) -entitiesView.get(0).getTranslateY() + (SCENE_HEIGHT - 50) / 2);
+    	setScrollX((int) entitiesView.get(0).getTranslateX() - (SCENE_WIDTH / 2));
+		setScrollY((int) entitiesView.get(0).getTranslateY() - ((SCENE_HEIGHT - 50) / 2));
     	
     	this.game.getMapChanged().addListener(new ChangeListener<Boolean>() {
 
@@ -150,41 +150,41 @@ public class Controler implements Initializable {
 				
 				switch (game.getPlayer().getOrientation().get()) {
 				case 0:
-					if (entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2 < 0)
+					if (entitiesView.get(0).getTranslateY() - ((SCENE_HEIGHT - 50) / 2) < 0)
 						setScrollY(0);
-					else if (entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2 > SCENE_HEIGHT)
-						setScrollY(SCENE_HEIGHT);
+					else if (entitiesView.get(0).getTranslateY() + ((SCENE_HEIGHT - 50) / 2) > 800)
+						setScrollY(800 - SCENE_HEIGHT);
 					else
-						setScrollY((int) -entitiesView.get(0).getTranslateY() + (SCENE_HEIGHT - 50) / 2);
-					setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH - 32);
+						setScrollY((int) entitiesView.get(0).getTranslateY() - ((SCENE_HEIGHT - 50) / 2));
+					setScrollX((int) entitiesView.get(0).getTranslateX() - SCENE_WIDTH + 32);
 					break;
 				case 1:
-					if (entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2 < 0)
+					if (entitiesView.get(0).getTranslateX() - (SCENE_WIDTH / 2) < 0)
 						setScrollX(0);
-					else if (entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2 > SCENE_WIDTH)
-						setScrollX(SCENE_WIDTH);
+					else if (entitiesView.get(0).getTranslateX() + (SCENE_WIDTH / 2) > 800)
+						setScrollX(800 - SCENE_WIDTH);
 					else
-						setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
-					setScrollY((int) -entitiesView.get(0).getTranslateY() + SCENE_HEIGHT - 32);
+						setScrollX((int) entitiesView.get(0).getTranslateX() - (SCENE_WIDTH / 2));
+					setScrollY((int) entitiesView.get(0).getTranslateY() - SCENE_HEIGHT + 50 + 32);
 					break;
 				case 2:
-					if (entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2 < 0) {
+					if (entitiesView.get(0).getTranslateY() - ((SCENE_HEIGHT - 50) / 2) < 0) {
 						setScrollY(0);
-					} else if (entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2 > SCENE_HEIGHT)  {
+					} else if (entitiesView.get(0).getTranslateY() + ((SCENE_HEIGHT - 50) / 2) > 800)  {
 						setScrollY(SCENE_HEIGHT);
 					} else {
-						setScrollY((int) -entitiesView.get(0).getTranslateY() + (SCENE_HEIGHT - 50) / 2);
+						setScrollY((int) entitiesView.get(0).getTranslateY() - ((SCENE_HEIGHT - 50) / 2));
 					}
-					setScrollX((int) -entitiesView.get(0).getTranslateX());
+					setScrollX((int) entitiesView.get(0).getTranslateX());
 					break;
 				case 3:
-					if (entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2 < 0)
+					if (entitiesView.get(0).getTranslateX() - (SCENE_WIDTH / 2) < 0)
 						setScrollX(0);
-					else if (entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2 > SCENE_WIDTH)
-						setScrollX(SCENE_WIDTH);
+					else if (entitiesView.get(0).getTranslateX() + (SCENE_WIDTH / 2) > 800)
+						setScrollX(800 - SCENE_WIDTH);
 					else
-						setScrollX((int) -entitiesView.get(0).getTranslateX() + SCENE_WIDTH / 2);
-					setScrollY((int) -entitiesView.get(0).getTranslateY());
+						setScrollX((int) entitiesView.get(0).getTranslateX() - (SCENE_WIDTH / 2));
+					setScrollY((int) entitiesView.get(0).getTranslateY());
 					break;
 				}
 				
@@ -194,13 +194,13 @@ public class Controler implements Initializable {
     }
     
     private void setScrollX(int a) {
-    	tileContainer.setTranslateX(a);
-		entityContainer.setTranslateX(a);
+    	tileContainer.setTranslateX(-a);
+		entityContainer.setTranslateX(-a);
     }
     
     private void setScrollY(int a) {
-    	tileContainer.setTranslateY(a);
-		entityContainer.setTranslateY(a);
+    	tileContainer.setTranslateY(-a);
+		entityContainer.setTranslateY(-a);
     }
     
     private void initializeMap() {
