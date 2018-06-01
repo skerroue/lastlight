@@ -52,7 +52,7 @@ public class Game {
 		this.gameloop = new Timeline();
 		this.fieldsMap = readFileMaps();
 		this.crossableTiles = readFileCrossableTiles();
-		this.map = new Field(0, 0, this.fieldsMap[0][0] , 25, 25, crossableTiles);	// coordonnées à modifier
+		this.map = new Field(1, 0, this.fieldsMap[1][0] , 25, 25, crossableTiles);	// coordonnées à modifier
 		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
@@ -171,7 +171,7 @@ public class Game {
 			}
 			break;
 		case DOWN :
-			if (i < 0 && this.fieldsMap[i + 1][j] != 0) {
+			if (i < 1 && this.fieldsMap[i + 1][j] != 0) {
 				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25, crossableTiles);
 				changing = true;
 			}
