@@ -39,6 +39,7 @@ public class Game {
 	static protected ArrayList<Integer> crossableTiles;
 
 	private Timeline gameloop;
+	private float compteur;
 	private int[][] fieldsMap;	// contient les indices des fichiers de chaque map
 								// valeurs allant de 1 à ... (0 = pas de map)
 	private static Field map;
@@ -50,6 +51,7 @@ public class Game {
 	
 	public Game() {
 		this.gameloop = new Timeline();
+		this.gameloop.setCycleCount(Timeline.INDEFINITE);
 		this.fieldsMap = readFileMaps();
 		this.crossableTiles = readFileCrossableTiles();
 		this.map = new Field(1, 0, this.fieldsMap[1][0] , 25, 25, crossableTiles);	// coordonnées à modifier
@@ -57,9 +59,34 @@ public class Game {
 		this.entities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
 		this.entities.add(player);
-		spawnEntities();
 		
 		this.bfs = new BFS(player, map);
+		
+		this.compteur = 0;
+		
+		initializeGame();
+	}
+	
+	public void initializeGame() {
+		spawnEntities();
+	
+		KeyFrame compt = new KeyFrame(Duration.seconds(0.017), e -> {
+	           compteur += Duration.seconds(0.017).toMillis();
+
+	           if ((int)this.compteur % ((int)Duration.seconds(0.017).toMillis()*10) == 0) {
+	               this.compteur = 0;
+	               if (player.getIsAttacking().get())
+	                   player.resetIsAttacking();
+	           }
+
+		});
+		
+		KeyFrame moveEnemies = new KeyFrame(Duration.seconds(0.035), e -> {
+			moveAllEnemies();
+		});
+		
+		gameloop.getKeyFrames().add(moveEnemies);
+		gameloop.getKeyFrames().add(compt);
 	}
 	
 	private int[][] readFileMaps() { 
@@ -236,10 +263,6 @@ public class Game {
     public void addEnnemy(int x, int y) {
     	AnimatedEntity e = new Enemy(x, y, 1, 0, 4, 6, 18);
     	entities.add(e);
-    	addKeyFrame(event -> {
-    		//e.update(entities);
-    		moveEnemy(e);
-    	}, 0.03);
     }
     
     public void playGameLoop() {
@@ -301,6 +324,12 @@ public class Game {
 			break;
     	}
     	
+    }
+    
+    public void moveAllEnemies() {
+    	for (int i = 1 ; i < entities.size() ; i++) {
+    		moveEnemy(entities.get(i));
+    	}
     }
     
     public void moveEnemy(AnimatedEntity e) {
