@@ -72,14 +72,14 @@ public abstract class AnimatedEntity extends Entity {
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
-				if (y.get() > LEFT_TOP_LIMIT) {
+				if (y.get() > LEFT_TOP_LIMIT+1) {
 					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() &&
-						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1).isCrossable() && emptyTile)
+						Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()-1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 				else {
 					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() &&
-						Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()-1).isCrossable() && emptyTile)
+						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 			}
@@ -134,12 +134,12 @@ public abstract class AnimatedEntity extends Entity {
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
 				if (y.get() > LEFT_TOP_LIMIT) {
 					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() &&
-						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1).isCrossable() && emptyTile)
+						Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 				else {
 					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() &&
-						Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1).isCrossable() && emptyTile)
+						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1).isCrossable() && emptyTile)
 						canMove = true;
 				}
 			}
