@@ -16,13 +16,13 @@ public class Main extends Application {
 		try {
 
 		FXMLLoader loader = new FXMLLoader();
-		URL url = new File("src/app/vue/vueGraphique.fxml").
+		URL url = new File("src/app/vue/vueMenu.fxml").
 		toURI().toURL();
 		loader.setLocation(url);
 		System.out.println(loader.getLocation());
 		Pane root = new Pane();
 		root=loader.load();
-     	Scene scene = new Scene(root,800,850);
+     	Scene scene = new Scene(root,512,512);
      	primaryStage.setTitle("Last Light");
      	primaryStage.setResizable(false);
 		primaryStage.setScene(scene);

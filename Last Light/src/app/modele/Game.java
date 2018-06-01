@@ -5,12 +5,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import app.modele.BFS.BFS;
+import app.modele.entity.AnimatedEntity;
 import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
 import app.modele.entity.Player;
 import app.modele.field.Field;
+import app.modele.field.Tile;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -19,31 +23,74 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
 public class Game {
+	
+	final static int LEFT = 0;
+	final static int UP = 1;
+	final static int RIGHT = 2;
+	final static int DOWN = 3;
+	
+	final static int LEFT_TOP_LIMIT = 0;
+	final static int RIGHT_BOTTOM_LIMIT = 768;
+	
+	static protected ArrayList<Integer> crossableTiles;
 
 	private Timeline gameloop;
+	private float compteur;
 	private int[][] fieldsMap;	// contient les indices des fichiers de chaque map
 								// valeurs allant de 1 à ... (0 = pas de map)
 	private static Field map;
 	private Player player;
-	private ObservableList<Entity> entities;
-	private BooleanProperty mapChanged;
+	private ObservableList<AnimatedEntity> entities;
+	private static BooleanProperty mapChanged;
+	
+	private BFS bfs;
 	
 	public Game() {
 		this.gameloop = new Timeline();
+		this.gameloop.setCycleCount(Timeline.INDEFINITE);
 		this.fieldsMap = readFileMaps();
-		this.map = new Field(0, 0, this.fieldsMap[0][0] , 25, 25);	// coordonnées à modifier
-		this.player = new Player(416, 416, 3, 0, 4, 0);	// coordonnées à modifier
+		this.crossableTiles = readFileCrossableTiles();
+		this.map = new Field(1, 0, this.fieldsMap[1][0] , 25, 25, crossableTiles);	// coordonnées à modifier
+		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
 		this.entities.add(player);
+		
+		this.bfs = new BFS(player, map);
+		
+		this.compteur = 0;
+		
+		initializeGame();
+	}
+	
+	public void initializeGame() {
 		spawnEntities();
+	
+		KeyFrame compt = new KeyFrame(Duration.seconds(0.017), e -> {
+	           compteur += Duration.seconds(0.017).toMillis();
+
+	           if ((int)this.compteur % ((int)Duration.seconds(0.017).toMillis()*10) == 0) {
+	               this.compteur = 0;
+	               if (player.getIsAttacking().get())
+	                   player.resetIsAttacking();
+	           }
+
+		});
+		
+		KeyFrame moveEnemies = new KeyFrame(Duration.seconds(0.035), e -> {
+			moveAllEnemies();
+		});
+		
+		gameloop.getKeyFrames().add(moveEnemies);
+		gameloop.getKeyFrames().add(compt);
 	}
 	
 	private int[][] readFileMaps() { 
-		int[][] fieldsMap = new int [1][2];	// taille à modifier
+		int[][] fieldsMap = new int [2][2];	// taille à modifier
 		        
         try {
         	
@@ -54,7 +101,7 @@ public class Game {
 			
 			try {
 				
-				for (int i = 0; i < 1; i++) {
+				for (int i = 0; i < 2; i++) {
 					for (int j = 0; j < 2; j++) {	// taille à modifier
 						fieldsMap[i][j] = s.nextInt();
 					}
@@ -75,6 +122,36 @@ public class Game {
 		return fieldsMap;
 	}
 	
+	private ArrayList<Integer> readFileCrossableTiles() {
+		ArrayList<Integer> crossableTiles = new ArrayList<>();
+		
+		try {
+        	
+			File f = new File("src/map/crossableTiles.txt");	// nom du fichier à modifier
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			Scanner s = new Scanner(br).useDelimiter(",");
+			
+			try {
+				
+				while (s.hasNextInt())
+					crossableTiles.add(s.nextInt());
+				
+				s.close();
+				br.close();
+				fr.close();
+				
+			} catch (IOException e) {
+				System.out.println("CrossableTiles : Erreur lecture");
+			}
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("CrossableTiles : Fichier introuvable");
+		}
+				
+		return crossableTiles;
+	}
+	
 	public static Field getMap() {
 		return map;
 	}
@@ -83,16 +160,16 @@ public class Game {
 		return this.player;
 	}
 	
-	public ObservableList<Entity> getEntities() {
+	public ObservableList<AnimatedEntity> getEntities() {
 		return this.entities;
 	}
 	
-	public BooleanProperty getMapChanged() {
-		return this.mapChanged;
+	public static BooleanProperty getMapChanged() {
+		return mapChanged;
 	}
 	
-	public void mapOnChange() {
-		this.mapChanged.set(!this.mapChanged.get());
+	public void mapChanged() {
+		mapChanged.set(!mapChanged.get());
 	}
 	
 	public boolean loadField(int direction) {
@@ -102,35 +179,34 @@ public class Game {
 		boolean changing = false;
 		
 		switch (direction) {
-		case 1 : // Ouest
+		case LEFT :
 			if (j > 0 && this.fieldsMap[i][j - 1] != 0) {
-				this.map = new Field(i, j - 1, this.fieldsMap[i][j - 1], 25, 25);
+				this.map = new Field(i, j - 1, this.fieldsMap[i][j - 1], 25, 25, crossableTiles);
 				changing = true;
 			}
 			break;
-		case 2 : // Nord
+		case UP :
 			if (i > 0 && this.fieldsMap[i - 1][j] != 0) {
-				this.map = new Field(i - 1, j, this.fieldsMap[i - 1][j], 25, 25);
+				this.map = new Field(i - 1, j, this.fieldsMap[i - 1][j], 25, 25, crossableTiles);
 				changing = true;
 			}
 			break;
-		case 3 : // Est
+		case RIGHT :
 			if (j < 1 && this.fieldsMap[i][j + 1] != 0) {
-				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25);
+				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25, crossableTiles);
 				changing = true;
 			}
 			break;
-		case 4 : // Sud
-			if (i < 0 && this.fieldsMap[i + 1][j] != 0) {
-				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25);
+		case DOWN :
+			if (i < 1 && this.fieldsMap[i + 1][j] != 0) {
+				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25, crossableTiles);
 				changing = true;
 			}
 			break;
 		}
 		
 		if (changing) {
-			this.mapOnChange();
-			for (int k = 1; k < this.entities.size(); k++)
+			for (int k = 1 ; k < this.entities.size() ; k++)
 				this.entities.get(k).die();
 			spawnEntities();
 		}
@@ -185,16 +261,93 @@ public class Game {
     }
     
     public void addEnnemy(int x, int y) {
-    	Entity e = new Enemy(x, y, 1, 0, 4);
+    	AnimatedEntity e = new Enemy(x, y, 1, 0, 4, 6, 18);
     	entities.add(e);
-    	addKeyFrame(event -> {
-    		e.update(entities);
-    	}, 0.5);
     }
     
     public void playGameLoop() {
     	gameloop.setCycleCount(Timeline.INDEFINITE);
     	gameloop.play();
+    }
+    
+    public void pauseGameLoop() {
+    	gameloop.pause();
+    }
+    
+    public void movePlayer(KeyCode event) {
+    	
+    	this.bfs.lancerBFS();
+    	player.setOrientation(event);
+    	
+    	switch (event) {
+    	case LEFT :
+    		if (player.getX().get() == LEFT_TOP_LIMIT) {
+    			if (loadField(LEFT)) {
+    				player.setX(RIGHT_BOTTOM_LIMIT);
+    				this.mapChanged();
+    			}
+    		}
+    		else 
+    			player.moveLeft(entities);
+    		break;
+    	case UP :
+    		if (player.getY().get() == LEFT_TOP_LIMIT) {
+    			if (loadField(UP)) {
+    				player.setY(RIGHT_BOTTOM_LIMIT);
+    				this.mapChanged();
+    			}
+    		}
+    		else 
+    			player.moveUp(entities);
+    		break;
+    	case RIGHT :
+    		if (player.getX().get() == RIGHT_BOTTOM_LIMIT) {
+    			if (loadField(RIGHT)) {
+    				player.setX(LEFT_TOP_LIMIT);
+    				this.mapChanged();
+    			}
+    		}
+    		else 
+    			player.moveRight(entities);
+    		break;
+    	case DOWN :
+    		if (player.getY().get() == RIGHT_BOTTOM_LIMIT) {
+    			if (loadField(DOWN)) {
+    				player.setY(LEFT_TOP_LIMIT);
+    				this.mapChanged();
+    			}
+    		}
+    		else 
+    			player.moveDown(entities);
+    		break;
+		default:
+			break;
+    	}
+    	
+    }
+    
+    public void moveAllEnemies() {
+    	for (int i = 1 ; i < entities.size() ; i++) {
+    		moveEnemy(entities.get(i));
+    	}
+    }
+    
+    public void moveEnemy(AnimatedEntity e) {
+    	Tile temp = this.bfs.searchWay(e);
+    	Tile enemyAt = this.map.getNextTile(e.getIndiceY(), e.getIndiceX());
+    	
+    	if (temp.getI() == enemyAt.getI() && temp.getJ() < enemyAt.getJ()) {
+    		e.moveLeft(entities);
+    	}
+    	if (temp.getI() < enemyAt.getI() && temp.getJ() == enemyAt.getJ()) {
+    		e.moveUp(entities);
+    	}
+    	if (temp.getI() == enemyAt.getI() && temp.getJ() > enemyAt.getJ()) {
+    		e.moveRight(entities);
+    	}
+    	if (temp.getI() > enemyAt.getI() && temp.getJ() == enemyAt.getJ()) {
+    		e.moveDown(entities);
+    	}
     }
 	
 }

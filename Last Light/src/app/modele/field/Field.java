@@ -14,12 +14,20 @@ import javafx.scene.image.ImageView;
 public class Field {
 	
 	private int[][] field;
+	private Tile[][] tileField;
+	private ArrayList<Integer> crossableTiles;
 	private int i, j; // coordonnées dans la grande map
 	
-	public Field(int i, int j, int fileIndex, int height, int width) {
+	public Field(int i, int j, int fileIndex, int height, int width, ArrayList<Integer> crossableTiles) {
 		this.field = readFile(fileIndex, height, width);
 		this.i = i;
 		this.j = j;
+		
+		this.crossableTiles = crossableTiles;
+		this.tileField = new Tile[25][25];
+		for (int k = 0 ; k < 25 ; k++) 
+			for (int l = 0 ; l < 25 ; l++) 
+				this.tileField[k][l] = new Tile(field[k][l], crossableTiles.contains(field[k][l]), k, l);
 	}
 	
 	private int[][] readFile(int fileIndex, int height, int width) {
@@ -67,8 +75,12 @@ public class Field {
 		return this.field;
 	}
 	
-	public int getNextTile(int i, int j) {
-		return this.field[i][j];
+	public Tile getNextTile(int i, int j) {
+		return this.tileField[i][j];
+	}
+	
+	public int getFieldSize() {
+		return field.length;
 	}
 	
 	public int getI() {

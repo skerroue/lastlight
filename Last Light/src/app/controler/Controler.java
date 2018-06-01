@@ -1,6 +1,6 @@
 package app.controler;
 
-import java.net.URL; 
+import java.net.URL;  
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -9,23 +9,36 @@ import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
 import app.vue.EnemyView;
 import app.vue.EntityView;
-import app.vue.ItemView;
+import app.vue.FieldView;
+import app.vue.InterfaceView;
 import app.vue.PlayerView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 public class Controler implements Initializable {
+	
+	final static int SCENE_WIDTH = 512;
+	final static int SCENE_HEIGHT = 512;
 
+	@FXML
+	private Pane pausePane;
+	private Button resumeButton;
+	private Button quitButton;
+	
     @FXML
     private Pane tileContainer;
-    private Image tileset;
+    private FieldView field;
 
     @FXML
     private Pane entityContainer;
@@ -34,99 +47,63 @@ public class Controler implements Initializable {
     private Pane interfaceContainer;
    
     private ArrayList<EntityView> entitiesView;
-    private ArrayList<ItemView> listItemView;
+    private InterfaceView hud;
     
     private Game game;
+    private ImageView i;
     
     public Controler() {	
     	
     	this.game = new Game();
-    	this.tileset = new Image("file:src/img/tilesetLastLight.png");
     	this.entitiesView = new ArrayList<>();
-    	this.listItemView = new ArrayList<>();
-    	
+    	this.hud = new InterfaceView(game.getPlayer());
+    	this.field = new FieldView();
+    	this.i = new ImageView(new Image("file:src/img/attack.png"));
     }
     
 	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {	
-		
-		// Generation de la map
-		mapGeneration();
-		this.game.mapOnChange();
-		
-		// Generation des entites
-		entityLoading();
-		
-		// Generation de l'interface
-		interfaceGeneration();
-		
-		this.game.addKeyFrame(e -> {
-			for (int k = 0; k < entitiesView.size(); k++)
-				if (entitiesView.get(k).getIsDead()) {
-					entityContainer.getChildren().remove(entitiesView.get(k));
-					entitiesView.remove(entitiesView.get(k));
-				}
-			for (int k = 0; k < game.getEntities().size(); k++)
-				if (game.getEntities().get(k).getIsDead().get()) {
-					game.getEntities().remove(game.getEntities().get(k));
-				}
-			for (int k = 0; k < game.getEntities().size(); k++) {
-				if (game.getEntities().get(k).getPv().get() == 0)
-					game.getEntities().get(k).die();
-			}
-		}, 0.017);
-		
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		// Generation des entites (personnage, ennemis, objets, interface, map)
+		initializeMap();
+		initializeInterface();
+		initializeEntities();
 		this.game.playGameLoop();
-		
+		initializeScrollField();
 	}
 
     @FXML
     void onKeyPressed(KeyEvent event) {
     	
-    	int rightLimit = 0, leftLimit = 768;
-    	
     	switch (event.getCode()) {
     	case UP:
-    		this.game.getPlayer().setOrientation(event.getCode());
-    		if (this.game.getPlayer().getY().getValue() == rightLimit) {
-    			if (this.game.loadField(2))
-    				this.game.getPlayer().setY(leftLimit);
+    		game.movePlayer(event.getCode());
+    		if (entitiesView.get(0).getTranslateY() - 231 > 0 && entitiesView.get(0).getTranslateY() + 231 < 800) {
+    			setScrollY((int) entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2);
     		}
-    		else 
-    			this.game.getPlayer().moveUp(this.game.getEntities());
     		break;
     	case DOWN:
-    		this.game.getPlayer().setOrientation(event.getCode());
-    		if (this.game.getPlayer().getY().getValue() == leftLimit) {
-    			if (this.game.loadField(4))
-    				this.game.getPlayer().setY(rightLimit);
+    		game.movePlayer(event.getCode());
+    		if (entitiesView.get(0).getTranslateY() - 231 > 0 && entitiesView.get(0).getTranslateY() + 231 < 800) {
+    			setScrollY((int) entitiesView.get(0).getTranslateY() - (SCENE_HEIGHT - 50) / 2);
     		}
-    		else
-    			this.game.getPlayer().moveDown(this.game.getEntities());
     		break;
     	case LEFT:
-    		this.game.getPlayer().setOrientation(event.getCode());
-    		if (this.game.getPlayer().getX().getValue() == rightLimit) {
-    			if (this.game.loadField(1))
-    				this.game.getPlayer().setX(leftLimit);
+    		game.movePlayer(event.getCode());
+    		if (entitiesView.get(0).getTranslateX() - 256 > 0 && entitiesView.get(0).getTranslateX() + 256 < 800) {
+    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2);
     		}
-    		else
-    			this.game.getPlayer().moveLeft(this.game.getEntities());
     		break;
     	case RIGHT:
-    		this.game.getPlayer().setOrientation(event.getCode());
-    		if (this.game.getPlayer().getX().getValue() == leftLimit) {
-    			if (this.game.loadField(3))
-    				this.game.getPlayer().setX(rightLimit);
+    		game.movePlayer(event.getCode());
+    		if (entitiesView.get(0).getTranslateX() - 256 > 0 && entitiesView.get(0).getTranslateX() + 256 < 800) {
+    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCENE_WIDTH / 2);
     		}
-    		else
-    			this.game.getPlayer().moveRight(this.game.getEntities());
     		break;
     	case S:
     		this.game.addEnnemy(384, 384);
     		break;
     	case E:
-    		this.game.getPlayer().loosePv(1);
+    		this.game.getPlayer().loseHP(1);
     		this.game.getPlayer().earnPotion();
     		this.game.getPlayer().earnMoney(1);
     		break;
@@ -135,6 +112,9 @@ public class Controler implements Initializable {
     		break;
     	case SPACE :
     		this.game.getPlayer().attack(game.getEntities());
+    		break;
+    	case ESCAPE:
+    		showPauseMenu();
     		break;
 		default:
 			break;
@@ -145,48 +125,200 @@ public class Controler implements Initializable {
     @FXML
     void onKeyReleased(KeyEvent event) {
     	
-    	entitiesView.get(0).resetImage();
+    	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
+    		entitiesView.get(0).resetImage();
     	
     	switch (event.getCode()) {
-    	case UP:
-    		break;
-    	case DOWN:
-    		break;
-    	case LEFT:
-    		break;
-    	case RIGHT:
-    		break;
     	case SPACE :
     		break;
-		default:
+		default :
 			break;
     	}
     	
     }
     
-    private void mapGeneration() {
+    public void initializeScrollField() {
+    	
+    	setScrollX((int) entitiesView.get(0).getTranslateX() - (SCENE_WIDTH / 2));
+		setScrollY((int) entitiesView.get(0).getTranslateY() - ((SCENE_HEIGHT - 50) / 2));
     	
     	this.game.getMapChanged().addListener(new ChangeListener<Boolean>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				
-				tileContainer.getChildren().clear();
+				field.refreshField();
 				
-				for (int i = 0 ; i < game.getMap().getField().length ; i++) 
-					for (int j = 0 ; j < game.getMap().getField().length ; j++) {
-						tileContainer.getChildren().add(game.getMap().intToTiles(new ImageView(tileset), game.getMap().getNextTile(i, j)));
-						tileContainer.getChildren().get(tileContainer.getChildren().size()-1).setTranslateX(j*32);
-						tileContainer.getChildren().get(tileContainer.getChildren().size()-1).setTranslateY(i*32);
+				switch (game.getPlayer().getOrientation().get()) {
+				case 0:
+					if (entitiesView.get(0).getTranslateY() - ((SCENE_HEIGHT - 50) / 2) < 0)
+						setScrollY(0);
+					else if (entitiesView.get(0).getTranslateY() + ((SCENE_HEIGHT - 50) / 2) > 800)
+						setScrollY(800 - SCENE_HEIGHT);
+					else
+						setScrollY((int) entitiesView.get(0).getTranslateY() - ((SCENE_HEIGHT - 50) / 2));
+					setScrollX((int) entitiesView.get(0).getTranslateX() - SCENE_WIDTH + 32);
+					break;
+				case 1:
+					if (entitiesView.get(0).getTranslateX() - (SCENE_WIDTH / 2) < 0)
+						setScrollX(0);
+					else if (entitiesView.get(0).getTranslateX() + (SCENE_WIDTH / 2) > 800)
+						setScrollX(800 - SCENE_WIDTH);
+					else
+						setScrollX((int) entitiesView.get(0).getTranslateX() - (SCENE_WIDTH / 2));
+					setScrollY((int) entitiesView.get(0).getTranslateY() - SCENE_HEIGHT + 50 + 32);
+					break;
+				case 2:
+					if (entitiesView.get(0).getTranslateY() - ((SCENE_HEIGHT - 50) / 2) < 0) {
+						setScrollY(0);
+					} else if (entitiesView.get(0).getTranslateY() + ((SCENE_HEIGHT - 50) / 2) > 800)  {
+						setScrollY(SCENE_HEIGHT);
+					} else {
+						setScrollY((int) entitiesView.get(0).getTranslateY() - ((SCENE_HEIGHT - 50) / 2));
 					}
+					setScrollX((int) entitiesView.get(0).getTranslateX());
+					break;
+				case 3:
+					if (entitiesView.get(0).getTranslateX() - (SCENE_WIDTH / 2) < 0)
+						setScrollX(0);
+					else if (entitiesView.get(0).getTranslateX() + (SCENE_WIDTH / 2) > 800)
+						setScrollX(800 - SCENE_WIDTH);
+					else
+						setScrollX((int) entitiesView.get(0).getTranslateX() - (SCENE_WIDTH / 2));
+					setScrollY((int) entitiesView.get(0).getTranslateY());
+					break;
+				}
 				
 			}
     		
     	});
+    }
+    
+    private void setScrollX(int a) {
+    	tileContainer.setTranslateX(-a);
+		entityContainer.setTranslateX(-a);
+    }
+    
+    private void setScrollY(int a) {
+    	tileContainer.setTranslateY(-a);
+		entityContainer.setTranslateY(-a);
+    }
+    
+    private void initializeMap() {
+    	
+    	tileContainer.getChildren().addAll(this.field.getFieldView());
+    	
+    	Game.getMapChanged().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+				field.refreshField();
+			}
+			
+		});
     	
     }
     
-    private void entityLoading() {
+    private void initializeInterface() {
+    	interfaceContainer.getChildren().addAll(hud.getHearts());
+    	interfaceContainer.getChildren().addAll(hud.getPotions());
+    	interfaceContainer.getChildren().addAll(hud.getMoney());
+    	
+    	hud.getPlayer().getHP().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (oldValue.intValue() > newValue.intValue()) {
+    				for (int i = hud.getHearts().size()-1 ; i >= 0 ; i--) 
+    					if (hud.getHearts().get(i).getFull()) {
+    						hud.getHearts().get(i).setEmpty();
+    						break;
+    					}
+    			}
+    			
+    			else {
+    				for (int i = 0 ; i < hud.getHearts().size() ; i++)
+    					if (hud.getHearts().get(i).getEmpty() && !hud.getHearts().get(i).getLocked()) {
+    						hud.getHearts().get(i).setFull();
+    						break;
+    					}
+    			}
+    				
+    		}
+    		
+	    });
+		
+    	hud.getPlayer().getMaxHP().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (newValue.intValue() > oldValue.intValue()) {
+    				for (int i = 0 ; i < hud.getHearts().size() ; i++)
+    					if (hud.getHearts().get(i).getLocked()) {
+    						hud.getHearts().get(i).setEmpty();
+    						break;
+    					}
+    				
+    			}
+    			
+    		}
+    		
+	    });
+    	
+		hud.getPlayer().getPotion().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (oldValue.intValue() > newValue.intValue()) {
+    				for (int i = hud.getPotions().size()-1 ; i >= 0 ; i--) 
+    					if (hud.getPotions().get(i).getFull()) {
+    						hud.getPotions().get(i).setEmpty();
+    						break;
+    					}
+    			}
+    			
+    			else {
+    				for (int i = 0 ; i < hud.getPotions().size() ; i++)
+    					if (hud.getPotions().get(i).getEmpty()) {
+    						hud.getPotions().get(i).setFull();
+    						break;
+    					}
+    			}
+    				
+    		}
+    		
+	    });
+		
+		hud.getPlayer().getMoney().addListener(new ChangeListener<Number>() {
+    		
+    		@Override
+    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    			
+    			if (oldValue.intValue() > newValue.intValue()) {
+    				for (int i = hud.getMoney().size()-1 ; i >= 0 ; i--) 
+    					if (hud.getMoney().get(i).getFull()) {
+    						hud.getMoney().get(i).setEmpty();
+    						break;
+    					}
+    			}
+    			
+    			else {
+    				for (int i = 0 ; i < hud.getMoney().size() ; i++)
+    					if (hud.getMoney().get(i).getEmpty()) {
+    						hud.getMoney().get(i).setFull();
+    						break;
+    					}
+    			}
+    				
+    		}
+    		
+	    });
+    }
+    
+    private void initializeEntities() {
     	
     	entitiesView.add(new PlayerView(game.getPlayer()));
     	entityContainer.getChildren().add(entitiesView.get(0));
@@ -207,104 +339,78 @@ public class Controler implements Initializable {
     		
     	});
     	
-    }
+    	game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
 
-    public void interfaceUpdate(int min, int max, int nbmax, Number oldValue, Number newValue, String imageName) {
-    	if (newValue.intValue() > oldValue.intValue()) {
-        	if (oldValue.intValue() == 0) {
-        		listItemView.get(min).setImage(new Image("file:src/img/" + imageName + ".png"));
-            	listItemView.get(min).switchIsEmpty();
-        	}
-        	else if (newValue.intValue() == nbmax) {
-        		listItemView.get(max).setImage(new Image("file:src/img/" + imageName + ".png"));
-            	listItemView.get(max).switchIsEmpty();
-        	}
-        	else {
-        		for (int i = min; i < max; i++) {
-        			if (!listItemView.get(i).getIsEmpty() && listItemView.get(i+1).getIsEmpty()) {
-        				listItemView.get(i+1).setImage(new Image("file:src/img/" + imageName + ".png"));
-        		    	listItemView.get(i+1).switchIsEmpty();
-        				break;
-        			}
-        		}
-        	}
-    	}
-    	else {
-    		if (oldValue.intValue() == nbmax) {
-    			listItemView.get(max).setImage(new Image("file:src/img/" + imageName + "-empty.png"));
-            	listItemView.get(max).switchIsEmpty();
-    		}
-    		else if (newValue.intValue() == 0) {
-    			listItemView.get(min).setImage(new Image("file:src/img/" + imageName + "-empty.png"));
-            	listItemView.get(min).switchIsEmpty();
-    		}
-    		else {
-    			for (int i = min; i < max; i++) {
-	    			if (!listItemView.get(i).getIsEmpty() && listItemView.get(i+1).getIsEmpty()) {
-	    				listItemView.get(i).setImage(new Image("file:src/img/" + imageName + "-empty.png"));
-	    		    	listItemView.get(i).switchIsEmpty();
-	    				break;
-	    			}
-    			}
-    		}
-    	}
-    }
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldValue, Boolean newValue) {
 
-    // Gère toute l'interface
-    public void interfaceGeneration() {
-    	/*
-    	* Indice 0-2 : Potions
-    	* Indice 3-7 : Jetons
-    	* Indice 8-13 : Coeurs
-    	*/
-    	
-    	// Potions
-    	for (int i = 0 ; i < 3 ; i++) {
-    		listItemView.add(new ItemView(game.getPlayer(), new Image("file:src/img/soda-empty.png"), 330+((i+1)*28), 10, true));
-    	}
-    	
-    	// Argent
-    	for (int i = 0 ; i < 5 ; i++) {
-    		listItemView.add(new ItemView(game.getPlayer(), new Image("file:src/img/money-empty.png"), 530+((i+4)*28), 10, true));
-    	}
-    	
-    	// Coeurs
-    	for (int i = 0 ; i < 6 ; i++) {
-    		if (i > 2)
-        		listItemView.add(new ItemView(game.getPlayer(), new Image("file:src/img/h-empty.png"), (i+1)*28, 10, true));
-    		else
-    			listItemView.add(new ItemView(game.getPlayer(), new Image("file:src/img/h.png"), (i+1)*28, 10, false));
-    	}
-    	
-		interfaceContainer.getChildren().addAll(listItemView);
+                if (newValue.booleanValue()) {
+                    switch (game.getPlayer().getOrientation().get()) {
+                    case 0 :
+                        i.setTranslateX(entitiesView.get(0).getTranslateX() - 32);
+                        i.setTranslateY(entitiesView.get(0).getTranslateY());
+                        i.setRotate(-90);
+                        break;
+                    case 1 :
+                        i.setTranslateX(entitiesView.get(0).getTranslateX());
+                        i.setTranslateY(entitiesView.get(0).getTranslateY() - 32);
+                        i.setRotate(0);
+                        break;
+                    case 2 : 
+                        i.setTranslateX(entitiesView.get(0).getTranslateX() + 32);
+                        i.setTranslateY(entitiesView.get(0).getTranslateY());
+                        i.setRotate(90);
+                        break;
+                    case 3 :
+                        i.setTranslateX(entitiesView.get(0).getTranslateX());
+                        i.setTranslateY(entitiesView.get(0).getTranslateY() + 32);
+                        i.setRotate(180);
+                        break;
+                    default :
+                        break;
+                    }
 
-    	// MAJ Heart
-    	game.getPlayer().getPv().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    		interfaceUpdate(8, 13, 6, oldValue, newValue, "h");
-    		}
-	    });
-	   
-    	// MAJ Potion
-    	game.getPlayer().getPotion().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			interfaceUpdate(0, 2, 3, oldValue, newValue, "soda");
-    		}
-	    });
-		
-    	// MAJ Jetons
-    	game.getPlayer().getMoney().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			interfaceUpdate(3, 7, 5, oldValue, newValue, "money");
-    		}
-	    });
-	    
+                    entityContainer.getChildren().add(i);
+                }
+                else
+                    entityContainer.getChildren().remove(i);
+
+            }
+
+        });
+    	
+    	this.game.addKeyFrame(e -> {
+			for (int k = 0; k < entitiesView.size(); k++)
+				if (entitiesView.get(k).getIsDead()) {
+					entityContainer.getChildren().remove(entitiesView.get(k));
+					entitiesView.remove(entitiesView.get(k));
+				}
+			for (int k = 0; k < game.getEntities().size(); k++)
+				if (game.getEntities().get(k).getIsDead().get()) {
+					game.getEntities().remove(game.getEntities().get(k));
+				}
+			for (int k = 0; k < game.getEntities().size(); k++) {
+				if (game.getEntities().get(k).getHP().get() == 0)
+					game.getEntities().get(k).die();
+			}
+		}, 0.017);
+    	
     }
     
+    @FXML
+    void quit(ActionEvent event) {
+    	System.exit(0);
+    }
+
+    @FXML
+    void resume(ActionEvent event) {
+    	this.pausePane.setVisible(false);
+    	this.game.playGameLoop();
+    }
+    
+    private void showPauseMenu() {
+    	this.pausePane.setVisible(true);
+    	this.game.pauseGameLoop();
+    	this.pausePane.requestFocus();
+    }
 }

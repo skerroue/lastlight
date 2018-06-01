@@ -72,16 +72,9 @@ public abstract class AnimatedEntity extends Entity {
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
-				if (y.get() > LEFT_TOP_LIMIT) {
-					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() &&
-						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1).isCrossable() && emptyTile)
-						canMove = true;
-				}
-				else {
-					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() &&
-						Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()-1).isCrossable() && emptyTile)
-						canMove = true;
-				}
+				if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() &&
+					Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1).isCrossable() && emptyTile)
+					canMove = true;
 			}
 			else
 				if (x.get() > LEFT_TOP_LIMIT && Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() && emptyTile)
@@ -92,16 +85,9 @@ public abstract class AnimatedEntity extends Entity {
 			if (y.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0 && y.get() > 0) {
-				if (x.get() < RIGHT_BOTTOM_LIMIT) {
-					if (Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()).isCrossable() && 
-						Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1).isCrossable() && emptyTile)
-						canMove = true;
-				}
-				else {
-					if (Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()).isCrossable() && 
-					   	Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()-1).isCrossable() && emptyTile)
-						canMove = true;
-				}
+				if (Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()).isCrossable() && 
+					Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1).isCrossable() && emptyTile)
+					canMove = true;
 			}
 			else 
 				if (y.get() > LEFT_TOP_LIMIT && Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()).isCrossable() && emptyTile)
@@ -112,16 +98,9 @@ public abstract class AnimatedEntity extends Entity {
 			if (y.get() % 32 != 0 && emptyTile) 
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
-				if (x.get() < RIGHT_BOTTOM_LIMIT) {
-					if (Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()).isCrossable() && 
-						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1).isCrossable() && emptyTile)
-						canMove = true;
-				}
-				else {
-					if (Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()).isCrossable() && 
-						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1).isCrossable() && emptyTile)
-						canMove = true;
-				}
+				if (Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()).isCrossable() && 
+					Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1).isCrossable() && emptyTile)
+					canMove = true;
 			}
 			else 
 				if (y.get() < RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()).isCrossable() && emptyTile)
@@ -132,16 +111,9 @@ public abstract class AnimatedEntity extends Entity {
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
-				if (y.get() > LEFT_TOP_LIMIT) {
-					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() &&
-						Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1).isCrossable() && emptyTile)
-						canMove = true;
-				}
-				else {
-					if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() &&
-						Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1).isCrossable() && emptyTile)
-						canMove = true;
-				}
+				if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() &&
+					Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1).isCrossable() && emptyTile)
+					canMove = true;
 			}
 			else
 				if (x.get() < RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() && emptyTile)

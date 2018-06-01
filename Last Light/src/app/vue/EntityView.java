@@ -1,5 +1,6 @@
 package app.vue;
 
+import app.modele.entity.AnimatedEntity;
 import app.modele.entity.Entity;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -9,11 +10,11 @@ import javafx.scene.image.ImageView;
 
 public class EntityView extends ImageView {
 	
-	protected Entity entity;
+	protected AnimatedEntity entity;
 	protected boolean isDead;
 	
-	public EntityView(Image img, Entity e) {
-		this.setImage(img);
+	public EntityView(AnimatedEntity e) {
+		this.setImage(new Image("file:src/img/tileset" + e.getId() + ".png"));
 		this.entity = e;
 		
 		this.translateXProperty().bind(e.getX());
@@ -28,15 +29,57 @@ public class EntityView extends ImageView {
 			
 		});
 		
+		this.actualiserImage();
+		this.initializeListeners();
+		
 	}
 	
 	public boolean getIsDead() {
 		return this.isDead;
 	}
 	
+	public void actualiserImage() {
+		this.setViewport(new Rectangle2D((this.entity.getFrame()/(entity.getFrameMax()/entity.getNbFrame()))*32, this.entity.getOrientation().getValue()*32, 32, 32));
+	}
+	
 	public void resetImage() {
 		this.entity.resetFrame();
-		this.setViewport(new Rectangle2D((this.entity.getFrame()/3)*32, this.entity.getOrientation().getValue()*32, 32, 32));
+		this.setViewport(new Rectangle2D((this.entity.getFrame()/(entity.getFrameMax()/entity.getNbFrame()))*32, this.entity.getOrientation().getValue()*32, 32, 32));
 	}
+	
+	public void initializeListeners() {
+		
+		this.entity.getOrientation().addListener(new ChangeListener<Number>() {
 
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				actualiserImage();
+			}
+			
+		});
+		
+		this.entity.getX().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				entity.incrementeFrame();
+				if (entity.getFrame() % (entity.getFrameMax()/entity.getNbFrame()) == 0)
+					actualiserImage();
+			}
+			
+		});
+		
+		this.entity.getY().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				entity.incrementeFrame();
+				if (entity.getFrame() % (entity.getFrameMax()/entity.getNbFrame()) == 0)
+					actualiserImage();
+			}
+			
+		});
+		
+	}
+	
 }
