@@ -50,6 +50,7 @@ public class Controler implements Initializable {
     private InterfaceView hud;
     
     private Game game;
+    private ImageView i;
     
     public Controler() {	
     	
@@ -57,7 +58,7 @@ public class Controler implements Initializable {
     	this.entitiesView = new ArrayList<>();
     	this.hud = new InterfaceView(game.getPlayer());
     	this.field = new FieldView();
-    	
+    	this.i = new ImageView(new Image("file:src/img/attack.png"));
     }
     
 	@Override
@@ -337,6 +338,46 @@ public class Controler implements Initializable {
 			}
     		
     	});
+    	
+    	game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldValue, Boolean newValue) {
+
+                if (newValue.booleanValue()) {
+                    switch (game.getPlayer().getOrientation().get()) {
+                    case 0 :
+                        i.setTranslateX(entitiesView.get(0).getTranslateX() - 32);
+                        i.setTranslateY(entitiesView.get(0).getTranslateY());
+                        i.setRotate(-90);
+                        break;
+                    case 1 :
+                        i.setTranslateX(entitiesView.get(0).getTranslateX());
+                        i.setTranslateY(entitiesView.get(0).getTranslateY() - 32);
+                        i.setRotate(0);
+                        break;
+                    case 2 : 
+                        i.setTranslateX(entitiesView.get(0).getTranslateX() + 32);
+                        i.setTranslateY(entitiesView.get(0).getTranslateY());
+                        i.setRotate(90);
+                        break;
+                    case 3 :
+                        i.setTranslateX(entitiesView.get(0).getTranslateX());
+                        i.setTranslateY(entitiesView.get(0).getTranslateY() + 32);
+                        i.setRotate(180);
+                        break;
+                    default :
+                        break;
+                    }
+
+                    entityContainer.getChildren().add(i);
+                }
+                else
+                    entityContainer.getChildren().remove(i);
+
+            }
+
+        });
     	
     	this.game.addKeyFrame(e -> {
 			for (int k = 0; k < entitiesView.size(); k++)
