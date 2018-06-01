@@ -63,7 +63,7 @@ public class Game {
 	}
 	
 	private int[][] readFileMaps() { 
-		int[][] fieldsMap = new int [1][2];	// taille à modifier
+		int[][] fieldsMap = new int [2][2];	// taille à modifier
 		        
         try {
         	
@@ -74,7 +74,7 @@ public class Game {
 			
 			try {
 				
-				for (int i = 0; i < 1; i++) {
+				for (int i = 0; i < 2; i++) {
 					for (int j = 0; j < 2; j++) {	// taille à modifier
 						fieldsMap[i][j] = s.nextInt();
 					}
