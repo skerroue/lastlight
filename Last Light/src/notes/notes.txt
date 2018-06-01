@@ -1,0 +1,11 @@
+- Contournement des obstacles par les ennemis
+- Animation du personnage lors des attaques (revoir l'affichage de la lumière)
+- Interactions avec les entités :
+	- Une arme par terre pour la récuperer
+	- Un distributeur pour acheter une potion
+	- Un PNJ pour lui parler
+	- Un bouton pour appuyer dessus
+	- Une caisse pour la pousser
+	
+- Ajouter une arme à distance
+- Ajouter des ennemis volants et attaquant à distance
