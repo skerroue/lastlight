@@ -47,10 +47,10 @@ public class Controler implements Initializable {
     private Pane interfaceContainer;
    
     private ArrayList<EntityView> entitiesView;
+    private PlayerView playerView;
     private InterfaceView hud;
     
     private Game game;
-    private ImageView i;
     
     public Controler() {	
     	
@@ -58,7 +58,6 @@ public class Controler implements Initializable {
     	this.entitiesView = new ArrayList<>();
     	this.hud = new InterfaceView(game.getPlayer());
     	this.field = new FieldView();
-    	this.i = new ImageView(new Image("file:src/img/attack.png"));
     }
     
 	@Override
@@ -115,6 +114,9 @@ public class Controler implements Initializable {
     		break;
     	case ESCAPE:
     		showPauseMenu();
+    		break;
+    	case DIGIT1 :
+    		this.game.getPlayer().switchWeapon(1);
     		break;
 		default:
 			break;
@@ -320,8 +322,9 @@ public class Controler implements Initializable {
     
     private void initializeEntities() {
     	
-    	entitiesView.add(new PlayerView(game.getPlayer()));
-    	entityContainer.getChildren().add(entitiesView.get(0));
+    	playerView = new PlayerView(game.getPlayer());
+    	entitiesView.add(playerView);
+    	entityContainer.getChildren().add(playerView);
     	
     	game.getEntities().addListener(new ListChangeListener<Entity>() {
 
@@ -347,33 +350,33 @@ public class Controler implements Initializable {
                 if (newValue.booleanValue()) {
                     switch (game.getPlayer().getOrientation().get()) {
                     case 0 :
-                        i.setTranslateX(entitiesView.get(0).getTranslateX() - 32);
-                        i.setTranslateY(entitiesView.get(0).getTranslateY());
-                        i.setRotate(-90);
+                        playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() - 32);
+                        playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY());
+                        playerView.getAttackImage().setRotate(-90);
                         break;
                     case 1 :
-                        i.setTranslateX(entitiesView.get(0).getTranslateX());
-                        i.setTranslateY(entitiesView.get(0).getTranslateY() - 32);
-                        i.setRotate(0);
+                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX());
+                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() - 32);
+                    	playerView.getAttackImage().setRotate(0);
                         break;
                     case 2 : 
-                        i.setTranslateX(entitiesView.get(0).getTranslateX() + 32);
-                        i.setTranslateY(entitiesView.get(0).getTranslateY());
-                        i.setRotate(90);
+                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() + 32);
+                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY());
+                    	playerView.getAttackImage().setRotate(90);
                         break;
                     case 3 :
-                        i.setTranslateX(entitiesView.get(0).getTranslateX());
-                        i.setTranslateY(entitiesView.get(0).getTranslateY() + 32);
-                        i.setRotate(180);
+                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX());
+                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 32);
+                    	playerView.getAttackImage().setRotate(180);
                         break;
                     default :
                         break;
                     }
 
-                    entityContainer.getChildren().add(i);
+                    entityContainer.getChildren().add(playerView.getAttackImage());
                 }
                 else
-                    entityContainer.getChildren().remove(i);
+                    entityContainer.getChildren().remove(playerView.getAttackImage());
 
             }
 

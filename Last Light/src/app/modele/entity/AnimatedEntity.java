@@ -181,39 +181,6 @@ public abstract class AnimatedEntity extends Entity {
 	
 	public void attack(ObservableList<AnimatedEntity> entities) {
 		
-		this.isAttacking.set(true);
-		
-		switch (this.getOrientation().get()) {
-		case LEFT :
-			for (AnimatedEntity e : entities)
-	    		if (this.getX().get() <= e.getX().get() + 64 && this.getX().get() >= e.getX().get() + 32 && 
-	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			e.loseHP(1);
-			break;
-		case UP :
-			for (AnimatedEntity e : entities)
-	    		if (this.getY().get() <= e.getY().get() + 64 && this.getY().get() >= e.getY().get() + 32 && 
-	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			e.loseHP(1);
-			break;
-		case RIGHT :
-			for (AnimatedEntity e : entities) {
-				if (this.getX().get() >= e.getX().get() - 64 && this.getX().get() <= e.getX().get() - 32 && 
-		    		this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-					e.loseHP(1);
-			}
-			break;
-		case DOWN :
-			for (AnimatedEntity e : entities)
-	    		if (this.getY().get() >= e.getY().get() - 64 && this.getY().get() <= e.getY().get() - 32 && 
-	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			e.loseHP(1);
-			break;
-		default :
-			break;
-			
-		}
-		
 	}
 	
 	public void resetIsAttacking() {
