@@ -10,6 +10,7 @@ import app.modele.entity.Entity;
 import app.vue.EnemyView;
 import app.vue.EntityView;
 import app.vue.FieldView;
+import app.vue.InanimatedEntityView;
 import app.vue.InterfaceView;
 import app.vue.PlayerView;
 import javafx.beans.value.ChangeListener;
@@ -47,6 +48,7 @@ public class Controler implements Initializable {
     private Pane interfaceContainer;
    
     private ArrayList<EntityView> entitiesView;
+    private ArrayList<InanimatedEntityView> inanimatedEntityView;
     private PlayerView playerView;
     private InterfaceView hud;
     
@@ -56,6 +58,7 @@ public class Controler implements Initializable {
     	
     	this.game = new Game();
     	this.entitiesView = new ArrayList<>();
+    	this.inanimatedEntityView = new ArrayList<>();
     	this.hud = new InterfaceView(game.getPlayer());
     	this.field = new FieldView();
     }
@@ -68,6 +71,8 @@ public class Controler implements Initializable {
 		initializeEntities();
 		this.game.playGameLoop();
 		initializeScrollField();
+		
+		this.game.addInanimated(1, 384, 384);
 	}
 
     @FXML
@@ -100,6 +105,9 @@ public class Controler implements Initializable {
     		break;
     	case S:
     		this.game.addEnnemy(384, 384);
+    		break;
+    	case F :
+    		this.game.getPlayer().interact(game.getInanimatedEntities());
     		break;
     	case E:
     		this.game.getPlayer().loseHP(1);
@@ -342,6 +350,22 @@ public class Controler implements Initializable {
     		
     	});
     	
+    	game.getInanimatedEntities().addListener(new ListChangeListener<Entity>() {
+
+			@Override
+			public void onChanged(Change<? extends Entity> c) {
+				
+				while (c.next()) {
+					if (c.wasAdded()) {
+						inanimatedEntityView.add(new InanimatedEntityView(game.getInanimatedEntities().get(game.getInanimatedEntities().size()-1)));
+						entityContainer.getChildren().add(inanimatedEntityView.get(inanimatedEntityView.size()-1));
+					}
+				}
+				
+			}
+    		
+    	});
+    	
     	game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
 
             @Override
@@ -396,7 +420,15 @@ public class Controler implements Initializable {
 				if (game.getEntities().get(k).getHP().get() == 0)
 					game.getEntities().get(k).die();
 			}
-		}, 0.017);
+			for (int i = 0 ; i < inanimatedEntityView.size() ; i++)
+				if (inanimatedEntityView.get(i).getIsDead()) {
+					entityContainer.getChildren().remove(inanimatedEntityView.get(i));
+					inanimatedEntityView.remove(inanimatedEntityView.get(i));
+				}
+			for (int i = 0 ; i < game.getInanimatedEntities().size() ; i++)
+				if (game.getInanimatedEntities().get(i).getIsDead().get())
+					game.getInanimatedEntities().remove(game.getInanimatedEntities().get(i));
+ 		}, 0.017);
     	
     }
     

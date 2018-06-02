@@ -40,7 +40,6 @@ public class Player extends AnimatedEntity {
 		this.boots = new SimpleBooleanProperty(false);
 		this.necklace = new SimpleBooleanProperty(false);
 		this.weapons = new ArrayList<>();
-		this.weapons.add(new Lampe(1,0));
 		this.activeWeaponIndex = new SimpleIntegerProperty(0);
 		
 		this.id = "player";
@@ -146,6 +145,39 @@ public class Player extends AnimatedEntity {
 			}
 		}
 		
+	}
+	
+	public void interact(ObservableList<InanimatedEntity> entities) {
+		switch (this.getOrientation().get()) {
+		case LEFT :
+			for (InanimatedEntity e : entities)
+	    		if (this.getX().get() <= e.getX().get() + 64 && this.getX().get() >= e.getX().get() + 32 && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
+	    			e.interact(this);
+			break;
+		case UP :
+			for (InanimatedEntity e : entities)
+	    		if (this.getY().get() <= e.getY().get() + 64 && this.getY().get() >= e.getY().get() + 32 && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
+	    			e.interact(this);
+			break;
+		case RIGHT :
+			for (InanimatedEntity e : entities) {
+				if (this.getX().get() >= e.getX().get() - 64 && this.getX().get() <= e.getX().get() - 32 && 
+		    		this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
+					e.interact(this);
+			}
+			break;
+		case DOWN :
+			for (InanimatedEntity e : entities)
+	    		if (this.getY().get() >= e.getY().get() - 64 && this.getY().get() <= e.getY().get() - 32 && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
+	    			e.interact(this);
+			break;
+		default :
+			break;
+			
+		}
 	}
 	
 }

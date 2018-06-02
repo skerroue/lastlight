@@ -12,7 +12,9 @@ import app.modele.BFS.BFS;
 import app.modele.entity.AnimatedEntity;
 import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
+import app.modele.entity.InanimatedEntity;
 import app.modele.entity.Player;
+import app.modele.entity.WeaponEntity;
 import app.modele.field.Field;
 import app.modele.field.Tile;
 import javafx.animation.KeyFrame;
@@ -45,6 +47,7 @@ public class Game {
 	private static Field map;
 	private Player player;
 	private ObservableList<AnimatedEntity> entities;
+	private ObservableList<InanimatedEntity> inanimatedEntities;
 	private static BooleanProperty mapChanged;
 	
 	private BFS bfs;
@@ -57,8 +60,10 @@ public class Game {
 		this.map = new Field(1, 0, this.fieldsMap[1][0] , 25, 25, crossableTiles);	// coordonnées à modifier
 		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
+		this.inanimatedEntities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
 		this.entities.add(player);
+		
 		
 		this.bfs = new BFS(player, map);
 		
@@ -164,6 +169,10 @@ public class Game {
 		return this.entities;
 	}
 	
+	public ObservableList<InanimatedEntity> getInanimatedEntities() {
+		return this.inanimatedEntities;
+	}
+	
 	public static BooleanProperty getMapChanged() {
 		return mapChanged;
 	}
@@ -206,8 +215,13 @@ public class Game {
 		}
 		
 		if (changing) {
-			for (int k = 1 ; k < this.entities.size() ; k++)
+			for (int k = 1 ; k < this.entities.size() ; k++) {
 				this.entities.get(k).die();
+			}
+			for (int l = 0 ; l < this.inanimatedEntities.size() ; l++) {
+				this.inanimatedEntities.get(l).die();
+			}
+			
 			spawnEntities();
 		}
 		
@@ -263,6 +277,10 @@ public class Game {
     public void addEnnemy(int x, int y) {
     	AnimatedEntity e = new Enemy(x, y, 1, 0, 4, 6, 18);
     	entities.add(e);
+    }
+    
+    public void addInanimated(int id, int x, int y) {
+    	inanimatedEntities.add(new WeaponEntity(id, x, y));
     }
     
     public void playGameLoop() {
