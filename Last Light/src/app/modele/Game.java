@@ -38,6 +38,9 @@ public class Game {
 	final static int LEFT_TOP_LIMIT = 0;
 	final static int RIGHT_BOTTOM_LIMIT = 768;
 	
+	final static int FILE_MAP_WIDTH = 2;
+	final static int FILE_MAP_HEIGHT = 2;
+	
 	static protected ArrayList<Integer> crossableTiles;
 
 	private Timeline gameloop;
@@ -106,8 +109,8 @@ public class Game {
 			
 			try {
 				
-				for (int i = 0; i < 2; i++) {
-					for (int j = 0; j < 2; j++) {	// taille à modifier
+				for (int i = 0; i < FILE_MAP_HEIGHT; i++) {
+					for (int j = 0; j < FILE_MAP_WIDTH; j++) {	// taille à modifier
 						fieldsMap[i][j] = s.nextInt();
 					}
 				}
@@ -201,13 +204,13 @@ public class Game {
 			}
 			break;
 		case RIGHT :
-			if (j < 1 && this.fieldsMap[i][j + 1] != 0) {
+			if (j < FILE_MAP_WIDTH-1 && this.fieldsMap[i][j + 1] != 0) {
 				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25, crossableTiles);
 				changing = true;
 			}
 			break;
 		case DOWN :
-			if (i < 1 && this.fieldsMap[i + 1][j] != 0) {
+			if (i < FILE_MAP_HEIGHT-1 && this.fieldsMap[i + 1][j] != 0) {
 				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25, crossableTiles);
 				changing = true;
 			}

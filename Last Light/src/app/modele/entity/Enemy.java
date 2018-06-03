@@ -10,15 +10,4 @@ public class Enemy extends AnimatedEntity {
 		this.id = "rodeur";
 	}
 
-	public void update(ObservableList<AnimatedEntity> entities) {
-		if (Math.random() < 0.25)
-			this.moveDown(entities);
-		else if (Math.random() < 0.5) 
-			this.moveLeft(entities);
-		else if (Math.random() < 0.75)
-			this.moveRight(entities);
-		else
-			this.moveUp(entities);
-	}
-
 }

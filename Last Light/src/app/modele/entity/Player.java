@@ -45,10 +45,6 @@ public class Player extends AnimatedEntity {
 		this.id = "player";
 	}
 	
-	public void update(ObservableList<AnimatedEntity> entities) {
-		
-	}
-	
 	public IntegerProperty getMaxPotion() {
 		return this.maxPotion;
 	}

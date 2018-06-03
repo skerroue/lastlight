@@ -1,3 +1,5 @@
+- Transformer la methode attack en methode interact (les bases sont là mais à transposer)
+- Ajouter le boolean "canChangeMap", conditionner le fait qu'on ne puisse pas partir quand une entité indispensable spawn (WeaponEntity, Collier/bottes)
 - Contournement des obstacles par les ennemis
 - Animation du personnage lors des attaques (revoir l'affichage de la lumière)
 - Interactions avec les entités :
@@ -8,4 +10,6 @@
 	- Une caisse pour la pousser
 	
 - Ajouter une arme à distance
-- Ajouter des ennemis volants et attaquant à distance
+
+- Ajouter des ennemis volants et attaquant à distance :
+	- D'abord arreter d'instancier la classe Enemy, faire une classe rodeur et une classe rodeur volant

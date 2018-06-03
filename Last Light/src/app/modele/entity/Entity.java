@@ -31,8 +31,6 @@ public abstract class Entity {
 		this.isDead = new SimpleBooleanProperty(false);
 	}
 	
-	public abstract void update(ObservableList<AnimatedEntity> entities);
-	
 	public IntegerProperty getX() {
 		return x;
 	}

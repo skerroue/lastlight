@@ -7,12 +7,13 @@ import java.util.ResourceBundle;
 import app.modele.Game;
 import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
-import app.vue.EnemyView;
-import app.vue.EntityView;
 import app.vue.FieldView;
-import app.vue.InanimatedEntityView;
 import app.vue.InterfaceView;
-import app.vue.PlayerView;
+import app.vue.entity.AnimatedEntityView;
+import app.vue.entity.EnemyView;
+import app.vue.entity.EntityView;
+import app.vue.entity.InanimatedEntityView;
+import app.vue.entity.PlayerView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -47,7 +48,7 @@ public class Controler implements Initializable {
     @FXML
     private Pane interfaceContainer;
    
-    private ArrayList<EntityView> entitiesView;
+    private ArrayList<AnimatedEntityView> entitiesView;
     private ArrayList<InanimatedEntityView> inanimatedEntityView;
     private PlayerView playerView;
     private InterfaceView hud;

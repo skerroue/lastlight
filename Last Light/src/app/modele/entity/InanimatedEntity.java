@@ -3,6 +3,7 @@ package app.modele.entity;
 import javafx.collections.ObservableList;
 
 public abstract class InanimatedEntity extends Entity {
+	// TODO : Trouver un moyen plus "clair" d'identifier les entites inanimees
 	
 	protected int id;
 	
@@ -10,7 +11,6 @@ public abstract class InanimatedEntity extends Entity {
 		this.id = id;
 	}
 
-	public abstract void update(ObservableList<AnimatedEntity> entities);
 	public abstract void interact(Player p);
 	
 	public int getId() {

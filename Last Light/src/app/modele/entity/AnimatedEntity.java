@@ -32,12 +32,6 @@ public abstract class AnimatedEntity extends Entity {
 		this.isAttacking = new SimpleBooleanProperty(false);
 	}
 	
-	@Override
-	public void update(ObservableList<AnimatedEntity> entities) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public void moveLeft(ObservableList<AnimatedEntity> entities) {
 		this.setOrientation(KeyCode.LEFT);
 		if (canMove(entities))

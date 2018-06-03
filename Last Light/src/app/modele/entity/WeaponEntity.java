@@ -12,13 +12,8 @@ public class WeaponEntity extends InanimatedEntity {
 		this.x = new SimpleIntegerProperty(x);
 		this.y = new SimpleIntegerProperty(y);
 	}
-
-	@Override
-	public void update(ObservableList<AnimatedEntity> entities) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
+	// Dumb af cette methode mais est construite dans l'idée où une arme spawnera une et une seule fois dans le jeu
 	public void interact(Player p) {
 		switch (this.id) {
 		case 1 :
