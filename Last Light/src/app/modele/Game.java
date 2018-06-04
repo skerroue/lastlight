@@ -61,7 +61,7 @@ public class Game {
 		this.fieldsMap = readFileMaps();
 		this.crossableTiles = readFileCrossableTiles();
 		this.map = new Field(3, 0, this.fieldsMap[3][0] , 25, 25, crossableTiles);	// coordonnées à modifier
-		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);	// coordonnées à modifier
+		this.player = new Player(416, 416, 3, 0, 16, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.inanimatedEntities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
@@ -252,8 +252,20 @@ public class Game {
 					Scanner s = new Scanner(line).useDelimiter(",");
 					s.nextInt();
 					
-					while (s.hasNext())
-						this.addEnnemy(s.nextInt(), s.nextInt());
+					while (s.hasNext()) {
+						int nextInt = s.nextInt();
+						System.out.println(nextInt);
+						switch (nextInt) {
+						case 1 :
+							this.addEnnemy(s.nextInt(), s.nextInt());
+							break;
+						case 3 :
+							this.addInanimated(new WeaponEntity(nextInt, s.nextInt(), s.nextInt()));
+							break;
+						default :
+							break;
+						}
+					}
 					
 					s.close();
 				}
@@ -282,8 +294,8 @@ public class Game {
     	entities.add(e);
     }
     
-    public void addInanimated(int id, int x, int y) {
-    	inanimatedEntities.add(new WeaponEntity(id, x, y));
+    public void addInanimated(InanimatedEntity i) {
+    	inanimatedEntities.add(i);
     }
     
     public void playGameLoop() {
