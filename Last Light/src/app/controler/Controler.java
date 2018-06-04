@@ -105,7 +105,7 @@ public class Controler implements Initializable {
     		}
     		break;
     	case S:
-    		this.game.addEnnemy(384, 384);
+    		this.game.addEnnemy("walker", 384, 384);
     		break;
     	case F :
     		this.game.getPlayer().interact(game.getInanimatedEntities());
