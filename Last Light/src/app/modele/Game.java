@@ -13,6 +13,7 @@ import app.modele.entity.AnimatedEntity;
 import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
 import app.modele.entity.InanimatedEntity;
+import app.modele.entity.ItemEntity;
 import app.modele.entity.Player;
 import app.modele.entity.WeaponEntity;
 import app.modele.field.Field;
@@ -61,7 +62,7 @@ public class Game {
 		this.fieldsMap = readFileMaps();
 		this.crossableTiles = readFileCrossableTiles();
 		this.map = new Field(3, 0, this.fieldsMap[3][0] , 25, 25, crossableTiles);	// coordonnées à modifier
-		this.player = new Player(416, 416, 3, 0, 16, 0, 6, 18);	// coordonnées à modifier
+		this.player = new Player(416, 416, 3, 0, 32, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.inanimatedEntities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
@@ -261,6 +262,9 @@ public class Game {
 							break;
 						case 3 :
 							this.addInanimated(new WeaponEntity(nextInt, s.nextInt(), s.nextInt()));
+							break;
+						case 5 :
+							this.addInanimated(new ItemEntity(nextInt, s.nextInt(), s.nextInt()));
 							break;
 						default :
 							break;
