@@ -18,6 +18,7 @@ import app.modele.entity.Player;
 import app.modele.entity.WeaponEntity;
 import app.modele.field.Field;
 import app.modele.field.Tile;
+import app.modele.weapon.Weapon;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -255,13 +256,13 @@ public class Game {
 					
 					while (s.hasNext()) {
 						int nextInt = s.nextInt();
-						System.out.println(nextInt);
 						switch (nextInt) {
 						case 1 :
 							this.addEnnemy(s.nextInt(), s.nextInt());
 							break;
 						case 3 :
-							this.addInanimated(new WeaponEntity(nextInt, s.nextInt(), s.nextInt()));
+							if (!hasWeapon("lamp"))
+								this.addInanimated(new WeaponEntity(nextInt, s.nextInt(), s.nextInt()));
 							break;
 						case 5 :
 							this.addInanimated(new ItemEntity(nextInt, s.nextInt(), s.nextInt()));
@@ -283,6 +284,17 @@ public class Game {
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("entityLocations : Fichier introuvable");
+		}
+	}
+	
+	private boolean hasWeapon(String id) {
+		if (this.player.getWeapons().size() == 0)
+			return false;
+		else {
+			for (Weapon e : this.player.getWeapons())
+				if (e.getId().equals(id))
+					return true;
+			return false;
 		}
 	}
 	
