@@ -13,10 +13,10 @@ public class WeaponEntity extends InanimatedEntity {
 		this.y = new SimpleIntegerProperty(y);
 	}
 	
-	// Dumb af cette methode mais est construite dans l'idée où une arme spawnera une et une seule fois dans le jeu
+	// Dumb af cette methode mais est construite dans l'idÃ©e oÃ¹ une arme spawnera une et une seule fois dans le jeu
 	public void interact(Player p) {
 		switch (this.id) {
-		case 1 :
+		case 3 :
 			if (p.getWeapons().size() < 1) {
 				p.getWeapons().add(new Lampe(1, 0));
 				this.die();
