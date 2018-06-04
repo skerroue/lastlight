@@ -89,7 +89,7 @@ public class Player extends AnimatedEntity {
 	
 	// TODO
 	public void usePotion() {
-		if (this.potion.getValue() > 0) {
+		if (this.potion.getValue() > 0 && this.hp.getValue() < this.maxHP.getValue()) {
 			this.potion.set(this.potion.getValue() - 1);
 			this.hp.set(this.hp.getValue() + 1);
 		}
