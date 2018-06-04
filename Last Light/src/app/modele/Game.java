@@ -258,7 +258,7 @@ public class Game {
 						int nextInt = s.nextInt();
 						switch (nextInt) {
 						case 1 :
-							this.addEnnemy(s.nextInt(), s.nextInt());
+							this.addEnnemy("walker", s.nextInt(), s.nextInt());
 							break;
 						case 3 :
 							if (!hasWeapon("lamp"))
@@ -305,9 +305,14 @@ public class Game {
     	gameloop.play();
     }
     
-    public void addEnnemy(int x, int y) {
-    	AnimatedEntity e = new Enemy(x, y, 1, 0, 4, 6, 18);
-    	entities.add(e);
+    public void addEnnemy(String type, int x, int y) {
+    	switch (type) {
+    	case "walker" :
+    		entities.add(new Walker(x, y, 1, 0, 4, 6, 18));
+    		break;
+    	default :
+    		break;
+    	}
     }
     
     public void addInanimated(InanimatedEntity i) {
