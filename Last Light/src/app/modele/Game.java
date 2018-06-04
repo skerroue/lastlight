@@ -38,8 +38,8 @@ public class Game {
 	final static int LEFT_TOP_LIMIT = 0;
 	final static int RIGHT_BOTTOM_LIMIT = 768;
 	
-	final static int FILE_MAP_WIDTH = 2;
-	final static int FILE_MAP_HEIGHT = 2;
+	final static int FILE_MAP_WIDTH = 3;
+	final static int FILE_MAP_HEIGHT = 4;
 	
 	static protected ArrayList<Integer> crossableTiles;
 
@@ -60,7 +60,7 @@ public class Game {
 		this.gameloop.setCycleCount(Timeline.INDEFINITE);
 		this.fieldsMap = readFileMaps();
 		this.crossableTiles = readFileCrossableTiles();
-		this.map = new Field(1, 0, this.fieldsMap[1][0] , 25, 25, crossableTiles);	// coordonnées à modifier
+		this.map = new Field(3, 0, this.fieldsMap[3][0] , 25, 25, crossableTiles);	// coordonnées à modifier
 		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.inanimatedEntities = FXCollections.observableArrayList();
@@ -98,7 +98,7 @@ public class Game {
 	}
 	
 	private int[][] readFileMaps() { 
-		int[][] fieldsMap = new int [2][2];	// taille à modifier
+		int[][] fieldsMap = new int [FILE_MAP_HEIGHT][FILE_MAP_WIDTH];	// taille à modifier
 		        
         try {
         	
