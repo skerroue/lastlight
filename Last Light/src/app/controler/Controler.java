@@ -74,8 +74,6 @@ public class Controler implements Initializable {
 		initializeEntities();
 		this.game.playGameLoop();
 		initializeScrollField();
-		
-		this.game.addInanimated(1, 384, 384);
 	}
 
     @FXML
