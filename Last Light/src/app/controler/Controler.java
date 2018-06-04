@@ -124,7 +124,7 @@ public class Controler implements Initializable {
     	case ESCAPE:
     		showPauseMenu();
     		break;
-    	case DIGIT1 :
+    	case A :
     		this.game.getPlayer().switchWeapon(1);
     		break;
 		default:
