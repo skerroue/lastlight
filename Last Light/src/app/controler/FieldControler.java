@@ -5,14 +5,40 @@ import java.util.ArrayList;
 import app.modele.Game;
 import app.vue.FieldView;
 import app.vue.entity.AnimatedEntityView;
+import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class FieldControler {
 	
-    public static void initializeField(Pane tileContainer, FieldView field) {
+    private static FadeTransition ft;
+    private static Rectangle rec;
+    
+	 public static void AnimationTransitionMap(Double i) {
+	    	ft.setDuration(Duration.seconds(i));
+			ft.play();
+	    }
+	 
+	private static void creatingAnimation(Pane interfaceContainer) {
+		interfaceContainer.getChildren().add(rec);
+		rec.setFill(Color.BLACK);
+        ft.setFromValue(1.0);
+		ft.setToValue(0.0);
+		ft.setNode(rec);
+	}
+    
+    public static void initializeField(Pane tileContainer, FieldView field, Pane interfaceContainer) {
+      
     	
+    	// Map transition
+        ft = new FadeTransition();
+        rec = new Rectangle(600,600);
+        creatingAnimation(interfaceContainer);
+        
     	tileContainer.getChildren().addAll(field.getFieldView());
     	
     	Game.getMapChanged().addListener(new ChangeListener<Boolean>() {
@@ -32,10 +58,10 @@ public class FieldControler {
 		setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
     	
     	game.getMapChanged().addListener(new ChangeListener<Boolean>() {
-
+    		
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				
+				AnimationTransitionMap(0.2);
 				field.refreshField();
 				
 				switch (game.getPlayer().getOrientation().get()) {
@@ -92,4 +118,5 @@ public class FieldControler {
 		entityContainer.setTranslateY(-a);
     }
 	
+
 }

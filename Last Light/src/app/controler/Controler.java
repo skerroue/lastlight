@@ -5,28 +5,22 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import app.modele.Game;
-import app.modele.entity.Enemy;
-import app.modele.entity.Entity;
 import app.vue.FieldView;
 import app.vue.InterfaceView;
 import app.vue.entity.AnimatedEntityView;
-import app.vue.entity.EnemyView;
-import app.vue.entity.EntityView;
 import app.vue.entity.InanimatedEntityView;
 import app.vue.entity.PlayerView;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class Controler implements Initializable {
 	
@@ -57,6 +51,8 @@ public class Controler implements Initializable {
     
     private Game game;
     
+
+    
     public Controler() {	
     	
     	this.game = new Game();
@@ -65,13 +61,15 @@ public class Controler implements Initializable {
     	this.hud = new InterfaceView(game.getPlayer());
     	this.field = new FieldView();
     	this.playerView = new PlayerView(game.getPlayer());
+
+        
     }
     
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
 		// Creation de la map visuellement
-		FieldControler.initializeField(tileContainer, field);
+		FieldControler.initializeField(tileContainer, field, interfaceContainer);
 		
 		// Creation de l'interface et liaison avec les caracteristiques du joueur
 		InterfaceControler.initializeInterface(interfaceContainer, hud);
@@ -84,6 +82,9 @@ public class Controler implements Initializable {
 		
 		// Initialisation de la Scroll Map
 		FieldControler.initializeScrollField(entitiesView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer);
+        
+        // Animation
+        FieldControler.AnimationTransitionMap(2.0);
 		
 	}
 
