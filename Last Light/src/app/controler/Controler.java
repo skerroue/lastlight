@@ -84,7 +84,7 @@ public class Controler implements Initializable {
 		FieldControler.initializeScrollField(entitiesView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer);
         
         // Animation
-        FieldControler.AnimationTransitionMap(2.0);
+        FieldControler.AnimationTransitionMap(1.0);
 		
 	}
 
