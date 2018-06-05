@@ -6,9 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class ItemEntity extends InanimatedEntity {
 
 	public ItemEntity(String id, int x, int y) {
-		super(id);
-		this.x = new SimpleIntegerProperty(x);
-		this.y = new SimpleIntegerProperty(y);
+		super(id, x, y);
 	}
 	
 	// Dumb af cette methode mais est construite dans l'id�e o� une arme spawnera une et une seule fois dans le jeu

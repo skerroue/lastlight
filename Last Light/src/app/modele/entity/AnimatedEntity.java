@@ -12,7 +12,7 @@ import javafx.scene.input.KeyCode;
 
 public abstract class AnimatedEntity extends Entity {
 	
-	protected String id;
+	protected int velocity;
 	protected int attaque;
 	protected IntegerProperty hp;
 	protected BooleanProperty isAttacking;
@@ -20,9 +20,8 @@ public abstract class AnimatedEntity extends Entity {
 	protected int nbFrame;
 	protected int frameMax;
 	
-	public AnimatedEntity(int x, int y, int hp, int att, int v, int nb, int fmax) {
-		this.x = new SimpleIntegerProperty(x);
-		this.y = new SimpleIntegerProperty(y);
+	public AnimatedEntity(String id, int x, int y, int hp, int att, int v, int nb, int fmax) {
+		super(id, x, y);
 		this.hp = new SimpleIntegerProperty(hp);
 		this.attaque = att;
 		this.velocity = v;

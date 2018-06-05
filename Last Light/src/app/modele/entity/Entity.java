@@ -18,14 +18,17 @@ public abstract class Entity {
 	final static int LEFT_TOP_LIMIT = 31;
 	final static int RIGHT_BOTTOM_LIMIT = 768;
 	
+	protected String id;
 	protected IntegerProperty x;
 	protected IntegerProperty y;
 	protected IntegerProperty orientation;
 	protected int frame;
-	protected int velocity;
 	protected BooleanProperty isDead;
 	
-	public Entity() {
+	public Entity(String id, int x, int y) {
+		this.id = id;
+		this.x = new SimpleIntegerProperty(x);
+		this.y = new SimpleIntegerProperty(y);
 		this.orientation = new SimpleIntegerProperty(0);
 		this.frame = 0;
 		this.isDead = new SimpleBooleanProperty(false);

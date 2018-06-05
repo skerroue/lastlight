@@ -28,7 +28,7 @@ public class Player extends AnimatedEntity {
 	private IntegerProperty activeWeaponIndex;
 	
 	public Player(int x, int y, int pv, int att, int v, int m, int nb, int fmax) {
-		super(x, y, pv, att, v, nb, fmax);
+		super("player", x, y, pv, att, v, nb, fmax);
 		
 		this.maxPotion = new SimpleIntegerProperty(3);
 		this.potion = new SimpleIntegerProperty(0);
@@ -41,8 +41,6 @@ public class Player extends AnimatedEntity {
 		this.necklace = new SimpleBooleanProperty(false);
 		this.weapons = new ArrayList<>();
 		this.activeWeaponIndex = new SimpleIntegerProperty(0);
-		
-		this.id = "player";
 	}
 	
 	public IntegerProperty getMaxPotion() {

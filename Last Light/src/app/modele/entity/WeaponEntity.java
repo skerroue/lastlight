@@ -8,10 +8,7 @@ import javafx.collections.ObservableList;
 public class WeaponEntity extends InanimatedEntity {
 
 	public WeaponEntity(String id, int x, int y) {
-		super(id);
-		this.x = new SimpleIntegerProperty(x);
-		this.y = new SimpleIntegerProperty(y);
-		System.out.println(this.id);
+		super(id, x, y);
 	}
 	
 	// Dumb af cette methode mais est construite dans l'idée où une arme spawnera une et une seule fois dans le jeu
