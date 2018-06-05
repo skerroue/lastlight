@@ -1,9 +1,18 @@
 package app.modele.weapon;
 
+import app.modele.entity.AnimatedEntity;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
 
-public class Weapon {
+public abstract class Weapon {
+	
+	final static int LEFT = 0;
+	final static int UP = 1;
+	final static int RIGHT = 2;
+	final static int DOWN = 3;
+	
+	final static int TILE_SIZE = 32;
 
 	protected IntegerProperty att;
 	protected IntegerProperty distance;
@@ -21,4 +30,6 @@ public class Weapon {
 	public String getId() {
 		return this.id;
 	}
+	
+	public abstract void attack(ObservableList<AnimatedEntity> entities, int orientation, int x, int y);
 }
