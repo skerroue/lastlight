@@ -8,15 +8,24 @@ import app.vue.entity.AnimatedEntityView;
 import app.vue.entity.EnemyView;
 import app.vue.entity.InanimatedEntityView;
 import app.vue.entity.PlayerView;
+import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 
 public class EntityControler {
 	
+	private static FadeTransition ft;
+	
     public static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<AnimatedEntityView> entitiesView, ArrayList<InanimatedEntityView> inanimatedEntityView) {
+    	
+    	ft = new FadeTransition();
+    	ft.setFromValue(1.0);
+ 		ft.setToValue(0.0);
+ 		ft.setDuration(Duration.seconds(0.05));
     	
     	entitiesView.add(playerView);
     	entityContainer.getChildren().add(playerView);
@@ -94,11 +103,29 @@ public class EntityControler {
         });
     	
     	game.addKeyFrame(e -> {
+    		
+    		for (int i = 0 ; i < game.getEntities().size() ; i++) {
+    			if (entitiesView.get(i).getIsDead()) {
+     				ft.setNode(entitiesView.get(i));
+     				break;
+    			}
+    		}
+    		
+    		ft.setOnFinished(event -> {
+    			entitiesView.remove(ft.getNode());
+    			ft.setNode(null);
+    		});
+    		
+    		ft.play();
+    		
+    		/*
 			for (int k = 0; k < entitiesView.size(); k++)
 				if (entitiesView.get(k).getIsDead()) {
 					entityContainer.getChildren().remove(entitiesView.get(k));
 					entitiesView.remove(entitiesView.get(k));
 				}
+			*/	
+				
 			for (int k = 0; k < game.getEntities().size(); k++)
 				if (game.getEntities().get(k).getIsDead().get()) {
 					game.getEntities().remove(game.getEntities().get(k));
