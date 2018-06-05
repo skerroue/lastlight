@@ -14,7 +14,7 @@ public class InanimatedEntityView extends EntityView {
 		super(i);
 		this.inanimatedEntity = i;
 		
-		this.setImage(new Image("file:src/img/i" + this.inanimatedEntity.getId() + ".png"));
+		this.setImage(new Image("file:src/img/" + this.inanimatedEntity.getId() + ".png"));
 	}
 
 }

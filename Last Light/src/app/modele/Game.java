@@ -15,6 +15,7 @@ import app.modele.entity.Entity;
 import app.modele.entity.InanimatedEntity;
 import app.modele.entity.ItemEntity;
 import app.modele.entity.Player;
+import app.modele.entity.Walker;
 import app.modele.entity.WeaponEntity;
 import app.modele.field.Field;
 import app.modele.field.Tile;
@@ -262,10 +263,10 @@ public class Game {
 							break;
 						case 3 :
 							if (!hasWeapon("lamp"))
-								this.addInanimated(new WeaponEntity(nextInt, s.nextInt(), s.nextInt()));
+								this.addInanimated(new WeaponEntity("lamp", s.nextInt(), s.nextInt()));
 							break;
 						case 5 :
-							this.addInanimated(new ItemEntity(nextInt, s.nextInt(), s.nextInt()));
+							this.addInanimated(new ItemEntity("soda", s.nextInt(), s.nextInt()));
 							break;
 						default :
 							break;
