@@ -106,39 +106,9 @@ public class Player extends AnimatedEntity {
 	
 	public void attack(ObservableList<AnimatedEntity> entities) {
 		
-		if (this.activeWeaponIndex.get() != 0) {
+		if (this.activeWeaponIndex.get() > 0) {
 			this.isAttacking.set(true);
-			
-			switch (this.getOrientation().get()) {
-			case LEFT :
-				for (AnimatedEntity e : entities)
-		    		if (this.getX().get() <= e.getX().get() + 64 && this.getX().get() >= e.getX().get() + 32 && 
-		    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-		    			e.loseHP(1);
-				break;
-			case UP :
-				for (AnimatedEntity e : entities)
-		    		if (this.getY().get() <= e.getY().get() + 64 && this.getY().get() >= e.getY().get() + 32 && 
-		    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-		    			e.loseHP(1);
-				break;
-			case RIGHT :
-				for (AnimatedEntity e : entities) {
-					if (this.getX().get() >= e.getX().get() - 64 && this.getX().get() <= e.getX().get() - 32 && 
-			    		this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-						e.loseHP(1);
-				}
-				break;
-			case DOWN :
-				for (AnimatedEntity e : entities)
-		    		if (this.getY().get() >= e.getY().get() - 64 && this.getY().get() <= e.getY().get() - 32 && 
-		    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-		    			e.loseHP(1);
-				break;
-			default :
-				break;
-				
-			}
+			this.weapons.get(this.activeWeaponIndex.get()-1).attack(entities, this.orientation.get(), this.getX().get(), this.getY().get());
 		}
 		
 	}
