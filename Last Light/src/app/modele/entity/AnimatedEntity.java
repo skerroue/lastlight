@@ -12,7 +12,6 @@ import javafx.scene.input.KeyCode;
 
 public abstract class AnimatedEntity extends Entity {
 	
-	protected int velocity;
 	protected int attaque;
 	protected IntegerProperty hp;
 	protected BooleanProperty isAttacking;

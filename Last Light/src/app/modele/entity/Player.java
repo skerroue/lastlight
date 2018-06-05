@@ -2,7 +2,7 @@ package app.modele.entity;
 
 import java.util.ArrayList;
 
-import app.modele.weapon.Lampe;
+import app.modele.weapon.Lamp;
 import app.modele.weapon.Weapon;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -76,8 +76,7 @@ public class Player extends AnimatedEntity {
 	}
 	 
 	public void switchWeapon(int n) {
-		if (n-1 <= this.weapons.size()-1)
-			this.activeWeaponIndex.set(n);
+		this.activeWeaponIndex.set(n);
 	}
 	
 	// Gagne une potion 1 à 1
@@ -102,11 +101,20 @@ public class Player extends AnimatedEntity {
 		this.money.set(this.money.getValue() - a);
 	}
 	
-	public void attack(ObservableList<AnimatedEntity> entities) {
+	public void attack(ObservableList<AnimatedEntity> entities, int x, int y) {
 		
-		if (this.activeWeaponIndex.get() > 0) {
-			this.isAttacking.set(true);
-			this.weapons.get(this.activeWeaponIndex.get()-1).attack(entities, this.orientation.get(), this.getX().get(), this.getY().get());
+		this.isAttacking.set(true);
+		
+		switch (this.activeWeaponIndex.get()) {
+		case 1 :
+			System.out.println("ok");
+			this.weapons.get(this.activeWeaponIndex.get()-1).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
+			break;
+		case 2 :
+			this.weapons.get(this.activeWeaponIndex.get()-1).attack(entities, this.orientation.get(), x, y);
+			break;
+		default :
+			break;
 		}
 		
 	}

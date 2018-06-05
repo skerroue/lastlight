@@ -1,6 +1,6 @@
 package app.modele.entity;
 
-import app.modele.weapon.Lampe;
+import app.modele.weapon.Lamp;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class ItemEntity extends InanimatedEntity {

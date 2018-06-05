@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import app.modele.Game;
 import app.vue.FieldView;
 import app.vue.entity.AnimatedEntityView;
+import app.vue.entity.EntityView;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -52,10 +53,10 @@ public class FieldControler {
     	
     }
     
-    public static void initializeScrollField(ArrayList<AnimatedEntityView> entitiesView, FieldView field, Game game, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH, Pane tileContainer, Pane entityContainer) {
+    public static void initializeScrollField(EntityView playerView, FieldView field, Game game, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH, Pane tileContainer, Pane entityContainer) {
     	
-    	setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
-		setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
+    	setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
+		setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
     	
     	game.getMapChanged().addListener(new ChangeListener<Boolean>() {
     		
@@ -66,40 +67,40 @@ public class FieldControler {
 				
 				switch (game.getPlayer().getOrientation().get()) {
 				case 0:
-					if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 < 0)
+					if (playerView.getTranslateY() - SCROLL_HEIGHT / 2 < 0)
 						setScrollY(0, tileContainer, entityContainer);
-					else if (entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 > PANE_HEIGHT)
+					else if (playerView.getTranslateY() + SCROLL_HEIGHT / 2 > PANE_HEIGHT)
 						setScrollY(800 - SCROLL_HEIGHT, tileContainer, entityContainer);
 					else
-						setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
-					setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH + 32, tileContainer, entityContainer);
+						setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
+					setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH + 32, tileContainer, entityContainer);
 					break;
 				case 1:
-					if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 < 0)
+					if (playerView.getTranslateX() - SCROLL_WIDTH / 2 < 0)
 						setScrollX(0, tileContainer, entityContainer);
-					else if (entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 > PANE_WIDTH)
+					else if (playerView.getTranslateX() + SCROLL_WIDTH / 2 > PANE_WIDTH)
 						setScrollX(800 - SCROLL_WIDTH, tileContainer, entityContainer);
 					else
-						setScrollX((int) entitiesView.get(0).getTranslateX() - (SCROLL_WIDTH / 2), tileContainer, entityContainer);
-					setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT + 32, tileContainer, entityContainer);
+						setScrollX((int) playerView.getTranslateX() - (SCROLL_WIDTH / 2), tileContainer, entityContainer);
+					setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT + 32, tileContainer, entityContainer);
 					break;
 				case 2:
-					if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 < 0)
+					if (playerView.getTranslateY() - SCROLL_HEIGHT / 2 < 0)
 						setScrollY(0, tileContainer, entityContainer);
-					else if (entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 > PANE_HEIGHT)
+					else if (playerView.getTranslateY() + SCROLL_HEIGHT / 2 > PANE_HEIGHT)
 						setScrollY(800 - SCROLL_HEIGHT, tileContainer, entityContainer);
 					else
-						setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
-					setScrollX((int) entitiesView.get(0).getTranslateX(), tileContainer, entityContainer);
+						setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
+					setScrollX((int) playerView.getTranslateX(), tileContainer, entityContainer);
 					break;
 				case 3:
-					if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 < 0)
+					if (playerView.getTranslateX() - SCROLL_WIDTH / 2 < 0)
 						setScrollX(0, tileContainer, entityContainer);
-					else if (entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 > PANE_WIDTH)
+					else if (playerView.getTranslateX() + SCROLL_WIDTH / 2 > PANE_WIDTH)
 						setScrollX(800 - SCROLL_WIDTH, tileContainer, entityContainer);
 					else
-						setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
-					setScrollY((int) entitiesView.get(0).getTranslateY(), tileContainer, entityContainer);
+						setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
+					setScrollY((int) playerView.getTranslateY(), tileContainer, entityContainer);
 					break;
 				}
 				

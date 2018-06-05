@@ -1,6 +1,7 @@
 package app.modele.entity;
 
-import app.modele.weapon.Lampe;
+import app.modele.weapon.Lamp;
+import app.modele.weapon.Pistol;
 import app.modele.weapon.Weapon;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
@@ -15,12 +16,14 @@ public class WeaponEntity extends InanimatedEntity {
 	public void interact(Player p) {
 		switch (this.id) {
 		case "lamp" :
-			if (p.getWeapons().size() < 1) {
-				p.getWeapons().add(new Lampe(1, 1));
-				this.die();
-			}
+			p.getWeapons().add(new Lamp(1, 1));
+			this.die();
 			break;
-		default :
+		case "pistol" :
+			p.getWeapons().add(new Pistol(1, 1));
+			this.die();
+			break;
+  		default :
 			break;
 		}
 	}

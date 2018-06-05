@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import app.modele.Game;
+import app.modele.entity.Entity;
 import app.vue.FieldView;
 import app.vue.InterfaceView;
 import app.vue.entity.AnimatedEntityView;
+import app.vue.entity.BulletView;
+import app.vue.entity.EntityView;
 import app.vue.entity.InanimatedEntityView;
 import app.vue.entity.PlayerView;
 import javafx.animation.FadeTransition;
@@ -43,11 +46,11 @@ public class Controler implements Initializable {
 	
     @FXML
     private Pane interfaceContainer;
-   
-    private ArrayList<AnimatedEntityView> entitiesView;
-    private ArrayList<InanimatedEntityView> inanimatedEntityView;
-    private PlayerView playerView;
     private InterfaceView hud;
+    
+    private ArrayList<EntityView> entitiesView;
+    private PlayerView playerView;
+    private BulletView bulletsView;
     
     private Game game;
     
@@ -57,11 +60,10 @@ public class Controler implements Initializable {
     	
     	this.game = new Game();
     	this.entitiesView = new ArrayList<>();
-    	this.inanimatedEntityView = new ArrayList<>();
     	this.hud = new InterfaceView(game.getPlayer());
     	this.field = new FieldView();
     	this.playerView = new PlayerView(game.getPlayer());
-
+    	this.bulletsView = new BulletView(game.getPlayer());
         
     }
     
@@ -75,13 +77,13 @@ public class Controler implements Initializable {
 		InterfaceControler.initializeInterface(interfaceContainer, hud);
 		
 		// Liaison des entitiyView avec les entites du modele
-		EntityControler.initializeEntities(entityContainer, game, playerView, entitiesView, inanimatedEntityView);
+		EntityControler.initializeEntities(entityContainer, game, playerView, entitiesView, bulletsView);
 		
 		// Lancement de la gameloop
 		this.game.playGameLoop();
 		
 		// Initialisation de la Scroll Map
-		FieldControler.initializeScrollField(entitiesView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer);
+		FieldControler.initializeScrollField(playerView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer);
         
         // Animation
         FieldControler.AnimationTransitionMap(1.0);
@@ -131,13 +133,19 @@ public class Controler implements Initializable {
     		this.game.getPlayer().usePotion();
     		break;
     	case SPACE :
-    		this.game.getPlayer().attack(game.getEntities());
+    		this.game.getPlayer().attack(game.getEntities(), (int)game.getPlayer().getX().get(), (int)game.getPlayer().getY().get());
+    		if (this.game.getPlayer().getActiveWeaponIndex().get() == 2) {
+    			this.bulletsView.addBullet();
+    		}
     		break;
     	case ESCAPE:
     		showPauseMenu();
     		break;
     	case A :
     		this.game.getPlayer().switchWeapon(1);
+    		break;
+    	case Z :
+    		this.game.getPlayer().switchWeapon(2);
     		break;
 		default:
 			break;
@@ -149,7 +157,7 @@ public class Controler implements Initializable {
     void onKeyReleased(KeyEvent event) {
     	
     	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
-    		entitiesView.get(0).resetImage();
+    		playerView.resetImage();
     	
     	switch (event.getCode()) {
     	case SPACE :

@@ -27,6 +27,14 @@ public class EntityView extends ImageView {
 		return this.isDead;
 	}
 	
+	/*
+	public void update() {
+		if (this.entity.getIsDead().get())
+			this.isDead = true;
+	}
+	*/
+	
+	
 	public void initializeEntity() {
 		
 		this.entity.getIsDead().addListener(new ChangeListener<Boolean>() {
@@ -39,5 +47,6 @@ public class EntityView extends ImageView {
 		});
 		
 	}
+	
 	
 }

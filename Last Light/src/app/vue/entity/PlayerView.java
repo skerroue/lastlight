@@ -40,6 +40,7 @@ public class PlayerView extends AnimatedEntityView {
 					setImage(tilesetLamp);
 					break;
 				case 2 :
+					setImage(tileset);
 					break;
 				case 3 :
 					break;

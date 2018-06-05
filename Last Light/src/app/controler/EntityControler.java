@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import app.modele.Game;
 import app.modele.entity.Entity;
 import app.vue.entity.AnimatedEntityView;
+import app.vue.entity.BulletView;
 import app.vue.entity.EnemyView;
+import app.vue.entity.EntityView;
 import app.vue.entity.InanimatedEntityView;
 import app.vue.entity.PlayerView;
 import javafx.animation.FadeTransition;
@@ -14,13 +16,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 public class EntityControler {
 	
 	private static FadeTransition ft;
 	
-    public static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<AnimatedEntityView> entitiesView, ArrayList<InanimatedEntityView> inanimatedEntityView) {
+    public static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<EntityView> entitiesView, BulletView bullets) {
     	
     	ft = new FadeTransition();
     	ft.setFromValue(1.0);
@@ -53,8 +56,23 @@ public class EntityControler {
 				
 				while (c.next()) {
 					if (c.wasAdded()) {
-						inanimatedEntityView.add(new InanimatedEntityView(game.getInanimatedEntities().get(game.getInanimatedEntities().size()-1)));
-						entityContainer.getChildren().add(inanimatedEntityView.get(inanimatedEntityView.size()-1));
+						entitiesView.add(new InanimatedEntityView(game.getInanimatedEntities().get(game.getInanimatedEntities().size()-1)));
+						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
+					}
+				}
+				
+			}
+    		
+    	});
+    	
+    	bullets.getBulletsNodes().addListener(new ListChangeListener<Circle>() {
+
+			@Override
+			public void onChanged(Change c) {
+				
+				while (c.next()) {
+					if (c.wasAdded()) {
+						entityContainer.getChildren().add(bullets.getBulletsNodes().get(bullets.getBulletsNodes().size()-1));
 					}
 				}
 				
@@ -104,7 +122,22 @@ public class EntityControler {
     	
     	game.addKeyFrame(e -> {
     		
-    		for (int i = 0 ; i < game.getEntities().size() ; i++) {
+    		//for (int i = 0 ; i < entitiesView.size() ; i++)
+    			//entitiesView.get(i).update();
+    		
+    		for (int i = 0 ; i < bullets.getBullets().size() ; i++)
+    			if (bullets.getBullets().get(i).getIsDead().get()) {
+    				game.getPlayer().attack(game.getEntities(), (int)bullets.getBullets().get(i).getX().get(), (int)bullets.getBullets().get(i).getY().get());
+    				entityContainer.getChildren().remove(bullets.getBulletsNodes().get(i));
+    				bullets.getBulletsNodes().remove(i);
+    				bullets.getBullets().remove(i);
+    			}
+    		
+    		for (int i = 0 ; i < bullets.getBulletsNodes().size() ; i++)
+    			bullets.update(entitiesView);
+    			
+    		
+    		for (int i = 0 ; i < entitiesView.size() ; i++) {
     			if (entitiesView.get(i).getIsDead()) {
      				ft.setNode(entitiesView.get(i));
      				break;
@@ -123,9 +156,9 @@ public class EntityControler {
 				if (entitiesView.get(k).getIsDead()) {
 					entityContainer.getChildren().remove(entitiesView.get(k));
 					entitiesView.remove(entitiesView.get(k));
-				}
-			*/	
-				
+				}	
+    		*/
+    		
 			for (int k = 0; k < game.getEntities().size(); k++)
 				if (game.getEntities().get(k).getIsDead().get()) {
 					game.getEntities().remove(game.getEntities().get(k));
@@ -134,14 +167,10 @@ public class EntityControler {
 				if (game.getEntities().get(k).getHP().get() == 0)
 					game.getEntities().get(k).die();
 			}
-			for (int i = 0 ; i < inanimatedEntityView.size() ; i++)
-				if (inanimatedEntityView.get(i).getIsDead()) {
-					entityContainer.getChildren().remove(inanimatedEntityView.get(i));
-					inanimatedEntityView.remove(inanimatedEntityView.get(i));
-				}
 			for (int i = 0 ; i < game.getInanimatedEntities().size() ; i++)
 				if (game.getInanimatedEntities().get(i).getIsDead().get())
 					game.getInanimatedEntities().remove(game.getInanimatedEntities().get(i));
+			
  		}, 0.017);
     	
     }

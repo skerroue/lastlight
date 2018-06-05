@@ -265,6 +265,10 @@ public class Game {
 							if (!hasWeapon("lamp"))
 								this.addInanimated(new WeaponEntity("lamp", s.nextInt(), s.nextInt()));
 							break;
+						case 4 :
+							if (!hasWeapon("pistol"))
+								this.addInanimated(new WeaponEntity("pistol", s.nextInt(), s.nextInt()));
+							break;
 						case 5 :
 							this.addInanimated(new ItemEntity("soda", s.nextInt(), s.nextInt()));
 							break;
@@ -382,9 +386,8 @@ public class Game {
     }
     
     public void moveAllEnemies() {
-    	for (int i = 1 ; i < entities.size() ; i++) {
+    	for (int i = 1 ; i < entities.size() ; i++) 
     		moveEnemy(entities.get(i));
-    	}
     }
     
     public void moveEnemy(AnimatedEntity e) {
