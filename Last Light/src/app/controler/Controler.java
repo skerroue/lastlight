@@ -64,16 +64,17 @@ public class Controler implements Initializable {
     	this.inanimatedEntityView = new ArrayList<>();
     	this.hud = new InterfaceView(game.getPlayer());
     	this.field = new FieldView();
+    	this.playerView = new PlayerView(game.getPlayer());
     }
     
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// Generation des entites (personnage, ennemis, objets, interface, map)
-		initializeMap();
-		initializeInterface();
-		initializeEntities();
+
+		FieldControler.initializeField(tileContainer, field);
+		InterfaceControler.initializeInterface(interfaceContainer, hud);
+		EntityControler.initializeEntities(entityContainer, game, playerView, entitiesView, inanimatedEntityView);
 		this.game.playGameLoop();
-		initializeScrollField();
+		FieldControler.initializeScrollField(entitiesView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer);
 	}
 
     @FXML
@@ -82,25 +83,25 @@ public class Controler implements Initializable {
     	switch (event.getCode()) {
     	case UP:
     		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
+    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
     			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
     		}
     		break;
     	case DOWN:
     		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
+    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
     			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
     		}
     		break;
     	case LEFT:
     		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
+    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
     			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
     		}
     		break;
     	case RIGHT:
     		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
+    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
     			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
     		}
     		break;
@@ -148,62 +149,6 @@ public class Controler implements Initializable {
     	
     }
     
-    public void initializeScrollField() {
-    	
-    	setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
-		setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
-    	
-    	this.game.getMapChanged().addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				
-				field.refreshField();
-				
-				switch (game.getPlayer().getOrientation().get()) {
-				case 0:
-					if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 < 0)
-						setScrollY(0);
-					else if (entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 > PANE_HEIGHT)
-						setScrollY(800 - SCROLL_HEIGHT);
-					else
-						setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
-					setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH + 32);
-					break;
-				case 1:
-					if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 < 0)
-						setScrollX(0);
-					else if (entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 > PANE_WIDTH)
-						setScrollX(800 - SCROLL_WIDTH);
-					else
-						setScrollX((int) entitiesView.get(0).getTranslateX() - (SCROLL_WIDTH / 2));
-					setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT + 32);
-					break;
-				case 2:
-					if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 < 0)
-						setScrollY(0);
-					else if (entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 > PANE_HEIGHT)
-						setScrollY(800 - SCROLL_HEIGHT);
-					else
-						setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
-					setScrollX((int) entitiesView.get(0).getTranslateX());
-					break;
-				case 3:
-					if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 < 0)
-						setScrollX(0);
-					else if (entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 > PANE_WIDTH)
-						setScrollX(800 - SCROLL_WIDTH);
-					else
-						setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
-					setScrollY((int) entitiesView.get(0).getTranslateY());
-					break;
-				}
-				
-			}
-    		
-    	});
-    }
-    
     private void setScrollX(int a) {
     	tileContainer.setTranslateX(-a);
 		entityContainer.setTranslateX(-a);
@@ -212,224 +157,6 @@ public class Controler implements Initializable {
     private void setScrollY(int a) {
     	tileContainer.setTranslateY(-a);
 		entityContainer.setTranslateY(-a);
-    }
-    
-    private void initializeMap() {
-    	
-    	tileContainer.getChildren().addAll(this.field.getFieldView());
-    	
-    	Game.getMapChanged().addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-				field.refreshField();
-			}
-			
-		});
-    	
-    }
-    
-    private void initializeInterface() {
-    	interfaceContainer.getChildren().addAll(hud.getHearts());
-    	interfaceContainer.getChildren().addAll(hud.getPotions());
-    	interfaceContainer.getChildren().addAll(hud.getMoney());
-    	
-    	hud.getPlayer().getHP().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			
-    			if (oldValue.intValue() > newValue.intValue()) {
-    				for (int i = hud.getHearts().size()-1 ; i >= 0 ; i--) 
-    					if (hud.getHearts().get(i).getFull()) {
-    						hud.getHearts().get(i).setEmpty();
-    						break;
-    					}
-    			}
-    			
-    			else {
-    				for (int i = 0 ; i < hud.getHearts().size() ; i++)
-    					if (hud.getHearts().get(i).getEmpty() && !hud.getHearts().get(i).getLocked()) {
-    						hud.getHearts().get(i).setFull();
-    						break;
-    					}
-    			}
-    				
-    		}
-    		
-	    });
-		
-    	hud.getPlayer().getMaxHP().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			
-    			if (newValue.intValue() > oldValue.intValue()) {
-    				for (int i = 0 ; i < hud.getHearts().size() ; i++)
-    					if (hud.getHearts().get(i).getLocked()) {
-    						hud.getHearts().get(i).setEmpty();
-    						break;
-    					}
-    				
-    			}
-    			
-    		}
-    		
-	    });
-    	
-		hud.getPlayer().getPotion().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			
-    			if (oldValue.intValue() > newValue.intValue()) {
-    				for (int i = hud.getPotions().size()-1 ; i >= 0 ; i--) 
-    					if (hud.getPotions().get(i).getFull()) {
-    						hud.getPotions().get(i).setEmpty();
-    						break;
-    					}
-    			}
-    			
-    			else {
-    				for (int i = 0 ; i < hud.getPotions().size() ; i++)
-    					if (hud.getPotions().get(i).getEmpty()) {
-    						hud.getPotions().get(i).setFull();
-    						break;
-    					}
-    			}
-    				
-    		}
-    		
-	    });
-		
-		hud.getPlayer().getMoney().addListener(new ChangeListener<Number>() {
-    		
-    		@Override
-    		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-    			
-    			if (oldValue.intValue() > newValue.intValue()) {
-    				for (int i = hud.getMoney().size()-1 ; i >= 0 ; i--) 
-    					if (hud.getMoney().get(i).getFull()) {
-    						hud.getMoney().get(i).setEmpty();
-    						break;
-    					}
-    			}
-    			
-    			else {
-    				for (int i = 0 ; i < hud.getMoney().size() ; i++)
-    					if (hud.getMoney().get(i).getEmpty()) {
-    						hud.getMoney().get(i).setFull();
-    						break;
-    					}
-    			}
-    				
-    		}
-    		
-	    });
-    }
-    
-    private void initializeEntities() {
-    	
-    	playerView = new PlayerView(game.getPlayer());
-    	entitiesView.add(playerView);
-    	entityContainer.getChildren().add(playerView);
-    	
-    	game.getEntities().addListener(new ListChangeListener<Entity>() {
-
-			@Override
-			public void onChanged(Change<? extends Entity> c) {
-				
-				while (c.next()) {
-					if (c.wasAdded()) {
-						entitiesView.add(new EnemyView(game.getEntities().get(game.getEntities().size()-1)));
-						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
-					}
-				}
-				
-			}
-    		
-    	});
-    	
-    	game.getInanimatedEntities().addListener(new ListChangeListener<Entity>() {
-
-			@Override
-			public void onChanged(Change<? extends Entity> c) {
-				
-				while (c.next()) {
-					if (c.wasAdded()) {
-						inanimatedEntityView.add(new InanimatedEntityView(game.getInanimatedEntities().get(game.getInanimatedEntities().size()-1)));
-						entityContainer.getChildren().add(inanimatedEntityView.get(inanimatedEntityView.size()-1));
-					}
-				}
-				
-			}
-    		
-    	});
-    	
-    	game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldValue, Boolean newValue) {
-
-                if (newValue.booleanValue()) {
-                    switch (game.getPlayer().getOrientation().get()) {
-                    case 0 :
-                        playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() - 32);
-                        playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY());
-                        playerView.getAttackImage().setRotate(-90);
-                        break;
-                    case 1 :
-                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX());
-                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() - 32);
-                    	playerView.getAttackImage().setRotate(0);
-                        break;
-                    case 2 : 
-                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() + 32);
-                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY());
-                    	playerView.getAttackImage().setRotate(90);
-                        break;
-                    case 3 :
-                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX());
-                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 32);
-                    	playerView.getAttackImage().setRotate(180);
-                        break;
-                    default :
-                        break;
-                    }
-
-                    entityContainer.getChildren().add(playerView.getAttackImage());
-                }
-                else
-                    entityContainer.getChildren().remove(playerView.getAttackImage());
-
-            }
-
-        });
-    	
-    	this.game.addKeyFrame(e -> {
-			for (int k = 0; k < entitiesView.size(); k++)
-				if (entitiesView.get(k).getIsDead()) {
-					entityContainer.getChildren().remove(entitiesView.get(k));
-					entitiesView.remove(entitiesView.get(k));
-				}
-			for (int k = 0; k < game.getEntities().size(); k++)
-				if (game.getEntities().get(k).getIsDead().get()) {
-					game.getEntities().remove(game.getEntities().get(k));
-				}
-			for (int k = 0; k < game.getEntities().size(); k++) {
-				if (game.getEntities().get(k).getHP().get() == 0)
-					game.getEntities().get(k).die();
-			}
-			for (int i = 0 ; i < inanimatedEntityView.size() ; i++)
-				if (inanimatedEntityView.get(i).getIsDead()) {
-					entityContainer.getChildren().remove(inanimatedEntityView.get(i));
-					inanimatedEntityView.remove(inanimatedEntityView.get(i));
-				}
-			for (int i = 0 ; i < game.getInanimatedEntities().size() ; i++)
-				if (game.getInanimatedEntities().get(i).getIsDead().get())
-					game.getInanimatedEntities().remove(game.getInanimatedEntities().get(i));
- 		}, 0.017);
-    	
     }
     
     @FXML
