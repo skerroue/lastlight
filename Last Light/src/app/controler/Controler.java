@@ -69,12 +69,22 @@ public class Controler implements Initializable {
     
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
+		
+		// Creation de la map visuellement
 		FieldControler.initializeField(tileContainer, field);
+		
+		// Creation de l'interface et liaison avec les caracteristiques du joueur
 		InterfaceControler.initializeInterface(interfaceContainer, hud);
+		
+		// Liaison des entitiyView avec les entites du modele
 		EntityControler.initializeEntities(entityContainer, game, playerView, entitiesView, inanimatedEntityView);
+		
+		// Lancement de la gameloop
 		this.game.playGameLoop();
+		
+		// Initialisation de la Scroll Map
 		FieldControler.initializeScrollField(entitiesView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer);
+		
 	}
 
     @FXML
@@ -160,7 +170,7 @@ public class Controler implements Initializable {
     }
     
     @FXML
-    void quit(ActionEvent event) {
+    void quit(ActionEvent event) {	
     	System.exit(0);
     }
 
