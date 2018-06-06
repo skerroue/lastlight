@@ -21,18 +21,18 @@
                   <Image url="@../../img/pause-background.png" />
                </image>
             </ImageView>
-            <Button fx:id="resumeButton" layoutX="120.0" layoutY="200.0" mnemonicParsing="false" onAction="#resume" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: transparent;">
+            <Button fx:id="resumeButton" layoutX="28.0" layoutY="124.0" mnemonicParsing="false" onAction="#resume" prefHeight="52.0" prefWidth="205.0" style="-fx-background-color: transparent;">
                <graphic>
-                  <ImageView fitHeight="92.0" fitWidth="259.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="52.0" fitWidth="205.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../img/resume-button.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="quitButton" layoutX="145.0" layoutY="300.0" mnemonicParsing="false" onAction="#quit" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: transparent;">
+            <Button fx:id="quitButton" layoutX="273.0" layoutY="124.0" mnemonicParsing="false" onAction="#quit" prefHeight="52.0" prefWidth="205.0" style="-fx-background-color: transparent;">
                <graphic>
-                  <ImageView fitHeight="95.0" fitWidth="212.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="52.0" fitWidth="205.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../img/quit-button.png" />
                      </image>
