@@ -18,8 +18,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -54,6 +56,10 @@ public class Controler implements Initializable {
     
     private Game game;
     
+    @FXML
+    private Pane interactPane;
+    @FXML
+    private Label discussionLabel;
 
     
     public Controler() {	
@@ -147,6 +153,10 @@ public class Controler implements Initializable {
     	case Z :
     		this.game.getPlayer().switchWeapon(2);
     		break;
+    	case R:
+    		changeText("Malcom est absent ce sécheur !");
+    		showText();
+    		break;
 		default:
 			break;
     	}
@@ -193,5 +203,21 @@ public class Controler implements Initializable {
     	this.pausePane.setVisible(true);
     	this.game.pauseGameLoop();
     	this.pausePane.requestFocus();
+    }
+    
+    @FXML
+    void closeText(MouseEvent event) {
+    	this.interactPane.setVisible(false);
+    	this.game.playGameLoop();
+    }
+    
+    private void showText() {
+    	this.interactPane.setVisible(true);
+    	this.game.pauseGameLoop();
+    	//this.interactPane.requestFocus();
+    }
+    
+    private void changeText(String newLabel) {
+    	this.discussionLabel.setText(newLabel);
     }
 }
