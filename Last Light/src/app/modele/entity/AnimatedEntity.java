@@ -219,7 +219,10 @@ public abstract class AnimatedEntity extends Entity {
 	}
 	
 	public void loseHP(int a) {
-		this.hp.set(this.hp.get() - a);
+		if (this.hp.get() - a < 1)
+			this.die();
+		else
+			this.hp.set(this.hp.get() - a);
 	}
 
 }

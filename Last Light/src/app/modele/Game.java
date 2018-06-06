@@ -20,6 +20,7 @@ import app.modele.entity.WeaponEntity;
 import app.modele.field.Field;
 import app.modele.field.Tile;
 import app.modele.weapon.Weapon;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -49,7 +50,7 @@ public class Game {
 	private Timeline gameloop;
 	private float compteur;
 	private int[][] fieldsMap;	// contient les indices des fichiers de chaque map
-								// valeurs allant de 1 à ... (0 = pas de map)
+								// valeurs allant de 1 a ... (0 = pas de map)
 	private static Field map;
 	private Player player;
 	private ObservableList<AnimatedEntity> entities;
@@ -81,6 +82,7 @@ public class Game {
 	public void initializeGame() {
 		spawnEntities();
 	
+		/*
 		KeyFrame compt = new KeyFrame(Duration.seconds(0.017), e -> {
 	           compteur += Duration.seconds(0.017).toMillis();
 
@@ -91,13 +93,22 @@ public class Game {
 	           }
 
 		});
+		*/
 		
-		KeyFrame moveEnemies = new KeyFrame(Duration.seconds(0.035), e -> {
+		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {
 			moveAllEnemies();
+			
+			for (int k = 0; k < getEntities().size(); k++)
+				if (getEntities().get(k).getIsDead().get()) 
+					getEntities().remove(getEntities().get(k));
+			
+			for (int i = 0 ; i < getInanimatedEntities().size() ; i++)
+				if (getInanimatedEntities().get(i).getIsDead().get())
+					getInanimatedEntities().remove(getInanimatedEntities().get(i));
 		});
 		
-		gameloop.getKeyFrames().add(moveEnemies);
-		gameloop.getKeyFrames().add(compt);
+		gameloop.getKeyFrames().add(updateEntities);
+		//gameloop.getKeyFrames().add(compt);
 	}
 	
 	private int[][] readFileMaps() { 

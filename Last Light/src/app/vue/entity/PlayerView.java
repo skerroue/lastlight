@@ -29,26 +29,26 @@ public class PlayerView extends AnimatedEntityView {
 	
 	public void initializePlayer() {
 		
+		this.setImage(tileset);
+		
 		this.player.getActiveWeaponIndex().addListener(new ChangeListener<Number>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> arg0, Number oldValue, Number newValue) {
-				switch (newValue.intValue()) {
-				case 0 :
-					setImage(tileset);
-				case 1 :
+				
+				switch (player.getWeaponName()) {
+				case "lamp" :
 					setImage(tilesetLamp);
 					break;
-				case 2 :
+				case "pistol" :
 					setImage(tileset);
 					break;
-				case 3 :
-					break;
 				default :
+					setImage(tileset);
 					break;
 				}
 				
-				attaque.setImage(new Image("file:src/img/" + player.getWeapons().get(player.getActiveWeaponIndex().get()-1).getId() + "attack.png"));
+				attaque.setImage(new Image("file:src/img/" + player.getWeaponName() + "attack.png"));
 			}
 			
 		});

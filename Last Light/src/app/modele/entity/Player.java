@@ -40,7 +40,7 @@ public class Player extends AnimatedEntity {
 		this.boots = new SimpleBooleanProperty(false);
 		this.necklace = new SimpleBooleanProperty(false);
 		this.weapons = new ArrayList<>();
-		this.activeWeaponIndex = new SimpleIntegerProperty(0);
+		this.activeWeaponIndex = new SimpleIntegerProperty(-1);
 	}
 	
 	public IntegerProperty getMaxPotion() {
@@ -74,9 +74,21 @@ public class Player extends AnimatedEntity {
 	public IntegerProperty getActiveWeaponIndex() {
 		return this.activeWeaponIndex;
 	}
-	 
-	public void switchWeapon(int n) {
-		this.activeWeaponIndex.set(n);
+	
+	public String getWeaponName() {
+		if (this.weapons.size() > 0)
+			return this.weapons.get(this.activeWeaponIndex.get()).getId();
+		
+		return "default";
+	}
+	
+	public void nextWeapon() {
+		if (this.weapons.size() > 0) {
+			if (this.activeWeaponIndex.get() + 1 < this.weapons.size()) 
+				this.activeWeaponIndex.set(this.activeWeaponIndex.get() + 1);
+			else 
+				this.activeWeaponIndex.set(0);
+		}
 	}
 	
 	// Gagne une potion 1 à 1
@@ -103,19 +115,18 @@ public class Player extends AnimatedEntity {
 	
 	public void attack(ObservableList<AnimatedEntity> entities, int x, int y) {
 		
-		this.isAttacking.set(true);
-		
-		switch (this.activeWeaponIndex.get()) {
-		case 1 :
-			System.out.println("ok");
-			this.weapons.get(this.activeWeaponIndex.get()-1).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
-			break;
-		case 2 :
-			this.weapons.get(this.activeWeaponIndex.get()-1).attack(entities, this.orientation.get(), x, y);
-			break;
-		default :
-			break;
-		}
+		if (this.weapons.size() > 0)
+			switch (this.weapons.get(this.activeWeaponIndex.get()).getId()) {
+			case "lamp" :
+				this.isAttacking.set(true);
+				this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
+				break;
+			case "pistol" :
+				this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), x, y);
+				break;
+			default :
+				break;
+			}
 		
 	}
 	

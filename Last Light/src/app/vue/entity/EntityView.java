@@ -20,21 +20,21 @@ public class EntityView extends ImageView {
 		this.translateXProperty().bind(e.getX());
 		this.translateYProperty().bind(e.getY());
 		
-		initializeEntity();
+		//initializeEntity();
 	}
 	
 	public boolean getIsDead() {
 		return this.isDead;
 	}
 	
-	/*
+	
 	public void update() {
 		if (this.entity.getIsDead().get())
 			this.isDead = true;
 	}
-	*/
 	
 	
+	/*
 	public void initializeEntity() {
 		
 		this.entity.getIsDead().addListener(new ChangeListener<Boolean>() {
@@ -47,6 +47,6 @@ public class EntityView extends ImageView {
 		});
 		
 	}
-	
+	*/
 	
 }

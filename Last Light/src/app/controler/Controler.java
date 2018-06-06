@@ -60,7 +60,6 @@ public class Controler implements Initializable {
     private Pane interactPane;
     @FXML
     private Label discussionLabel;
-
     
     public Controler() {	
     	
@@ -130,31 +129,30 @@ public class Controler implements Initializable {
     	case F :
     		this.game.getPlayer().interact(game.getInanimatedEntities());
     		break;
-    	case E:
+    	case D :
     		this.game.getPlayer().loseHP(1);
     		this.game.getPlayer().earnPotion();
     		this.game.getPlayer().earnMoney(1);
     		break;
-    	case X:
+    	case X :
     		this.game.getPlayer().usePotion();
     		break;
     	case SPACE :
     		this.game.getPlayer().attack(game.getEntities(), (int)game.getPlayer().getX().get(), (int)game.getPlayer().getY().get());
-    		if (this.game.getPlayer().getActiveWeaponIndex().get() == 2) {
-    			this.bulletsView.addBullet();
-    		}
+    		
+    		if (this.game.getPlayer().getWeapons().size() > 0) 
+    			if (this.game.getPlayer().getWeaponName().equals("pistol"))
+    				this.bulletsView.addBullet();
+    		
     		break;
     	case ESCAPE:
     		showPauseMenu();
     		break;
-    	case A :
-    		this.game.getPlayer().switchWeapon(1);
+    	case TAB :
+    		this.game.getPlayer().nextWeapon();
     		break;
-    	case Z :
-    		this.game.getPlayer().switchWeapon(2);
-    		break;
-    	case R:
-    		changeText("Malcom est absent ce sécheur !");
+    	case R :
+    		changeText("Malcom est absent ce secheur !");
     		showText();
     		break;
 		default:

@@ -21,14 +21,31 @@ import javafx.util.Duration;
 
 public class EntityControler {
 	
-	private static FadeTransition ft;
+	private static FadeTransition enemyDisappearance;
+	private static FadeTransition attackAnimation;
+	static boolean b = true;
 	
     public static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<EntityView> entitiesView, BulletView bullets) {
     	
-    	ft = new FadeTransition();
-    	ft.setFromValue(1.0);
- 		ft.setToValue(0.0);
- 		ft.setDuration(Duration.seconds(0.05));
+    	enemyDisappearance = new FadeTransition();
+    	enemyDisappearance.setFromValue(1.0);
+ 		enemyDisappearance.setToValue(0.0);
+ 		enemyDisappearance.setDuration(Duration.seconds(0.05));
+ 		enemyDisappearance.setOnFinished(event -> {
+			entitiesView.remove(enemyDisappearance.getNode());
+			enemyDisappearance.setNode(null);
+		});
+ 		
+ 		attackAnimation = new FadeTransition();
+ 		attackAnimation.setFromValue(1.0);
+ 		attackAnimation.setToValue(0.0);
+ 		attackAnimation.setDuration(Duration.seconds(0.2));
+ 		attackAnimation.setNode(playerView.getAttackImage());
+		attackAnimation.setOnFinished(event2 -> {
+			entityContainer.getChildren().remove(attackAnimation.getNode());
+			game.getPlayer().resetIsAttacking();
+			b = true;
+		});
     	
     	entitiesView.add(playerView);
     	entityContainer.getChildren().add(playerView);
@@ -70,12 +87,10 @@ public class EntityControler {
 			@Override
 			public void onChanged(Change c) {
 				
-				while (c.next()) {
-					if (c.wasAdded()) {
+				while (c.next()) 
+					if (c.wasAdded()) 
 						entityContainer.getChildren().add(bullets.getBulletsNodes().get(bullets.getBulletsNodes().size()-1));
-					}
-				}
-				
+					
 			}
     		
     	});
@@ -110,11 +125,8 @@ public class EntityControler {
                     default :
                         break;
                     }
-
-                    entityContainer.getChildren().add(playerView.getAttackImage());
+                    
                 }
-                else
-                    entityContainer.getChildren().remove(playerView.getAttackImage());
 
             }
 
@@ -122,8 +134,8 @@ public class EntityControler {
     	
     	game.addKeyFrame(e -> {
     		
-    		//for (int i = 0 ; i < entitiesView.size() ; i++)
-    			//entitiesView.get(i).update();
+    		for (int i = 0 ; i < entitiesView.size() ; i++)
+    			entitiesView.get(i).update();
     		
     		for (int i = 0 ; i < bullets.getBullets().size() ; i++)
     			if (bullets.getBullets().get(i).getIsDead().get()) {
@@ -135,42 +147,22 @@ public class EntityControler {
     		
     		for (int i = 0 ; i < bullets.getBulletsNodes().size() ; i++)
     			bullets.update(entitiesView);
-    			
     		
-    		for (int i = 0 ; i < entitiesView.size() ; i++) {
+    		for (int i = 0 ; i < entitiesView.size() ; i++) 
     			if (entitiesView.get(i).getIsDead()) {
-     				ft.setNode(entitiesView.get(i));
+     				enemyDisappearance.setNode(entitiesView.get(i));
      				break;
     			}
-    		}
     		
-    		ft.setOnFinished(event -> {
-    			entitiesView.remove(ft.getNode());
-    			ft.setNode(null);
-    		});
+    		enemyDisappearance.play();
     		
-    		ft.play();
+    		if (game.getPlayer().getIsAttacking().get()) 
+    			if (b) {
+    				b = false; 
+    				entityContainer.getChildren().add(attackAnimation.getNode());
+    				attackAnimation.play();
+    			}
     		
-    		/*
-			for (int k = 0; k < entitiesView.size(); k++)
-				if (entitiesView.get(k).getIsDead()) {
-					entityContainer.getChildren().remove(entitiesView.get(k));
-					entitiesView.remove(entitiesView.get(k));
-				}	
-    		*/
-    		
-			for (int k = 0; k < game.getEntities().size(); k++)
-				if (game.getEntities().get(k).getIsDead().get()) {
-					game.getEntities().remove(game.getEntities().get(k));
-				}
-			for (int k = 0; k < game.getEntities().size(); k++) {
-				if (game.getEntities().get(k).getHP().get() == 0)
-					game.getEntities().get(k).die();
-			}
-			for (int i = 0 ; i < game.getInanimatedEntities().size() ; i++)
-				if (game.getInanimatedEntities().get(i).getIsDead().get())
-					game.getInanimatedEntities().remove(game.getInanimatedEntities().get(i));
-			
  		}, 0.017);
     	
     }
