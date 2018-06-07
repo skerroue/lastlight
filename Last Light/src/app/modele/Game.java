@@ -361,56 +361,59 @@ public class Game {
     }
     
     public void movePlayer(KeyCode event) {
-    
-    	player.setOrientation(event);
-    	
-    	switch (event) {
-    	case LEFT :
-    		if (player.getX().get() == LEFT_TOP_LIMIT) {
-    			if (loadField(LEFT)) {
-    				player.setX(RIGHT_BOTTOM_LIMIT);
-    				this.mapChanged();
-    			}
-    		}
-    		else 
-    			player.moveLeft(entities);
-    		break;
-    	case UP :
-    		if (player.getY().get() == LEFT_TOP_LIMIT) {
-    			if (loadField(UP)) {
-    				player.setY(RIGHT_BOTTOM_LIMIT);
-    				this.mapChanged();
-    			}
-    		}
-    		else 
-    			player.moveUp(entities);
-    		break;
-    	case RIGHT :
-    		if (player.getX().get() == RIGHT_BOTTOM_LIMIT) {
-    			if (loadField(RIGHT)) {
-    				player.setX(LEFT_TOP_LIMIT);
-    				this.mapChanged();
-    			}
-    		}
-    		else 
-    			player.moveRight(entities);
-    		break;
-    	case DOWN :
-    		if (player.getY().get() == RIGHT_BOTTOM_LIMIT) {
-    			if (loadField(DOWN)) {
-    				player.setY(LEFT_TOP_LIMIT);
-    				this.mapChanged();
-    			}
-    		}
-    		else 
-    			player.moveDown(entities);
-    		break;
-		default:
-			break;
-    	}
 	    
-	this.bfs.lancerBFS();
-    	
+    	if (!this.player.getIsAttacking().get()) {
+		player.setOrientation(event);
+
+		switch (event) {
+		case LEFT :
+			if (player.getX().get() == LEFT_TOP_LIMIT) {
+				if (loadField(LEFT)) {
+					player.setX(RIGHT_BOTTOM_LIMIT);
+					this.mapChanged();
+				}
+			}
+			else 
+				player.moveLeft(entities);
+			break;
+		case UP :
+			if (player.getY().get() == LEFT_TOP_LIMIT) {
+				if (loadField(UP)) {
+					player.setY(RIGHT_BOTTOM_LIMIT);
+					this.mapChanged();
+				}
+			}
+			else 
+				player.moveUp(entities);
+			break;
+		case RIGHT :
+			if (player.getX().get() == RIGHT_BOTTOM_LIMIT) {
+				if (loadField(RIGHT)) {
+					player.setX(LEFT_TOP_LIMIT);
+					this.mapChanged();
+				}
+			}
+			else 
+				player.moveRight(entities);
+			break;
+		case DOWN :
+			if (player.getY().get() == RIGHT_BOTTOM_LIMIT) {
+				if (loadField(DOWN)) {
+					player.setY(LEFT_TOP_LIMIT);
+					this.mapChanged();
+				}
+			}
+			else 
+				player.moveDown(entities);
+			break;
+			default:
+				break;
+		}
+
+		this.bfs.lancerBFS();
+		
+	}
+	    
     }
     
     public void moveAllEnemies() {
