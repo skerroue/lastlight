@@ -8,6 +8,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Player extends AnimatedEntity {
@@ -24,7 +25,7 @@ public class Player extends AnimatedEntity {
 	private BooleanProperty boots;
 	private BooleanProperty necklace;
 	
-	private ArrayList<Weapon> weapons;
+	private ObservableList<Weapon> weapons;
 	private IntegerProperty activeWeaponIndex;
 	
 	public Player(int x, int y, int pv, int att, int v, int m, int nb, int fmax) {
@@ -39,7 +40,7 @@ public class Player extends AnimatedEntity {
 		
 		this.boots = new SimpleBooleanProperty(false);
 		this.necklace = new SimpleBooleanProperty(false);
-		this.weapons = new ArrayList<>();
+		this.weapons = FXCollections.observableArrayList();
 		this.activeWeaponIndex = new SimpleIntegerProperty(-1);
 	}
 	
@@ -67,8 +68,16 @@ public class Player extends AnimatedEntity {
 		return potentialHP;
 	}
 	
-	public ArrayList<Weapon> getWeapons() {
+	public ObservableList<Weapon> getWeapons() {
 		return this.weapons;
+	}
+	
+	public ObservableList<Bullet> getBullets() {
+		for (Weapon w : this.weapons)
+			if (w.getId().equals("pistol"))
+				return w.getBullets();
+		
+		return null;
 	}
 	
 	public IntegerProperty getActiveWeaponIndex() {
@@ -113,7 +122,7 @@ public class Player extends AnimatedEntity {
 		this.money.set(this.money.getValue() - a);
 	}
 	
-	public void attack(ObservableList<AnimatedEntity> entities, int x, int y) {
+	public void attack(ObservableList<AnimatedEntity> entities) {
 		
 		if (this.weapons.size() > 0)
 			switch (this.weapons.get(this.activeWeaponIndex.get()).getId()) {
@@ -122,7 +131,7 @@ public class Player extends AnimatedEntity {
 				this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
 				break;
 			case "pistol" :
-				this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), x, y);
+				this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
 				break;
 			default :
 				break;

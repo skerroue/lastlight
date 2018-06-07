@@ -1,6 +1,7 @@
 package app.modele.weapon;
 
 import app.modele.entity.AnimatedEntity;
+import app.modele.entity.Bullet;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
@@ -32,4 +33,6 @@ public abstract class Weapon {
 	}
 	
 	public abstract void attack(ObservableList<AnimatedEntity> entities, int orientation, int x, int y);
+	
+	public abstract ObservableList<Bullet> getBullets();
 }

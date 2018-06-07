@@ -26,7 +26,7 @@ public class EntityControler {
 	private static FadeTransition attackAnimation;
 	private static boolean attackAnimationActive = false;
 	
-    public static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<EntityView> entitiesView, BulletView bullets) {
+    public static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<EntityView> entitiesView) {
     	
     	enemyDisappearance = new FadeTransition();
     	enemyDisappearance.setFromValue(1.0);
@@ -94,6 +94,20 @@ public class EntityControler {
     		
     	});
     	
+    	playerView.getBullets().addListener(new ListChangeListener<BulletView>() {
+
+			@Override
+			public void onChanged(Change c) {
+				while (c.next())
+					if (c.wasAdded()) {
+						entitiesView.add(playerView.getBullets().get(playerView.getBullets().size()-1));
+						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
+					}
+			}
+    		
+    	});
+    	
+    	/*
     	bullets.getBulletsNodes().addListener(new ListChangeListener<Circle>() {
 
 			@Override
@@ -106,6 +120,7 @@ public class EntityControler {
 			}
     		
     	});
+    	*/
     	
     	game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
 
@@ -149,6 +164,7 @@ public class EntityControler {
     		for (int i = 0 ; i < entitiesView.size() ; i++)
     			entitiesView.get(i).update();
     		
+    		/*
     		for (int i = 0 ; i < bullets.getBullets().size() ; i++)
     			if (bullets.getBullets().get(i).getIsDead().get()) {
     				game.getPlayer().attack(game.getEntities(), (int)bullets.getBullets().get(i).getX().get(), (int)bullets.getBullets().get(i).getY().get());
@@ -159,6 +175,7 @@ public class EntityControler {
     		
     		for (int i = 0 ; i < bullets.getBulletsNodes().size() ; i++)
     			bullets.update(entitiesView);
+    		*/
     		
     		for (int i = 0 ; i < entitiesView.size() ; i++) 
     			if (entitiesView.get(i).getIsDead()) {

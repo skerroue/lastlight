@@ -1,18 +1,31 @@
 package app.modele.weapon;
 
+import java.util.ArrayList;
+
 import app.modele.entity.AnimatedEntity;
+import app.modele.entity.Bullet;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Pistol extends Weapon {
+	
+	private ObservableList<Bullet> bullets;
+	private int magSize;
 
 	public Pistol(int a, int d) {
 		super(a, d);
 		this.id = "pistol";
+		this.bullets = FXCollections.observableArrayList();
+		this.magSize = 7;
 	}
 
 	@Override
 	public void attack(ObservableList<AnimatedEntity> entities, int orientation, int x, int y) {
 		
+		if (this.bullets.size() < this.magSize)
+			this.bullets.add(new Bullet(x, y, orientation));
+		
+		/*
 		switch (orientation) {
 		case LEFT :
 			for (int i = 1 ; i < entities.size() ; i++) {
@@ -45,7 +58,18 @@ public class Pistol extends Weapon {
 			break;
 			
 		}
+		*/
 		
+	}
+	
+	public void resetBullets() {
+		if (bullets.size() > 6)
+			bullets.clear();
+	}
+
+	@Override
+	public ObservableList<Bullet> getBullets() {
+		return this.bullets;
 	}
 
 }

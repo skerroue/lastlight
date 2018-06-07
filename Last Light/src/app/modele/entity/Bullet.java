@@ -13,10 +13,12 @@ public class Bullet extends Entity {
 		this.velocity = 4;
 	}
 	
-	public void update(ArrayList<EntityView> entities) {
+	public void update() {
 		
+		/*
 		if (this.getX().get() <= 100 || this.getY().get() <= 100 || this.getX().get() >= 795 || this.getY().get() >= 795 || isCollidingWith(entities) > -1) 
 			this.die();
+		*/
 		
 		switch (this.orientation.get()) {
 		case LEFT :
@@ -39,6 +41,7 @@ public class Bullet extends Entity {
 	
 	public int isCollidingWith(ArrayList<EntityView> entities) {
 		
+		/*
 		switch (this.orientation.get()) {
 		case LEFT :
 			for (int i = 1 ; i < entities.size() ; i++)
@@ -63,6 +66,7 @@ public class Bullet extends Entity {
 		default :
 			break;
 		}
+		*/
 		
 		return -1;
 	}

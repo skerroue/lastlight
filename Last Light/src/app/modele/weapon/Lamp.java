@@ -1,6 +1,7 @@
 package app.modele.weapon;
 
 import app.modele.entity.AnimatedEntity;
+import app.modele.entity.Bullet;
 import javafx.collections.ObservableList;
 
 public class Lamp extends Weapon{
@@ -44,6 +45,11 @@ public class Lamp extends Weapon{
 			
 		}
 		
+	}
+
+	@Override
+	public ObservableList<Bullet> getBullets() {
+		return null;
 	}
 
 }

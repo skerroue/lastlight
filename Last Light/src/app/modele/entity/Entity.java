@@ -68,5 +68,9 @@ public abstract class Entity {
 	public BooleanProperty getIsDead() {
 		return this.isDead;
 	}
+	
+	public IntegerProperty getOrientation() {
+		return this.orientation;
+	}
 
 }

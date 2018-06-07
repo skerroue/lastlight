@@ -203,10 +203,6 @@ public abstract class AnimatedEntity extends Entity {
 		return this.isAttacking;
 	}
 	
-	public IntegerProperty getOrientation() {
-		return this.orientation;
-	}
-	
 	public String getId() {
 		return this.id;
 	}

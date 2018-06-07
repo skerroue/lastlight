@@ -67,7 +67,7 @@ public class Game {
 		this.fieldsMap = readFileMaps();
 		this.crossableTiles = readFileCrossableTiles();
 		this.map = new Field(3, 0, this.fieldsMap[3][0] , 25, 25, crossableTiles);	// coordonnées à modifier
-		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);	// coordonnées à modifier
+		this.player = new Player(416, 416, 3, 0, 16, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.inanimatedEntities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
@@ -116,6 +116,10 @@ public class Game {
 		
 		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {
 			moveAllEnemies();
+			
+			if (player.getBullets() != null)
+				for (int i = 0 ; i < player.getBullets().size() ; i++)
+					player.getBullets().get(i).update();
 			
 			for (int k = 0; k < getEntities().size(); k++)
 				if (getEntities().get(k).getIsDead().get()) 

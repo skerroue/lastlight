@@ -52,7 +52,6 @@ public class Controler implements Initializable {
     
     private ArrayList<EntityView> entitiesView;
     private PlayerView playerView;
-    private BulletView bulletsView;
     
     private Game game;
     
@@ -68,7 +67,6 @@ public class Controler implements Initializable {
     	this.hud = new InterfaceView(game.getPlayer());
     	this.field = new FieldView();
     	this.playerView = new PlayerView(game.getPlayer());
-    	this.bulletsView = new BulletView(game.getPlayer());
         
     }
     
@@ -82,7 +80,7 @@ public class Controler implements Initializable {
 		InterfaceControler.initializeInterface(interfaceContainer, hud);
 		
 		// Liaison des entitiyView avec les entites du modele
-		EntityControler.initializeEntities(entityContainer, game, playerView, entitiesView, bulletsView);
+		EntityControler.initializeEntities(entityContainer, game, playerView, entitiesView);
 		
 		// Lancement de la gameloop
 		this.game.playGameLoop();
@@ -137,12 +135,7 @@ public class Controler implements Initializable {
     		this.game.getPlayer().usePotion();
     		break;
     	case SPACE :
-    		this.game.getPlayer().attack(game.getEntities(), (int)game.getPlayer().getX().get(), (int)game.getPlayer().getY().get());
-    		
-    		if (this.game.getPlayer().getWeapons().size() > 0) 
-    			if (this.game.getPlayer().getWeaponName().equals("pistol"))
-    				this.bulletsView.addBullet();
-    		
+    		this.game.getPlayer().attack(game.getEntities());
     		break;
     	case ESCAPE:
     		showPauseMenu();
