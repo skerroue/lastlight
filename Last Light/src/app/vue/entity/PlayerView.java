@@ -55,6 +55,14 @@ public class PlayerView extends AnimatedEntityView {
 		
 	}
 	
+	public void animationAttack() {
+		this.player.setOrientation(this.player.getOrientation().get() + 4);
+	}
+	
+	public void resetAnimationAttack() {
+		this.player.setOrientation(this.player.getOrientation().get() - 4);
+	}
+	
 	public ImageView getAttackImage() {
 		return this.attaque;
 	}
