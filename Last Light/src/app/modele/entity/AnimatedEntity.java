@@ -149,6 +149,10 @@ public abstract class AnimatedEntity extends Entity {
 		}
  	}
 	
+	public void setOrientation(int n) {
+		this.orientation.set(n);
+	}
+	
 	public boolean tileIsEmpty(ObservableList<AnimatedEntity> entities, int DIRECTION) {
     	
 		switch (DIRECTION) {
