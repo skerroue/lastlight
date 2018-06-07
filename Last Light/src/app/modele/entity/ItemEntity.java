@@ -1,5 +1,12 @@
 package app.modele.entity;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import app.modele.Game;
 import app.modele.weapon.Lamp;
 import app.modele.weapon.Pistol;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -29,6 +36,23 @@ public class ItemEntity extends InanimatedEntity {
 			break;
 		default :
 			break;
+		}
+		
+		try {
+			
+			File f = new File("src/map/takenItems.txt");
+			FileWriter fw = new FileWriter(f, true);
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			bw.write(Game.getMapId() + "," + this.id.charAt(0) + "\n");
+				
+			bw.close();
+			fw.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("takenItems : Fichier introuvable");
+		} catch (IOException e) {
+			System.out.println("takenItems : Erreur de lecture");
 		}
 	}
 

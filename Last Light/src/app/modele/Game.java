@@ -1,9 +1,11 @@
 package app.modele;
 
-import java.io.BufferedReader; 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -49,7 +51,7 @@ public class Game {
 
 	private Timeline gameloop;
 	private float compteur;
-	private int[][] fieldsMap;	// contient les indices des fichiers de chaque map
+	private static int[][] fieldsMap;	// contient les indices des fichiers de chaque map
 								// valeurs allant de 1 a ... (0 = pas de map)
 	private static Field map;
 	private Player player;
@@ -80,6 +82,23 @@ public class Game {
 	}
 	
 	public void initializeGame() {
+		try {
+			
+			File f = new File("src/map/takenItems.txt");
+			FileWriter fw = new FileWriter(f);
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			bw.write("");
+			
+			bw.close();
+			fw.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("takenItems : Fichier introuvable");
+		} catch (IOException e) {
+			System.out.println("takenItems : Erreur de lecture");
+		}
+
 		spawnEntities();
 	
 		/*
@@ -178,6 +197,10 @@ public class Game {
 		return map;
 	}
 	
+	public static int getMapId() {
+		return fieldsMap[map.getI()][map.getJ()];
+	}
+	
 	public Player getPlayer() {
 		return this.player;
 	}
@@ -273,15 +296,16 @@ public class Game {
 							this.addEnnemy("walker", s.nextInt(), s.nextInt());
 							break;
 						case 3 :
-							if (!hasWeapon("lamp"))
+							if (!takenItem("lamp", noMap))
 								this.addInanimated(new ItemEntity("lamp", s.nextInt(), s.nextInt()));
 							break;
 						case 4 :
-							if (!hasWeapon("pistol"))
+							if (!takenItem("pistol", noMap))
 								this.addInanimated(new ItemEntity("pistol", s.nextInt(), s.nextInt()));
 							break;
 						case 5 :
-							this.addInanimated(new ItemEntity("soda", s.nextInt(), s.nextInt()));
+							if (!takenItem("pistol", noMap))
+								this.addInanimated(new ItemEntity("soda", s.nextInt(), s.nextInt()));
 							break;
 						case 6 :
 							this.addAnimated("rock", s.nextInt(), s.nextInt());
@@ -306,15 +330,42 @@ public class Game {
 		}
 	}
 	
-	private boolean hasWeapon(String id) {
-		if (this.player.getWeapons().size() == 0)
-			return false;
-		else {
-			for (Weapon e : this.player.getWeapons())
-				if (e.getId().equals(id))
-					return true;
-			return false;
+	private boolean takenItem(String id, int noMap) {
+		boolean takenItem = false;
+		String line;
+		
+		try {
+			
+			File f = new File("src/map/takenItems.txt");
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			
+			line = br.readLine();
+			
+			while (br.ready() && line.charAt(0) != Integer.toString(noMap).charAt(0))
+				line = br.readLine();
+						
+			if (line != null && line.charAt(0) == Integer.toString(noMap).charAt(0)) {
+				Scanner s = new Scanner(line).useDelimiter(",");
+				s.next();
+				
+				if (s.next().charAt(0) == id.charAt(0)) {
+					takenItem = true;
+				}
+				
+				s.close();
+			}
+				
+			br.close();
+			fr.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("takenItems : Fichier introuvable");
+		} catch (IOException e) {
+			System.out.println("takenItems : Erreur de lecture");
 		}
+		
+		return takenItem;
 	}
 	
     public void addKeyFrame(EventHandler<ActionEvent> e, double duration) {
