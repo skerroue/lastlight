@@ -41,14 +41,14 @@
                   </ImageView>
                </graphic></Button>
          </children></Pane>
-      <Pane fx:id="interactPane" prefHeight="512.0" prefWidth="512.0" visible="false">
+      <Pane fx:id="interactPane" onKeyPressed="#closeText" prefHeight="512.0" prefWidth="512.0" visible="false">
          <children>
             <ImageView fitHeight="150.0" fitWidth="512.0" layoutY="362.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../img/textbox.png" />
                </image>
             </ImageView>
-            <Label fx:id="discussionLabel" alignment="TOP_LEFT" layoutX="30.0" layoutY="390.0" onMouseClicked="#closeText" prefHeight="90.0" prefWidth="450.0" text="blablabla" textFill="WHITE">
+            <Label fx:id="discussionLabel" alignment="TOP_LEFT" layoutX="30.0" layoutY="390.0" prefHeight="83.0" prefWidth="450.0" text="blablabla" textFill="WHITE">
                <font>
                   <Font name="VCR OSD Mono" size="15.0" />
                </font>
