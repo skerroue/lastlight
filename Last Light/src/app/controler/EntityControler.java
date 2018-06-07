@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import app.modele.Game;
 import app.modele.entity.Entity;
 import app.vue.entity.AnimatedEntityView;
-import app.vue.entity.BoxView;
+import app.vue.entity.RockView;
 import app.vue.entity.BulletView;
 import app.vue.entity.EnemyView;
 import app.vue.entity.EntityView;
@@ -62,8 +62,8 @@ public class EntityControler {
 						case "walker" :
 							entitiesView.add(new EnemyView(game.getEntities().get(game.getEntities().size() - 1)));
 							break;
-						case "box" :
-							entitiesView.add(new BoxView(game.getEntities().get(game.getEntities().size() - 1)));
+						case "rock" :
+							entitiesView.add(new RockView(game.getEntities().get(game.getEntities().size() - 1)));
 							break;
 						default :
 							break;

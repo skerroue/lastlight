@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 import app.modele.BFS.BFS;
 import app.modele.entity.AnimatedEntity;
-import app.modele.entity.Box;
+import app.modele.entity.Rock;
 import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
 import app.modele.entity.InanimatedEntity;
@@ -284,7 +284,7 @@ public class Game {
 							this.addInanimated(new ItemEntity("soda", s.nextInt(), s.nextInt()));
 							break;
 						case 6 :
-							this.addAnimated("box", s.nextInt(), s.nextInt());
+							this.addAnimated("rock", s.nextInt(), s.nextInt());
 							break;
 						default :
 							break;
@@ -343,8 +343,8 @@ public class Game {
     	case "walker" :
     		entities.add(new Walker(x, y, 1, 0, 4, 6, 18));
     		break;
-    	case "box" :
-    		entities.add(new Box(x, y));
+    	case "rock" :
+    		entities.add(new Rock(x, y));
     		break;
      	default :
     		break;
@@ -414,7 +414,7 @@ public class Game {
     
     public void moveAllEnemies() {
     	for (int i = 1 ; i < entities.size() ; i++) 
-    		if (entities.get(i).getId() != "box")
+    		if (entities.get(i).getId() != "rock")
     			moveEnemy(entities.get(i));
     }
     
