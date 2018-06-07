@@ -212,7 +212,7 @@ public class Controler implements Initializable {
     private void showText() {
     	this.interactPane.setVisible(true);
     	this.game.pauseGameLoop();
-    	//this.interactPane.requestFocus();
+    	this.interactPane.requestFocus();
     }
     
     private void changeText(String newLabel) {
