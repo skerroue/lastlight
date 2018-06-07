@@ -30,28 +30,40 @@ public abstract class AnimatedEntity extends Entity {
 		this.isAttacking = new SimpleBooleanProperty(false);
 	}
 	
-	public void moveLeft(ObservableList<AnimatedEntity> entities) {
+	public boolean moveLeft(ObservableList<AnimatedEntity> entities) {
 		this.setOrientation(KeyCode.LEFT);
-		if (canMove(entities))
+		if (canMove(entities)) {
 			x.set(x.get() - velocity);
+			return true;
+		}
+		return false;
 	}
 	
-	public void moveRight(ObservableList<AnimatedEntity> entities) {
+	public boolean moveRight(ObservableList<AnimatedEntity> entities) {
 		this.setOrientation(KeyCode.RIGHT);
-		if (canMove(entities))
+		if (canMove(entities)) {
 			x.set(x.get() + velocity);
+			return true;
+		}
+		return false;
 	}
 
-	public void moveDown(ObservableList<AnimatedEntity> entities) {
+	public boolean moveDown(ObservableList<AnimatedEntity> entities) {
 		this.setOrientation(KeyCode.DOWN);
-		if (canMove(entities))
+		if (canMove(entities)) {
 			y.set(y.get() + velocity);
+			return true;
+		}
+		return false;
 	}
 	
-	public void moveUp(ObservableList<AnimatedEntity> entities) {
+	public boolean moveUp(ObservableList<AnimatedEntity> entities) {
 		this.setOrientation(KeyCode.UP);
-		if (canMove(entities))
+		if (canMove(entities)) {
 			y.set(y.get() - velocity);
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean canMove(ObservableList<AnimatedEntity> entities) {

@@ -6,24 +6,19 @@ public class Rock extends AnimatedEntity {
 
 	public Rock(int x, int y) {
 		super("rock", x, y, 1, 0, 4, 1, 1);
-		System.out.println("rock");
 	}
 	
 	public boolean interact(int DIRECTION, ObservableList<AnimatedEntity> entities) {
 		
 		switch (DIRECTION) {
 		case LEFT :
-			this.moveLeft(entities);
-			return true;
+			return this.moveLeft(entities);
 		case UP :
-			this.moveUp(entities);
-			return true;
+			return this.moveUp(entities);
 		case RIGHT :
-			this.moveRight(entities);
-			return true;
+			return this.moveRight(entities);
 		case DOWN :
-			this.moveDown(entities);
-			return true;
+			return this.moveDown(entities);
 		default :
 			return false;
 		}
