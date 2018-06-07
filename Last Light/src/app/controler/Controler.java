@@ -97,7 +97,6 @@ public class Controler implements Initializable {
 
     @FXML
     void onKeyPressed(KeyEvent event) {
-    	
     	switch (event.getCode()) {
     	case UP:
     		game.movePlayer(event.getCode());
@@ -204,9 +203,11 @@ public class Controler implements Initializable {
     }
     
     @FXML
-    void closeText(MouseEvent event) {
-    	this.interactPane.setVisible(false);
-    	this.game.playGameLoop();
+    void closeText(KeyEvent event) {
+    	if (event.getCode() == KeyCode.SPACE) {
+    		this.interactPane.setVisible(false);
+        	this.game.playGameLoop();
+    	}
     }
     
     private void showText() {
