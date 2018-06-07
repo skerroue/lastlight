@@ -10,13 +10,13 @@ import java.util.Scanner;
 
 import app.modele.BFS.BFS;
 import app.modele.entity.AnimatedEntity;
+import app.modele.entity.Box;
 import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
 import app.modele.entity.InanimatedEntity;
 import app.modele.entity.ItemEntity;
 import app.modele.entity.Player;
 import app.modele.entity.Walker;
-import app.modele.entity.WeaponEntity;
 import app.modele.field.Field;
 import app.modele.field.Tile;
 import app.modele.weapon.Weapon;
@@ -65,7 +65,7 @@ public class Game {
 		this.fieldsMap = readFileMaps();
 		this.crossableTiles = readFileCrossableTiles();
 		this.map = new Field(3, 0, this.fieldsMap[3][0] , 25, 25, crossableTiles);	// coordonnées à modifier
-		this.player = new Player(416, 416, 3, 0, 32, 0, 6, 18);	// coordonnées à modifier
+		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.inanimatedEntities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
@@ -274,14 +274,17 @@ public class Game {
 							break;
 						case 3 :
 							if (!hasWeapon("lamp"))
-								this.addInanimated(new WeaponEntity("lamp", s.nextInt(), s.nextInt()));
+								this.addInanimated(new ItemEntity("lamp", s.nextInt(), s.nextInt()));
 							break;
 						case 4 :
 							if (!hasWeapon("pistol"))
-								this.addInanimated(new WeaponEntity("pistol", s.nextInt(), s.nextInt()));
+								this.addInanimated(new ItemEntity("pistol", s.nextInt(), s.nextInt()));
 							break;
 						case 5 :
 							this.addInanimated(new ItemEntity("soda", s.nextInt(), s.nextInt()));
+							break;
+						case 6 :
+							this.addAnimated("box", s.nextInt(), s.nextInt());
 							break;
 						default :
 							break;
@@ -333,6 +336,19 @@ public class Game {
     
     public void addInanimated(InanimatedEntity i) {
     	inanimatedEntities.add(i);
+    }
+    
+    public void addAnimated(String type, int x, int y) {
+    	switch (type) {
+    	case "walker" :
+    		entities.add(new Walker(x, y, 1, 0, 4, 6, 18));
+    		break;
+    	case "box" :
+    		entities.add(new Box(x, y));
+    		break;
+     	default :
+    		break;
+    	}
     }
     
     public void playGameLoop() {
@@ -398,7 +414,8 @@ public class Game {
     
     public void moveAllEnemies() {
     	for (int i = 1 ; i < entities.size() ; i++) 
-    		moveEnemy(entities.get(i));
+    		if (entities.get(i).getId() != "box")
+    			moveEnemy(entities.get(i));
     }
     
     public void moveEnemy(AnimatedEntity e) {
