@@ -48,8 +48,9 @@ public class Lamp extends Weapon{
 	}
 
 	@Override
-	public ObservableList<Bullet> getBullets() {
-		return null;
+	public void update(ObservableList<AnimatedEntity> entities) {
+		// TODO Auto-generated method stub
+		
 	}
-
+	
 }

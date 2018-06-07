@@ -34,5 +34,14 @@ public abstract class Weapon {
 	
 	public abstract void attack(ObservableList<AnimatedEntity> entities, int orientation, int x, int y);
 	
-	public abstract ObservableList<Bullet> getBullets();
+	public abstract void update(ObservableList<AnimatedEntity> entities);
+	
+	public ObservableList<Bullet> getBullets() {
+		return null;
+	}
+	
+	public void reload() {
+		
+	}
+	
 }

@@ -72,6 +72,10 @@ public class Player extends AnimatedEntity {
 		return this.weapons;
 	}
 	
+	public void reload() {
+		this.weapons.get(this.activeWeaponIndex.get()).reload();
+	}
+	
 	public ObservableList<Bullet> getBullets() {
 		for (Weapon w : this.weapons)
 			if (w.getId().equals("pistol"))

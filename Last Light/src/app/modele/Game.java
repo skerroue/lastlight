@@ -100,26 +100,12 @@ public class Game {
 		}
 
 		spawnEntities();
-	
-		/*
-		KeyFrame compt = new KeyFrame(Duration.seconds(0.017), e -> {
-	           compteur += Duration.seconds(0.017).toMillis();
-
-	           if ((int)this.compteur % ((int)Duration.seconds(0.017).toMillis()*10) == 0) {
-	               this.compteur = 0;
-	               if (player.getIsAttacking().get())
-	                   player.resetIsAttacking();
-	           }
-
-		});
-		*/
 		
 		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {
 			moveAllEnemies();
 			
-			if (player.getBullets() != null)
-				for (int i = 0 ; i < player.getBullets().size() ; i++)
-					player.getBullets().get(i).update();
+			if (player.getActiveWeaponIndex().get() > -1)
+				player.getWeapons().get(player.getActiveWeaponIndex().get()).update(entities);
 			
 			for (int k = 0; k < getEntities().size(); k++)
 				if (getEntities().get(k).getIsDead().get()) 
@@ -131,7 +117,7 @@ public class Game {
 		});
 		
 		gameloop.getKeyFrames().add(updateEntities);
-		//gameloop.getKeyFrames().add(compt);
+		
 	}
 	
 	private int[][] readFileMaps() { 

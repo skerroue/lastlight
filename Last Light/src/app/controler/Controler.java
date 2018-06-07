@@ -144,6 +144,9 @@ public class Controler implements Initializable {
     		this.game.getPlayer().nextWeapon();
     		break;
     	case R :
+    		this.game.getPlayer().reload();
+    		break;
+    	case M :
     		changeText("Malcom est absent ce secheur !");
     		showText();
     		break;

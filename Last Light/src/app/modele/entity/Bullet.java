@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import app.vue.entity.EntityView;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
 
 public class Bullet extends Entity {
 
@@ -15,10 +16,8 @@ public class Bullet extends Entity {
 	
 	public void update() {
 		
-		/*
-		if (this.getX().get() <= 100 || this.getY().get() <= 100 || this.getX().get() >= 795 || this.getY().get() >= 795 || isCollidingWith(entities) > -1) 
+		if (this.getX().get() <= 0 || this.getY().get() <= 0 || this.getX().get() >= 800 || this.getY().get() >= 800) 
 			this.die();
-		*/
 		
 		switch (this.orientation.get()) {
 		case LEFT :
@@ -39,36 +38,34 @@ public class Bullet extends Entity {
 		
 	}
 	
-	public int isCollidingWith(ArrayList<EntityView> entities) {
+	public AnimatedEntity isCollidingWith(ObservableList<AnimatedEntity> entities) {
 		
-		/*
 		switch (this.orientation.get()) {
 		case LEFT :
 			for (int i = 1 ; i < entities.size() ; i++)
-				if (entities.get(i).getTranslateX() == this.getX().get() && entities.get(i).getTranslateY() >= this.getY().get()-32 && entities.get(i).getTranslateY() <= this.getY().get())
-					return i;
+				if (entities.get(i).getX().get() == this.getX().get() - 32 && entities.get(i).getY().get() >= this.getY().get() - 32 && entities.get(i).getY().get() <= this.getY().get() + 32)
+					return entities.get(i);
 			break;
 		case UP :
 			for (int i = 1 ; i < entities.size() ; i++)
-				if (entities.get(i).getTranslateY() == this.getY().get() && entities.get(i).getTranslateX() >= this.getX().get()-32 && entities.get(i).getTranslateX() <= this.getX().get())
-					return i;
+				if (entities.get(i).getY().get() == this.getY().get() - 32 && entities.get(i).getX().get() >= this.getX().get() - 32 && entities.get(i).getX().get() <= this.getX().get() + 32)
+					return entities.get(i);
 			break;
 		case RIGHT :
 			for (int i = 1 ; i < entities.size() ; i++)
-				if (entities.get(i).getTranslateX() == this.getX().get() && entities.get(i).getTranslateY() >= this.getY().get()-32 && entities.get(i).getTranslateY() <= this.getY().get())
-					return i;
+				if (entities.get(i).getX().get() == this.getX().get() + 32 && entities.get(i).getY().get() >= this.getY().get() - 32 && entities.get(i).getY().get() <= this.getY().get() + 32)
+					return entities.get(i);
 			break;
 		case DOWN :
 			for (int i = 1 ; i < entities.size() ; i++)
-				if (entities.get(i).getTranslateY() == this.getY().get() && entities.get(i).getTranslateX() >= this.getX().get()-32 && entities.get(i).getTranslateX() <= this.getX().get())
-					return i;
+				if (entities.get(i).getY().get() == this.getY().get() + 32 && entities.get(i).getX().get() >= this.getX().get() - 32 && entities.get(i).getX().get() <= this.getX().get() + 32)
+					return entities.get(i);
 			break;
 		default :
 			break;
 		}
-		*/
 		
-		return -1;
+		return null;
 	}
 	
 }
