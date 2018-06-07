@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import app.modele.Game;
 import app.modele.entity.Entity;
 import app.vue.entity.AnimatedEntityView;
-import app.vue.entity.RockView;
+import app.vue.entity.BoxView;
 import app.vue.entity.BulletView;
 import app.vue.entity.EnemyView;
 import app.vue.entity.EntityView;
@@ -24,7 +24,7 @@ public class EntityControler {
 	
 	private static FadeTransition enemyDisappearance;
 	private static FadeTransition attackAnimation;
-	static boolean b = true;
+	private static boolean attackAnimationActive = false;
 	
     public static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<EntityView> entitiesView, BulletView bullets) {
     	
@@ -43,9 +43,10 @@ public class EntityControler {
  		attackAnimation.setDuration(Duration.seconds(0.2));
  		attackAnimation.setNode(playerView.getAttackImage());
 		attackAnimation.setOnFinished(event2 -> {
+			playerView.resetAnimationAttack();
 			entityContainer.getChildren().remove(attackAnimation.getNode());
 			game.getPlayer().resetIsAttacking();
-			b = true;
+			attackAnimationActive = false;
 		});
     	
     	entitiesView.add(playerView);
@@ -62,8 +63,8 @@ public class EntityControler {
 						case "walker" :
 							entitiesView.add(new EnemyView(game.getEntities().get(game.getEntities().size() - 1)));
 							break;
-						case "rock" :
-							entitiesView.add(new RockView(game.getEntities().get(game.getEntities().size() - 1)));
+						case "box" :
+							entitiesView.add(new BoxView(game.getEntities().get(game.getEntities().size() - 1)));
 							break;
 						default :
 							break;
@@ -115,7 +116,7 @@ public class EntityControler {
                     switch (game.getPlayer().getOrientation().get()) {
                     case 0 :
                         playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() - 32);
-                        playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY());
+                        playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 5);
                         playerView.getAttackImage().setRotate(-90);
                         break;
                     case 1 :
@@ -125,7 +126,7 @@ public class EntityControler {
                         break;
                     case 2 : 
                     	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() + 32);
-                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY());
+                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 5);
                     	playerView.getAttackImage().setRotate(90);
                         break;
                     case 3 :
@@ -168,8 +169,9 @@ public class EntityControler {
     		enemyDisappearance.play();
     		
     		if (game.getPlayer().getIsAttacking().get()) 
-    			if (b) {
-    				b = false; 
+    			if (!attackAnimationActive) {
+    				playerView.animationAttack();
+    				attackAnimationActive = true; 
     				entityContainer.getChildren().add(attackAnimation.getNode());
     				attackAnimation.play();
     			}
