@@ -361,8 +361,7 @@ public class Game {
     }
     
     public void movePlayer(KeyCode event) {
-    	
-    	this.bfs.lancerBFS();
+    
     	player.setOrientation(event);
     	
     	switch (event) {
@@ -409,6 +408,8 @@ public class Game {
 		default:
 			break;
     	}
+	    
+	this.bfs.lancerBFS();
     	
     }
     
