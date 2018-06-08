@@ -141,12 +141,12 @@ public class Controler implements Initializable {
     		this.game.getPlayer().usePotion();
     		break;
     	case SPACE :
-    		this.game.getPlayer().interact(game.getInanimatedEntities());
     		if (!this.game.playerInteraction())
     			this.game.getPlayer().attack(game.getEntities());
-    		else
-    			if (!this.dialogContainer.getText().equals(null) && !this.dialogContainer.getText().equals(""))
-    				this.showText();
+    		else 
+    			if (!(this.dialogContainer.getText() == null))
+    				if (!this.dialogContainer.getText().equals(""))
+    					this.showText();
     		break;
     	case ESCAPE:
     		showPauseMenu();

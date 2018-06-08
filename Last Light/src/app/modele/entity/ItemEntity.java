@@ -23,8 +23,6 @@ public class ItemEntity extends InanimatedEntity {
 	public boolean interact(Player p) {
 		boolean hasInteracted = false;
 		
-		System.out.println("ok");
-		
 		switch (this.id) {
 		case "lamp" :
 			p.getWeapons().add(new Lamp(1, 1));
