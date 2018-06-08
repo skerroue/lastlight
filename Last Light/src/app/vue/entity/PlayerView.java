@@ -24,6 +24,7 @@ public class PlayerView extends AnimatedEntityView {
 	
 	private Image tileset = new Image("file:src/img/tilesetplayer.png");
 	private Image tilesetLamp = new Image("file:src/img/tilesetplayerlamp.png");
+	private Image tilesetTaser = new Image("file:src/img/tilesetplayertaser.png");
 
 	public PlayerView(Player e) {
 		super(e);
@@ -50,7 +51,7 @@ public class PlayerView extends AnimatedEntityView {
 					setImage(tilesetLamp);
 					break;
 				case "pistol" :
-					setImage(tileset);
+					setImage(tilesetTaser);
 					break;
 				default :
 					setImage(tileset);

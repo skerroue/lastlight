@@ -23,7 +23,7 @@ public class Pistol extends Weapon {
 	@Override
 	public void attack(ObservableList<AnimatedEntity> entities, int orientation, int x, int y) {
 		
-		if (this.bullets.size() < this.magSize && this.canShoot())
+		if (this.bullets.size() < this.magSize)
 			this.addBullet(x, y, orientation);
 		
 	}

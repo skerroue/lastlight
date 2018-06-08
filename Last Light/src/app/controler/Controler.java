@@ -145,7 +145,7 @@ public class Controler implements Initializable {
     		if (!this.game.playerInteraction())
     			this.game.getPlayer().attack(game.getEntities());
     		else
-    			if (!this.dialogContainer.getText().equals(null) || !this.dialogContainer.getText().equals(""))
+    			if (!this.dialogContainer.getText().equals(null) && !this.dialogContainer.getText().equals(""))
     				this.showText();
     		break;
     	case ESCAPE:

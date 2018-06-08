@@ -147,6 +147,7 @@ public class Player extends AnimatedEntity {
 				this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
 				break;
 			case "pistol" :
+				this.isAttacking.set(true);
 				this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
 				break;
 			default :
