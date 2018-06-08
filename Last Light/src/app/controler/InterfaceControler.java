@@ -19,6 +19,7 @@ public class InterfaceControler {
     		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
     			
     			if (oldValue.intValue() > newValue.intValue()) {
+    				
     				for (int i = hud.getHearts().size()-1 ; i >= 0 ; i--) 
     					if (hud.getHearts().get(i).getFull()) {
     						hud.getHearts().get(i).setEmpty();
@@ -87,11 +88,16 @@ public class InterfaceControler {
     		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
     			
     			if (oldValue.intValue() > newValue.intValue()) {
-    				for (int i = hud.getMoney().size()-1 ; i >= 0 ; i--) 
-    					if (hud.getMoney().get(i).getFull()) {
-    						hud.getMoney().get(i).setEmpty();
-    						break;
-    					}
+    				
+    				int difference = oldValue.intValue() - newValue.intValue();
+    				while (difference > 0) {
+	    				for (int i = hud.getMoney().size()-1 ; i >= 0 ; i--) 
+	    					if (hud.getMoney().get(i).getFull()) {
+	    						hud.getMoney().get(i).setEmpty();
+	    						break;
+	    					}
+	    				difference--;
+    				}
     			}
     			
     			else {

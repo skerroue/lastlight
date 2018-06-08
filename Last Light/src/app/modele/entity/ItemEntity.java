@@ -12,48 +12,69 @@ import app.modele.weapon.Pistol;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public class ItemEntity extends InanimatedEntity {
+	
+	private int oldValue;
 
-	public ItemEntity(String id, int x, int y) {
-		super(id, x, y);
+	public ItemEntity(String id, int x, int y, String dialog) {
+		super(id, x, y, dialog);
 	}
 	
 	// Dumb af cette methode mais est construite dans l'idï¿½e oï¿½ une arme spawnera une et une seule fois dans le jeu
-	public void interact(Player p) {
+	public boolean interact(Player p) {
+		boolean hasInteracted = false;
+		
+		System.out.println("ok");
+		
 		switch (this.id) {
 		case "lamp" :
 			p.getWeapons().add(new Lamp(1, 1));
 			this.die();
+			hasInteracted = true;
 			break;
 		case "pistol" :
 			p.getWeapons().add(new Pistol(1, 1));
 			this.die();
+			hasInteracted = true;
 			break;
 		case "soda" :
 			if (p.getPotion().getValue() < 3) {
 				p.earnPotion();
 				this.die();
 			}
+			hasInteracted = true;
 			break;
-		default :
+		case "dispenser" :
+			if (p.getPotion().getValue() < 3 && p.buyPotion())
+				this.dialog = "Vous avez acheté une potion";
+			else 
+				this.dialog = "Vous n'avez pas assez d'argent ou pas assez de place";
+			hasInteracted = true;
+		case "dispenserTop" :
+			hasInteracted = true;
+ 		default :
 			break;
 		}
 		
-		try {
-			
-			File f = new File("src/map/takenItems.txt");
-			FileWriter fw = new FileWriter(f, true);
-			BufferedWriter bw = new BufferedWriter(fw);
-			
-			bw.write(Game.getMapId() + "," + this.id.charAt(0) + "\n");
+		if (!this.id.equals("dispenser")) {
+			try {
 				
-			bw.close();
-			fw.close();
-			
-		} catch (FileNotFoundException e) {
-			System.out.println("takenItems : Fichier introuvable");
-		} catch (IOException e) {
-			System.out.println("takenItems : Erreur de lecture");
+				File f = new File("src/map/takenItems.txt");
+				FileWriter fw = new FileWriter(f, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				
+				bw.write(Game.getMapId() + "," + this.id.charAt(0) + "\n");
+					
+				bw.close();
+				fw.close();
+				
+			} catch (FileNotFoundException e) {
+				System.out.println("takenItems : Fichier introuvable");
+			} catch (IOException e) {
+				System.out.println("takenItems : Erreur de lecture");
+			}
 		}
+		
+		return hasInteracted;
 	}
 
 }

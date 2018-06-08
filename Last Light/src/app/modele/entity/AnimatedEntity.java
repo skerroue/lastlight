@@ -160,25 +160,25 @@ public abstract class AnimatedEntity extends Entity {
 			for (AnimatedEntity e : entities)
 	    		if (this.getX().get() == e.getX().get() + 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return e.interact(LEFT, entities);
+	    			return e.push(LEFT, entities);
 			break;
 		case UP :
 			for (AnimatedEntity e : entities)
 	    		if (this.getY().get() == e.getY().get() + 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return e.interact(UP, entities);
+	    			return e.push(UP, entities);
 			break;
 		case RIGHT :
 			for (AnimatedEntity e : entities)
 	    		if (this.getX().get() == e.getX().get() - 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return e.interact(RIGHT, entities);
+	    			return e.push(RIGHT, entities);
 			break;
 		case DOWN :
 			for (AnimatedEntity e : entities)
 	    		if (this.getY().get() == e.getY().get() - 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return e.interact(DOWN, entities);
+	    			return e.push(DOWN, entities);
 			break;
 		default :
 			break;
@@ -191,8 +191,16 @@ public abstract class AnimatedEntity extends Entity {
 		
 	}
 	
-	public boolean interact(int DIRECTION, ObservableList<AnimatedEntity> entities) {
+	public boolean push(int DIRECTION, ObservableList<AnimatedEntity> entities) {
 		return false;
+	}
+	
+	public boolean interact() {
+		return false;
+	}
+	
+	public String getDialog() {
+		return null;
 	}
 	
 	public void resetIsAttacking() {

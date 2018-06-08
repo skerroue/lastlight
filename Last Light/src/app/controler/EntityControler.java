@@ -9,6 +9,7 @@ import app.vue.entity.BulletView;
 import app.vue.entity.EnemyView;
 import app.vue.entity.EntityView;
 import app.vue.entity.InanimatedEntityView;
+import app.vue.entity.NPCView;
 import app.vue.entity.PlayerView;
 import app.vue.entity.RockView;
 import javafx.animation.FadeTransition;
@@ -66,6 +67,8 @@ public class EntityControler {
 						case "rock" :
 							entitiesView.add(new RockView(game.getEntities().get(game.getEntities().size() - 1)));
 							break;
+						case "sprite" :
+							entitiesView.add(new NPCView(game.getEntities().get(game.getEntities().size() - 1)));
 						default :
 							break;
 						}

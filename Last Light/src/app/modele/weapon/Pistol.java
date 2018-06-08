@@ -23,50 +23,15 @@ public class Pistol extends Weapon {
 	@Override
 	public void attack(ObservableList<AnimatedEntity> entities, int orientation, int x, int y) {
 		
-		if (this.bullets.size() < this.magSize)
+		if (this.bullets.size() < this.magSize && this.canShoot())
 			this.addBullet(x, y, orientation);
-		
-		/*
-		switch (orientation) {
-		case LEFT :
-			for (int i = 1 ; i < entities.size() ; i++) {
-	    		if (x <= entities.get(i).getX().get() + 32 && x >= entities.get(i).getX().get() - 32 && 
-	    			y >= entities.get(i).getY().get() - TILE_SIZE && y <= entities.get(i).getY().get() + TILE_SIZE) {
-	    			entities.get(i).loseHP(this.att.get());
-	    		}
-			}
-			break;
-		case UP :
-			for (int i = 1 ; i < entities.size() ; i++)
-	    		if (y <= entities.get(i).getY().get() && y >= entities.get(i).getY().get() - 32  && 
-	    			x >= entities.get(i).getX().get() - TILE_SIZE && x <= entities.get(i).getX().get() + TILE_SIZE)
-	    			entities.get(i).loseHP(this.att.get());
-			break;
-		case RIGHT :
-			for (int i = 1 ; i < entities.size() ; i++) {
-				if (x >= entities.get(i).getX().get() - 32 && x <= entities.get(i).getX().get() + 32 && 
-		    		y >= entities.get(i).getY().get() - TILE_SIZE && y <= entities.get(i).getY().get() + TILE_SIZE)
-					entities.get(i).loseHP(this.att.get());
-			}
-			break;
-		case DOWN :
-			for (int i = 1 ; i < entities.size() ; i++)
-	    		if (y >= entities.get(i).getY().get() && y <= entities.get(i).getY().get() + 32 && 
-	    			x >= entities.get(i).getX().get() - TILE_SIZE && x <= entities.get(i).getX().get() + TILE_SIZE)
-	    			entities.get(i).loseHP(this.att.get());
-			break;
-		default :
-			break;
-			
-		}
-		*/
 		
 	}
 	
 	@Override
 	public void update(ObservableList<AnimatedEntity> entities) {
 		
-		for (Bullet b : bullets) {
+		for (Bullet b : bullets) 
 			if (!b.getIsDead().get()) {
 				b.update();
 				this.hittedEntity = b.isCollidingWith(entities);
@@ -74,8 +39,8 @@ public class Pistol extends Weapon {
 					this.hittedEntity.loseHP(this.att.get());
 					b.die();
 				}
+				
 			}
-		}
 		
 	}
 	
@@ -95,6 +60,17 @@ public class Pistol extends Weapon {
 	@Override
 	public ObservableList<Bullet> getBullets() {
 		return this.bullets;
+	}
+	
+	public void killAllBullets() {
+		for (Bullet b : bullets)
+			b.die();
+	}
+	
+	public boolean canShoot() {
+		if (this.bullets.size() > 0)
+			return this.bullets.get(this.bullets.size()-1).getIsDead().get()?true:false;
+		else return true;
 	}
 	
 	public void addBullet(int x, int y, int orientation) {

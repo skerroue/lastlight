@@ -16,7 +16,7 @@ public class Bullet extends Entity {
 	
 	public void update() {
 		
-		if (this.getX().get() <= 0 || this.getY().get() <= 0 || this.getX().get() >= 800 || this.getY().get() >= 800) 
+		if (this.getX().get() <= 0 || this.getY().get() <= 0 || this.getX().get() >= 768 || this.getY().get() >= 768) 
 			this.die();
 		
 		switch (this.orientation.get()) {

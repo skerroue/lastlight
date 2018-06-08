@@ -73,7 +73,8 @@ public class Player extends AnimatedEntity {
 	}
 	
 	public void reload() {
-		this.weapons.get(this.activeWeaponIndex.get()).reload();
+		if (this.activeWeaponIndex.get() != -1)
+			this.weapons.get(this.activeWeaponIndex.get()).reload();
 	}
 	
 	public ObservableList<Bullet> getBullets() {
@@ -89,7 +90,7 @@ public class Player extends AnimatedEntity {
 	}
 	
 	public String getWeaponName() {
-		if (this.weapons.size() > 0)
+		if (this.weapons.size() > 0  && this.activeWeaponIndex.get() > -1)
 			return this.weapons.get(this.activeWeaponIndex.get()).getId();
 		
 		return "default";
@@ -106,7 +107,18 @@ public class Player extends AnimatedEntity {
 	
 	// Gagne une potion 1 à 1
 	public void earnPotion() {
-		this.potion.set(this.potion.getValue() + 1);
+		if (this.potion.get() < 3)
+			this.potion.set(this.potion.getValue() + 1);
+	}
+	
+	public boolean buyPotion() {
+		if (this.money.get() > 1 && this.potion.get() < 3) {
+			this.earnPotion();
+			this.earnMoney(-2);
+			return true;
+		}
+		else 
+			return false;
 	}
 	
 	// TODO
@@ -128,7 +140,7 @@ public class Player extends AnimatedEntity {
 	
 	public void attack(ObservableList<AnimatedEntity> entities) {
 		
-		if (this.weapons.size() > 0)
+		if (this.weapons.size() > 0  && this.activeWeaponIndex.get() > -1)
 			switch (this.weapons.get(this.activeWeaponIndex.get()).getId()) {
 			case "lamp" :
 				this.isAttacking.set(true);

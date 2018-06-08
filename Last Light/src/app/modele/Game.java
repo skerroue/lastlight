@@ -17,6 +17,7 @@ import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
 import app.modele.entity.InanimatedEntity;
 import app.modele.entity.ItemEntity;
+import app.modele.entity.NPC;
 import app.modele.entity.Player;
 import app.modele.entity.Walker;
 import app.modele.field.Field;
@@ -27,6 +28,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -50,7 +53,6 @@ public class Game {
 	static protected ArrayList<Integer> crossableTiles;
 
 	private Timeline gameloop;
-	private float compteur;
 	private static int[][] fieldsMap;	// contient les indices des fichiers de chaque map
 								// valeurs allant de 1 a ... (0 = pas de map)
 	private static Field map;
@@ -61,22 +63,23 @@ public class Game {
 	
 	private BFS bfs;
 	
+	private StringProperty currentText;
+	
 	public Game() {
 		this.gameloop = new Timeline();
 		this.gameloop.setCycleCount(Timeline.INDEFINITE);
 		this.fieldsMap = readFileMaps();
 		this.crossableTiles = readFileCrossableTiles();
 		this.map = new Field(3, 0, this.fieldsMap[3][0] , 25, 25, crossableTiles);	// coordonnées à modifier
-		this.player = new Player(416, 416, 3, 0, 16, 0, 6, 18);	// coordonnées à modifier
+		this.player = new Player(416, 416, 3, 0, 8, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
 		this.inanimatedEntities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
 		this.entities.add(player);
 		
-		
 		this.bfs = new BFS(player, map);
 		
-		this.compteur = 0;
+		this.currentText = new SimpleStringProperty("");
 		
 		initializeGame();
 	}
@@ -101,11 +104,12 @@ public class Game {
 
 		spawnEntities();
 		
-		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {
+		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {	
 			moveAllEnemies();
 			
 			if (player.getActiveWeaponIndex().get() > -1)
-				player.getWeapons().get(player.getActiveWeaponIndex().get()).update(entities);
+				for (Weapon w : this.player.getWeapons())
+					w.update(entities);
 			
 			for (int k = 0; k < getEntities().size(); k++)
 				if (getEntities().get(k).getIsDead().get()) 
@@ -207,6 +211,10 @@ public class Game {
 		return mapChanged;
 	}
 	
+	public StringProperty getCurrentTextProperty() {
+		return this.currentText;
+	}
+	
 	public void mapChanged() {
 		mapChanged.set(!mapChanged.get());
 	}
@@ -287,18 +295,27 @@ public class Game {
 							break;
 						case 3 :
 							if (!takenItem("lamp", noMap))
-								this.addInanimated(new ItemEntity("lamp", s.nextInt(), s.nextInt()));
+								this.addInanimated(new ItemEntity("lamp", s.nextInt(), s.nextInt(), ""));
 							break;
 						case 4 :
 							if (!takenItem("pistol", noMap))
-								this.addInanimated(new ItemEntity("pistol", s.nextInt(), s.nextInt()));
+								this.addInanimated(new ItemEntity("pistol", s.nextInt(), s.nextInt(), ""));
 							break;
 						case 5 :
 							if (!takenItem("pistol", noMap))
-								this.addInanimated(new ItemEntity("soda", s.nextInt(), s.nextInt()));
+								this.addInanimated(new ItemEntity("soda", s.nextInt(), s.nextInt(), ""));
 							break;
 						case 6 :
 							this.addAnimated("rock", s.nextInt(), s.nextInt());
+							break;
+						case 8 :
+							this.addAnimated("npc", s.nextInt(), s.nextInt());
+							break;
+						case 9 :
+							this.addInanimated(new ItemEntity("dispenser", s.nextInt(), s.nextInt(), "Voulez vous acheter une potion ?"));
+							break;
+						case 10 :
+							this.addInanimated(new ItemEntity("dispenserTop", s.nextInt(), s.nextInt(), ""));
 							break;
 						default :
 							break;
@@ -387,6 +404,9 @@ public class Game {
     	case "rock" :
     		entities.add(new Rock(x, y));
     		break;
+    	case "npc" :
+    		entities.add(new NPC(x, y, 1, 0, 4, 6, 18, "Martin est un fdp"));
+    		break;
      	default :
     		break;
     	}
@@ -404,62 +424,131 @@ public class Game {
     public void movePlayer(KeyCode event) {
 	    
     	if (!this.player.getIsAttacking().get()) {
-		player.setOrientation(event);
-
-		switch (event) {
-		case LEFT :
-			if (player.getX().get() == LEFT_TOP_LIMIT) {
-				if (loadField(LEFT)) {
-					player.setX(RIGHT_BOTTOM_LIMIT);
-					this.mapChanged();
+			player.setOrientation(event);
+	
+			switch (event) {
+			case LEFT :
+				if (player.getX().get() == LEFT_TOP_LIMIT) {
+					if (loadField(LEFT)) {
+						player.setX(RIGHT_BOTTOM_LIMIT);
+						this.mapChanged();
+					}
 				}
+				else 
+					player.moveLeft(entities);
+				break;
+			case UP :
+				if (player.getY().get() == LEFT_TOP_LIMIT) {
+					if (loadField(UP)) {
+						player.setY(RIGHT_BOTTOM_LIMIT);
+						this.mapChanged();
+					}
+				}
+				else 
+					player.moveUp(entities);
+				break;
+			case RIGHT :
+				if (player.getX().get() == RIGHT_BOTTOM_LIMIT) {
+					if (loadField(RIGHT)) {
+						player.setX(LEFT_TOP_LIMIT);
+						this.mapChanged();
+					}
+				}
+				else 
+					player.moveRight(entities);
+				break;
+			case DOWN :
+				if (player.getY().get() == RIGHT_BOTTOM_LIMIT) {
+					if (loadField(DOWN)) {
+						player.setY(LEFT_TOP_LIMIT);
+						this.mapChanged();
+					}
+				}
+				else 
+					player.moveDown(entities);
+				break;
+				default:
+					break;
 			}
-			else 
-				player.moveLeft(entities);
+	
+			this.bfs.lancerBFS();
+		
+    	}
+	    
+    }
+    
+    public boolean playerInteraction() {
+    	boolean hasInteracted = false;
+    	String newText = "";
+    	
+    	switch (this.player.getOrientation().get()) {
+		case LEFT :
+			for (AnimatedEntity e : entities)
+	    		if (this.player.getX().get() == e.getX().get() + 32 && 
+	    			this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
+	    			hasInteracted = e.interact();
+	    			this.currentText.set(e.getDialog());
+	    		}
+			for (InanimatedEntity e : inanimatedEntities)
+	    		if (this.player.getX().get() == e.getX().get() + 32 && 
+	    			this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
+	    			hasInteracted = e.interact(this.player);
+	    			this.currentText.set(e.getDialog());
+	    		}
 			break;
 		case UP :
-			if (player.getY().get() == LEFT_TOP_LIMIT) {
-				if (loadField(UP)) {
-					player.setY(RIGHT_BOTTOM_LIMIT);
-					this.mapChanged();
-				}
-			}
-			else 
-				player.moveUp(entities);
+			for (AnimatedEntity e : entities)
+	    		if (this.player.getY().get() == e.getY().get() + 32 && 
+	    			this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
+	    			hasInteracted = e.interact();
+	    			this.currentText.set(e.getDialog());
+	    		}
+			for (InanimatedEntity e : inanimatedEntities)
+	    		if (this.player.getY().get() == e.getY().get() + 32 && 
+	    			this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
+	    			hasInteracted = e.interact(this.player);
+	    			this.currentText.set(e.getDialog());
+	    		}
 			break;
 		case RIGHT :
-			if (player.getX().get() == RIGHT_BOTTOM_LIMIT) {
-				if (loadField(RIGHT)) {
-					player.setX(LEFT_TOP_LIMIT);
-					this.mapChanged();
+			for (AnimatedEntity e : entities)
+				if (this.player.getX().get() == e.getX().get() - 32 && 
+    				this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
+					hasInteracted = e.interact();
+					this.currentText.set(e.getDialog());
 				}
-			}
-			else 
-				player.moveRight(entities);
+			for (InanimatedEntity e : inanimatedEntities)
+				if (this.player.getX().get() == e.getX().get() - 32 && 
+    				this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
+					hasInteracted = e.interact(this.player);
+					this.currentText.set(e.getDialog());
+				}
 			break;
 		case DOWN :
-			if (player.getY().get() == RIGHT_BOTTOM_LIMIT) {
-				if (loadField(DOWN)) {
-					player.setY(LEFT_TOP_LIMIT);
-					this.mapChanged();
+			for (AnimatedEntity e : entities)
+				if (this.player.getY().get() == e.getY().get() - 32 && 
+    				this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
+					hasInteracted = e.interact();
+					this.currentText.set(e.getDialog());
 				}
-			}
-			else 
-				player.moveDown(entities);
+			for (InanimatedEntity e : inanimatedEntities)
+				if (this.player.getY().get() == e.getY().get() - 32 && 
+    				this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
+					hasInteracted = e.interact(this.player);
+					this.currentText.set(e.getDialog());
+				}
 			break;
-			default:
-				break;
+		default :
+			break;
 		}
-
-		this.bfs.lancerBFS();
-		
-	}
-	    
+    	
+    	return hasInteracted;
+    	
     }
     
     public void moveAllEnemies() {
     	for (int i = 1 ; i < entities.size() ; i++) 
-    		if (entities.get(i).getId() != "rock")
+    		if (entities.get(i).getId() != "rock" && entities.get(i).getId() != "sprite")
     			moveEnemy(entities.get(i));
     }
     

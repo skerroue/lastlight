@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -56,9 +57,13 @@ public class Controler implements Initializable {
     private Game game;
     
     @FXML
-    private Pane interactPane;
+    private Pane dialogPane;
+    
     @FXML
-    private Label discussionLabel;
+    private ImageView dialogBackground;
+    
+    @FXML
+    private Label dialogContainer;
     
     public Controler() {	
     	
@@ -81,6 +86,8 @@ public class Controler implements Initializable {
 		
 		// Liaison des entitiyView avec les entites du modele
 		EntityControler.initializeEntities(entityContainer, game, playerView, entitiesView);
+		
+		DialogControler.initializeDialogContainer(dialogPane, game, dialogContainer);
 		
 		// Lancement de la gameloop
 		this.game.playGameLoop();
@@ -124,7 +131,6 @@ public class Controler implements Initializable {
     		this.game.addEnnemy("walker", 384, 384);
     		break;
     	case F :
-    		this.game.getPlayer().interact(game.getInanimatedEntities());
     		break;
     	case D :
     		this.game.getPlayer().loseHP(1);
@@ -135,7 +141,12 @@ public class Controler implements Initializable {
     		this.game.getPlayer().usePotion();
     		break;
     	case SPACE :
-    		this.game.getPlayer().attack(game.getEntities());
+    		this.game.getPlayer().interact(game.getInanimatedEntities());
+    		if (!this.game.playerInteraction())
+    			this.game.getPlayer().attack(game.getEntities());
+    		else
+    			if (!this.dialogContainer.getText().equals(null) || !this.dialogContainer.getText().equals(""))
+    				this.showText();
     		break;
     	case ESCAPE:
     		showPauseMenu();
@@ -147,8 +158,7 @@ public class Controler implements Initializable {
     		this.game.getPlayer().reload();
     		break;
     	case M :
-    		changeText("Malcom est absent ce secheur !");
-    		showText();
+    		this.game.getPlayer().earnMoney(1);
     		break;
 		default:
 			break;
@@ -201,18 +211,15 @@ public class Controler implements Initializable {
     @FXML
     void closeText(KeyEvent event) {
     	if (event.getCode() == KeyCode.SPACE) {
-    		this.interactPane.setVisible(false);
+    		this.dialogPane.setVisible(false);
         	this.game.playGameLoop();
     	}
-    }
+    }	
     
     private void showText() {
-    	this.interactPane.setVisible(true);
+    	this.dialogPane.setVisible(true);
     	this.game.pauseGameLoop();
-    	this.interactPane.requestFocus();
+    	this.dialogPane.requestFocus();
     }
-    
-    private void changeText(String newLabel) {
-    	this.discussionLabel.setText(newLabel);
-    }
+    	
 }

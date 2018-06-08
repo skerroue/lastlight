@@ -8,7 +8,7 @@ public class Rock extends AnimatedEntity {
 		super("rock", x, y, 1, 0, 4, 1, 1);
 	}
 	
-	public boolean interact(int DIRECTION, ObservableList<AnimatedEntity> entities) {
+	public boolean push(int DIRECTION, ObservableList<AnimatedEntity> entities) {
 		
 		switch (DIRECTION) {
 		case LEFT :
