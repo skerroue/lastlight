@@ -48,7 +48,7 @@
                   <Image url="@../../img/textbox.png" />
                </image>
             </ImageView>
-            <Label fx:id="discussionLabel" alignment="TOP_LEFT" layoutX="30.0" layoutY="390.0" prefHeight="83.0" prefWidth="450.0" text="blablabla" textFill="WHITE">
+            <Label fx:id="discussionLabel" alignment="TOP_LEFT" ellipsisString="" layoutX="30.0" layoutY="390.0" maxHeight="83.0" maxWidth="450.0" minHeight="83.0" minWidth="450.0" prefHeight="83.0" prefWidth="450.0" text="blablabla" textFill="WHITE">
                <font>
                   <Font name="VCR OSD Mono" size="15.0" />
                </font>
