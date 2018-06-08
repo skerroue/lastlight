@@ -314,9 +314,6 @@ public class Game {
 						case 9 :
 							this.addInanimated(new ItemEntity("dispenser", s.nextInt(), s.nextInt(), "Voulez vous acheter une potion ?"));
 							break;
-						case 10 :
-							this.addInanimated(new ItemEntity("dispenserTop", s.nextInt(), s.nextInt(), ""));
-							break;
 						default :
 							break;
 						}
@@ -394,6 +391,9 @@ public class Game {
     
     public void addInanimated(InanimatedEntity i) {
     	inanimatedEntities.add(i);
+    	
+    	if (i.getId().equals("dispenser"))
+    		inanimatedEntities.add(new ItemEntity("dispenserTop", (int)i.getX().get(), (int)i.getY().get()-32, ""));
     }
     
     public void addAnimated(String type, int x, int y) {
@@ -435,7 +435,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveLeft(entities);
+					player.moveLeft(entities, inanimatedEntities);
 				break;
 			case UP :
 				if (player.getY().get() == LEFT_TOP_LIMIT) {
@@ -445,7 +445,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveUp(entities);
+					player.moveUp(entities, inanimatedEntities);
 				break;
 			case RIGHT :
 				if (player.getX().get() == RIGHT_BOTTOM_LIMIT) {
@@ -455,7 +455,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveRight(entities);
+					player.moveRight(entities, inanimatedEntities);
 				break;
 			case DOWN :
 				if (player.getY().get() == RIGHT_BOTTOM_LIMIT) {
@@ -465,7 +465,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveDown(entities);
+					player.moveDown(entities, inanimatedEntities);
 				break;
 				default:
 					break;
@@ -557,16 +557,16 @@ public class Game {
     	Tile enemyAt = this.map.getNextTile(e.getIndiceY(), e.getIndiceX());
     	
     	if (temp.getI() == enemyAt.getI() && temp.getJ() < enemyAt.getJ()) {
-    		e.moveLeft(entities);
+    		e.moveLeft(entities, inanimatedEntities);
     	}
     	if (temp.getI() < enemyAt.getI() && temp.getJ() == enemyAt.getJ()) {
-    		e.moveUp(entities);
+    		e.moveUp(entities, inanimatedEntities);
     	}
     	if (temp.getI() == enemyAt.getI() && temp.getJ() > enemyAt.getJ()) {
-    		e.moveRight(entities);
+    		e.moveRight(entities, inanimatedEntities);
     	}
     	if (temp.getI() > enemyAt.getI() && temp.getJ() == enemyAt.getJ()) {
-    		e.moveDown(entities);
+    		e.moveDown(entities, inanimatedEntities);
     	}
     }
 	
