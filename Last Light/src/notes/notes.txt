@@ -1,8 +1,2 @@
 - Contournement des obstacles par les ennemis
-- Interactions avec les entités :
-	- Un distributeur pour acheter une potion
-	- Un PNJ pour lui parler
-	- Un bouton pour appuyer dessus
-
-- Ajouter des ennemis volants et attaquant à distance :
-	- D'abord arreter d'instancier la classe Enemy, faire une classe rodeur et une classe rodeur volant
+- Ajouter des ennemis volants et attaquant à distance
