@@ -1,6 +1,6 @@
 package app.modele;
 
-import java.io.BufferedReader;
+import java.io.BufferedReader; 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 import app.modele.BFS.BFS;
 import app.modele.entity.AnimatedEntity;
+import app.modele.entity.Button;
 import app.modele.entity.Rock;
 import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
@@ -311,6 +312,11 @@ public class Game {
 						case 6 :
 							this.addAnimated("rock", s.nextInt(), s.nextInt());
 							break;
+						case 7 :
+							InanimatedEntity ent = new ItemEntity("door", 512, 512, "");
+							this.addInanimated(ent);
+							this.addInanimated(new Button("button", s.nextInt(), s.nextInt(), "", ent));
+							break;
 						case 8 :
 							this.addAnimated("npc", s.nextInt(), s.nextInt());
 							break;
@@ -548,21 +554,22 @@ public class Game {
     }
     
     public void moveEnemy(AnimatedEntity e) {
-    	Tile temp = this.bfs.searchWay(e);
+    	Tile nextTile = this.bfs.searchWay(e);
     	Tile enemyAt = this.map.getNextTile(e.getIndiceY(), e.getIndiceX());
     	
-    	if (temp.getI() == enemyAt.getI() && temp.getJ() < enemyAt.getJ()) {
+    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) {
     		e.moveLeft(entities, inanimatedEntities);
     	}
-    	if (temp.getI() < enemyAt.getI() && temp.getJ() == enemyAt.getJ()) {
+    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) {
     		e.moveUp(entities, inanimatedEntities);
     	}
-    	if (temp.getI() == enemyAt.getI() && temp.getJ() > enemyAt.getJ()) {
+    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) {
     		e.moveRight(entities, inanimatedEntities);
     	}
-    	if (temp.getI() > enemyAt.getI() && temp.getJ() == enemyAt.getJ()) {
+    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) {
     		e.moveDown(entities, inanimatedEntities);
     	}
+    	
     }
 	
 }

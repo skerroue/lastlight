@@ -68,4 +68,30 @@ public class Bullet extends Entity {
 		return null;
 	}
 	
+	public AnimatedEntity isCollidingWithPlayer(ObservableList<AnimatedEntity> entities) {
+		
+		switch (this.orientation.get()) {
+		case LEFT :
+			if (entities.get(0).getX().get() == this.getX().get() - 32 && entities.get(0).getY().get() >= this.getY().get() - 32 && entities.get(0).getY().get() <= this.getY().get() + 32)
+				return entities.get(0);
+			break;
+		case UP :
+			if (entities.get(0).getY().get() == this.getY().get() - 32 && entities.get(0).getX().get() >= this.getX().get() - 32 && entities.get(0).getX().get() <= this.getX().get() + 32)
+				return entities.get(0);
+			break;
+		case RIGHT :
+			if (entities.get(0).getX().get() == this.getX().get() + 32 && entities.get(0).getY().get() >= this.getY().get() - 32 && entities.get(0).getY().get() <= this.getY().get() + 32)
+				return entities.get(0);
+			break;
+		case DOWN :
+			if (entities.get(0).getY().get() == this.getY().get() + 32 && entities.get(0).getX().get() >= this.getX().get() - 32 && entities.get(0).getX().get() <= this.getX().get() + 32)
+				return entities.get(0);
+			break;
+		default :
+			break;
+		}
+		
+		return null;
+	}
+	
 }

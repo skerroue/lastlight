@@ -229,6 +229,10 @@ public abstract class AnimatedEntity extends Entity {
 		return null;
 	}
 	
+	public ObservableList<Bullet> getBullets() {
+		return null;
+	}
+	
 	public void resetIsAttacking() {
 		this.isAttacking.set(false);
 	}

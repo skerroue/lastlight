@@ -29,6 +29,7 @@ public class BFS {
 	public void lancerBFS() {
 		int x = player.getIndiceX();
 		int y = player.getIndiceY();
+		Tile player = field.getNextTile(y, x);
 		
 		this.parents.clear();
 		this.queue.clear();
@@ -55,6 +56,14 @@ public class BFS {
 				this.adjTiles.add(field.getNextTile(y+1, x));
 			}
 			
+			/*
+			for (Tile t : adjTiles) {
+				if (t.isCrossable() && this.parents.putIfAbsent(t, temp) == null) {
+					this.queue.add(t);
+				}
+			}
+			*/
+			
 			for (int i = 0 ; i < adjTiles.size() ; i++) {
 				
 				if (!this.parents.containsKey(adjTiles.get(i))) {
@@ -63,6 +72,7 @@ public class BFS {
 				}
 				
 			}
+			
 			
 			this.adjTiles.clear();
 		}

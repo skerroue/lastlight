@@ -47,13 +47,13 @@ public class ItemEntity extends InanimatedEntity {
 			else 
 				this.dialog = "Vous n'avez pas assez d'argent ou pas assez de place";
 			hasInteracted = true;
-		case "dispenserTop" :
-			hasInteracted = true;
+			break;
  		default :
+ 			hasInteracted = true;
 			break;
 		}
 		
-		if (!this.id.equals("dispenser")) {
+		if (!this.id.equals("dispenser") && !this.id.equals("button")) {
 			try {
 				
 				File f = new File("src/map/takenItems.txt");

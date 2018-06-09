@@ -1,6 +1,6 @@
 package app.controler;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;  
 
 import app.modele.Game;
 import app.modele.entity.Entity;
@@ -15,6 +15,7 @@ import app.vue.entity.RockView;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.scene.layout.Pane;
@@ -23,19 +24,19 @@ import javafx.util.Duration;
 
 public class EntityControler {
 	
-	private static FadeTransition enemyDisappearance;
+	private static FadeTransition entityDisappearance;
 	private static FadeTransition attackAnimation;
 	private static boolean attackAnimationActive = false;
 	
     public static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<EntityView> entitiesView) {
     	
-    	enemyDisappearance = new FadeTransition();
-    	enemyDisappearance.setFromValue(1.0);
- 		enemyDisappearance.setToValue(0.0);
- 		enemyDisappearance.setDuration(Duration.seconds(0.05));
- 		enemyDisappearance.setOnFinished(event -> {
-			entitiesView.remove(enemyDisappearance.getNode());
-			enemyDisappearance.setNode(null);
+    	entityDisappearance = new FadeTransition();
+    	entityDisappearance.setFromValue(1.0);
+ 		entityDisappearance.setToValue(0.0);
+ 		entityDisappearance.setDuration(Duration.seconds(0.05));
+ 		entityDisappearance.setOnFinished(event -> {
+			entitiesView.remove(entityDisappearance.getNode());
+			entityDisappearance.setNode(null);
 		});
  		
  		attackAnimation = new FadeTransition();
@@ -110,21 +111,6 @@ public class EntityControler {
     		
     	});
     	
-    	/*
-    	bullets.getBulletsNodes().addListener(new ListChangeListener<Circle>() {
-
-			@Override
-			public void onChanged(Change c) {
-				
-				while (c.next()) 
-					if (c.wasAdded()) 
-						entityContainer.getChildren().add(bullets.getBulletsNodes().get(bullets.getBulletsNodes().size()-1));
-					
-			}
-    		
-    	});
-    	*/
-    	
     	game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
 
             @Override
@@ -167,26 +153,13 @@ public class EntityControler {
     		for (int i = 0 ; i < entitiesView.size() ; i++)
     			entitiesView.get(i).update();
     		
-    		/*
-    		for (int i = 0 ; i < bullets.getBullets().size() ; i++)
-    			if (bullets.getBullets().get(i).getIsDead().get()) {
-    				game.getPlayer().attack(game.getEntities(), (int)bullets.getBullets().get(i).getX().get(), (int)bullets.getBullets().get(i).getY().get());
-    				entityContainer.getChildren().remove(bullets.getBulletsNodes().get(i));
-    				bullets.getBulletsNodes().remove(i);
-    				bullets.getBullets().remove(i);
-    			}
-    		
-    		for (int i = 0 ; i < bullets.getBulletsNodes().size() ; i++)
-    			bullets.update(entitiesView);
-    		*/
-    		
     		for (int i = 0 ; i < entitiesView.size() ; i++) 
     			if (entitiesView.get(i).getIsDead()) {
-     				enemyDisappearance.setNode(entitiesView.get(i));
+     				entityDisappearance.setNode(entitiesView.get(i));
      				break;
     			}
     		
-    		enemyDisappearance.play();
+    		entityDisappearance.play();
     		
     		if (game.getPlayer().getIsAttacking().get()) 
     			if (!attackAnimationActive) {
