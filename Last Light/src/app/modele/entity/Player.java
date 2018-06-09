@@ -140,19 +140,10 @@ public class Player extends AnimatedEntity {
 	
 	public void attack(ObservableList<AnimatedEntity> entities) {
 		
-		if (this.weapons.size() > 0  && this.activeWeaponIndex.get() > -1)
-			switch (this.weapons.get(this.activeWeaponIndex.get()).getId()) {
-			case "lamp" :
-				this.isAttacking.set(true);
-				this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
-				break;
-			case "pistol" :
-				this.isAttacking.set(true);
-				this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
-				break;
-			default :
-				break;
-			}
+		if (this.weapons.size() > 0  && this.activeWeaponIndex.get() > -1) {
+			this.isAttacking.set(true);
+			this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
+		}
 		
 	}
 	

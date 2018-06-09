@@ -6,6 +6,7 @@ public class Rock extends AnimatedEntity {
 
 	public Rock(int x, int y) {
 		super("rock", x, y, 1, 0, 4, 1, 1);
+		this.isInvicible = true;
 	}
 	
 	public boolean push(int DIRECTION, ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {

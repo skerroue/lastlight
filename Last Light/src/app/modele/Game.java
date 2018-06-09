@@ -23,8 +23,10 @@ import app.modele.entity.Walker;
 import app.modele.field.Field;
 import app.modele.field.Tile;
 import app.modele.weapon.Weapon;
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -53,6 +55,7 @@ public class Game {
 	static protected ArrayList<Integer> crossableTiles;
 
 	private Timeline gameloop;
+	
 	private static int[][] fieldsMap;	// contient les indices des fichiers de chaque map
 								// valeurs allant de 1 a ... (0 = pas de map)
 	private static Field map;
@@ -105,7 +108,7 @@ public class Game {
 		spawnEntities();
 		
 		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {	
-			moveAllEnemies();
+			updateEnemies();
 			
 			if (player.getActiveWeaponIndex().get() > -1)
 				for (Weapon w : this.player.getWeapons())
@@ -291,7 +294,7 @@ public class Game {
 						int nextInt = s.nextInt();
 						switch (nextInt) {
 						case 1 :
-							this.addEnnemy("walker", s.nextInt(), s.nextInt());
+							this.addAnimated("walker", s.nextInt(), s.nextInt());
 							break;
 						case 3 :
 							if (!takenItem("lamp", noMap))
@@ -379,16 +382,6 @@ public class Game {
     	gameloop.play();
     }
     
-    public void addEnnemy(String type, int x, int y) {
-    	switch (type) {
-    	case "walker" :
-    		entities.add(new Walker(x, y, 1, 0, 4, 6, 18));
-    		break;
-    	default :
-    		break;
-    	}
-    }
-    
     public void addInanimated(InanimatedEntity i) {
     	inanimatedEntities.add(i);
     	
@@ -399,7 +392,7 @@ public class Game {
     public void addAnimated(String type, int x, int y) {
     	switch (type) {
     	case "walker" :
-    		entities.add(new Walker(x, y, 1, 0, 4, 6, 18));
+    		entities.add(new Walker(x, y, 1, 1, 4, 6, 18));
     		break;
     	case "rock" :
     		entities.add(new Rock(x, y));
@@ -546,10 +539,12 @@ public class Game {
     	
     }
     
-    public void moveAllEnemies() {
+    public void updateEnemies() {
     	for (int i = 1 ; i < entities.size() ; i++) 
-    		if (entities.get(i).getId() != "rock" && entities.get(i).getId() != "sprite")
+    		if (entities.get(i).getId() != "rock" && entities.get(i).getId() != "sprite") {
     			moveEnemy(entities.get(i));
+    			entities.get(i).attack(entities);
+    		}
     }
     
     public void moveEnemy(AnimatedEntity e) {

@@ -7,6 +7,7 @@ public class NPC extends AnimatedEntity {
 	public NPC(int x, int y, int hp, int att, int v, int nb, int fmax, String dialog) {
 		super("sprite", x, y, hp, att, v, nb, fmax);
 		this.dialog = dialog;
+		this.isInvicible = true;
 	}
 	
 	public boolean interact() {

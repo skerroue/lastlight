@@ -3,12 +3,15 @@ package app.modele.entity;
 import java.util.ArrayList;
 
 import app.modele.Game;
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 
 public abstract class AnimatedEntity extends Entity {
 	
@@ -19,6 +22,9 @@ public abstract class AnimatedEntity extends Entity {
 	protected int nbFrame;
 	protected int frameMax;
 	
+	private Animation invicibilityFrame;
+	protected boolean isInvicible;
+	
 	public AnimatedEntity(String id, int x, int y, int hp, int att, int v, int nb, int fmax) {
 		super(id, x, y);
 		this.hp = new SimpleIntegerProperty(hp);
@@ -28,6 +34,10 @@ public abstract class AnimatedEntity extends Entity {
 		this.frameMax = fmax;
 		
 		this.isAttacking = new SimpleBooleanProperty(false);
+		this.isInvicible = false;
+		
+		this.invicibilityFrame = new PauseTransition(Duration.seconds(3));
+		this.invicibilityFrame.setOnFinished(e -> this.setInvicible(false) );
 	}
 	
 	public boolean moveLeft(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
@@ -227,6 +237,14 @@ public abstract class AnimatedEntity extends Entity {
 		return this.isAttacking;
 	}
 	
+	public void setInvicible(boolean b) {
+		this.isInvicible = b;
+	}
+	
+	public boolean isInvicible() {
+		return this.isInvicible;
+	}
+	
 	public String getId() {
 		return this.id;
 	}
@@ -259,10 +277,13 @@ public abstract class AnimatedEntity extends Entity {
 	}
 	
 	public void loseHP(int a) {
-		if (this.hp.get() - a < 1)
-			this.die();
-		else
+		if (!this.isInvicible) {
 			this.hp.set(this.hp.get() - a);
+			if (this.hp.get() == 0)
+				this.die();
+			this.isInvicible = true;
+			this.invicibilityFrame.play();
+		}
 	}
 
 }

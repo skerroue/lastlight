@@ -127,11 +127,6 @@ public class Controler implements Initializable {
     			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
     		}
     		break;
-    	case S:
-    		this.game.addEnnemy("walker", 384, 384);
-    		break;
-    	case F :
-    		break;
     	case D :
     		this.game.getPlayer().loseHP(1);
     		this.game.getPlayer().earnPotion();
