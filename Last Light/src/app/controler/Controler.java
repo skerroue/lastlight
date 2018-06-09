@@ -148,6 +148,9 @@ public class Controler implements Initializable {
     	case S :
     		this.game.playerUseNecklace();
     		break;
+    	case V :
+    		this.game.playerUseBoots();
+    		break;
 		default:
 			break;
     	}

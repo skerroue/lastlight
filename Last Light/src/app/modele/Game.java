@@ -69,6 +69,7 @@ public class Game {
 	private StringProperty currentText;
 	
 	private PauseTransition necklaceUse;
+	private PauseTransition bootsUse;
 	
 	public Game() {
 		
@@ -83,6 +84,11 @@ public class Game {
 		this.necklaceUse.setOnFinished(e -> {
 			this.player.setNecklaceInactive();
 			map.makeATileUncrossable(NECKLACE_WALL);
+			});
+		this.bootsUse = new PauseTransition(Duration.seconds(0.07));
+		this.bootsUse.setOnFinished(e -> {
+			System.out.println(this.player.getX());
+			this.player.setBootsInactive();
 			});
 		this.currentText = new SimpleStringProperty("");
 		
@@ -118,6 +124,7 @@ public class Game {
 		
 		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {	
 			updateEnemies();
+			player.update();
 			
 			if (player.getActiveWeaponIndex().get() > -1)
 				for (Weapon w : this.player.getWeapons())
@@ -332,6 +339,9 @@ public class Game {
 						case 10 :
 							this.addInanimated("necklace", s.nextInt(), s.nextInt(), noMap);
 							break;
+						case 11 :
+							this.addInanimated("boots", s.nextInt(), s.nextInt(), noMap);
+							break;
 						default : break;
 						}
 					}
@@ -422,6 +432,9 @@ public class Game {
     		inanimatedEntities.add(new Button(type, x, y, "", ent));
     		break;
     	case "necklace" :
+    		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
+    		break;
+    	case "boots" :
     		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
     		break;
     	default : break;
@@ -583,6 +596,14 @@ public class Game {
     		map.makeATileCrossable(NECKLACE_WALL);
     		this.player.setNecklaceActive();
     		this.necklaceUse.play();
+    	}
+    }
+    
+    public void playerUseBoots() {
+    	if (!this.player.bootsIsActive() && this.player.hasBoots()) {
+    		System.out.println(this.player.getX());
+    		this.player.setBootsActive();
+    		this.bootsUse.play();
     	}
     }
     

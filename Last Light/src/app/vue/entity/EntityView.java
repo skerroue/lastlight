@@ -13,8 +13,6 @@ public class EntityView extends ImageView {
 		
 		this.translateXProperty().bind(e.getX());
 		this.translateYProperty().bind(e.getY());
-		
-		//initializeEntity();
 	}
 	
 	public boolean getIsDead() {
@@ -26,21 +24,5 @@ public class EntityView extends ImageView {
 		if (this.entity.getIsDead().get())
 			this.isDead = true;
 	}
-	
-	
-	/*
-	public void initializeEntity() {
-		
-		this.entity.getIsDead().addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				isDead = true;
-			}
-			
-		});
-		
-	}
-	*/
 	
 }

@@ -19,7 +19,8 @@ public class Player extends AnimatedEntity {
 	private IntegerProperty maxMoney;
 	private IntegerProperty money;
 	
-	//private BooleanProperty boots;
+	private BooleanProperty boots;
+	private boolean bootsIsActive;
 	
 	private boolean necklace;
 	private BooleanProperty necklaceIsActive;
@@ -37,7 +38,8 @@ public class Player extends AnimatedEntity {
 		this.maxHP = new SimpleIntegerProperty(3);
 		this.potentialHP = new SimpleIntegerProperty(6);
 		
-		//this.boots = new SimpleBooleanProperty(false);
+		this.boots = new SimpleBooleanProperty(false);
+		this.bootsIsActive = false;
 		this.necklace = false;
 		this.necklaceIsActive = new SimpleBooleanProperty(false);
 		this.weapons = FXCollections.observableArrayList();
@@ -68,7 +70,7 @@ public class Player extends AnimatedEntity {
 		return potentialHP;
 	}
 	
-	public void setNecklage(boolean b) {
+	public void setNecklace(boolean b) {
 		this.necklace = b;
 	}
 	
@@ -86,6 +88,26 @@ public class Player extends AnimatedEntity {
 	
 	public void setNecklaceInactive() {
 		this.necklaceIsActive.set(false);
+	}
+	
+	public void setBoots(boolean b) {
+		this.boots.set(b);
+	}
+	
+	public boolean hasBoots() {
+		return this.boots.get();
+	}
+	
+	public boolean bootsIsActive() {
+		return this.bootsIsActive;
+	}
+	
+	public void setBootsActive() {
+		this.bootsIsActive = true;
+	}
+	
+	public void setBootsInactive() {
+		this.bootsIsActive = false;
 	}
 	
 	public ObservableList<Weapon> getWeapons() {
@@ -163,6 +185,24 @@ public class Player extends AnimatedEntity {
 		if (this.weapons.size() > 0  && this.activeWeaponIndex.get() > -1) {
 			this.isAttacking.set(true);
 			this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
+		}
+		
+	}
+	
+	public void update() {
+		if (this.bootsIsActive) {
+			switch (this.orientation.get()) {
+			case LEFT : x.set(x.get() - 32);
+				break;
+			case UP : y.set(y.get() - 32);
+				break;
+			case RIGHT : x.set(x.get() + 32);
+				break;
+			case DOWN : y.set(y.get() - 32);
+				break;
+			default : break;
+			}
+			
 		}
 		
 	}
