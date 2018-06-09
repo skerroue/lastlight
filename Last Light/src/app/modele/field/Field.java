@@ -99,4 +99,17 @@ public class Field {
     	return img;
     }
 	
+	public void makeATileCrossable(int id) {
+		for (int i = 0 ; i < this.tileField.length ; i++)
+			for (int j = 0 ; j < this.tileField[i].length ; j++)
+				if (this.tileField[i][j].getId() == id)
+					this.tileField[i][j].setCrossable();
+	}
+	
+	public void makeATileUncrossable(int id) {
+		for (int i = 0 ; i < this.tileField.length ; i++)
+			for (int j = 0 ; j < this.tileField[i].length ; j++)
+				if (this.tileField[i][j].getId() == id)
+					this.tileField[i][j].setUncrossable();
+	}
 }

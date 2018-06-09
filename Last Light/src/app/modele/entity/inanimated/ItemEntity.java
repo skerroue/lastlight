@@ -39,6 +39,11 @@ public class ItemEntity extends InanimatedEntity {
 			}
 			hasInteracted = true;
 			break;
+		case "necklace" :
+			p.setNecklage(true);
+			this.die();
+			hasInteracted = true;
+			break;
  		default : break;
 		}
 		

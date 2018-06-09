@@ -29,5 +29,13 @@ public class Tile {
 	public int getJ() {
 		return this.j;
 	}
+	
+	public void setCrossable() {
+		this.isCrossable = true;
+	}
+	
+	public void setUncrossable() {
+		this.isCrossable = false;
+	}
 	 
 }

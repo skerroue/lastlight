@@ -24,6 +24,7 @@ import app.modele.field.Field;
 import app.modele.field.Tile;
 import app.modele.weapon.Weapon;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -49,6 +50,8 @@ public class Game {
 	final static int FILE_MAP_WIDTH = 3;
 	final static int FILE_MAP_HEIGHT = 4;
 	
+	final static int NECKLACE_WALL = 28;
+	
 	static protected ArrayList<Integer> crossableTiles;
 
 	private Timeline gameloop;
@@ -65,6 +68,8 @@ public class Game {
 	
 	private StringProperty currentText;
 	
+	private PauseTransition necklaceUse;
+	
 	public Game() {
 		
 		fieldsMap = readFileMaps();
@@ -74,6 +79,11 @@ public class Game {
 		
 		this.gameloop = new Timeline();
 		this.gameloop.setCycleCount(Timeline.INDEFINITE);
+		this.necklaceUse = new PauseTransition(Duration.seconds(10));
+		this.necklaceUse.setOnFinished(e -> {
+			this.player.setNecklaceInactive();
+			map.makeATileUncrossable(NECKLACE_WALL);
+			});
 		this.currentText = new SimpleStringProperty("");
 		
 		this.entities = FXCollections.observableArrayList();
@@ -319,6 +329,9 @@ public class Game {
 						case 9 :
 							this.addInanimated("dispenser", s.nextInt(), s.nextInt(), noMap);
 							break;
+						case 10 :
+							this.addInanimated("necklace", s.nextInt(), s.nextInt(), noMap);
+							break;
 						default : break;
 						}
 					}
@@ -407,6 +420,9 @@ public class Game {
     		InanimatedEntity ent = new ItemEntity("door", 512, 512, "");
     		inanimatedEntities.add(ent);
     		inanimatedEntities.add(new Button(type, x, y, "", ent));
+    		break;
+    	case "necklace" :
+    		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
     		break;
     	default : break;
     	}
@@ -560,6 +576,14 @@ public class Game {
     	
     	return hasInteracted;
     	
+    }
+    
+    public void playerUseNecklace() {
+    	if (!this.player.necklaceIsActive().get() && this.player.hasNecklace()) {
+    		map.makeATileCrossable(NECKLACE_WALL);
+    		this.player.setNecklaceActive();
+    		this.necklaceUse.play();
+    	}
     }
     
     public void updateEnemies() {

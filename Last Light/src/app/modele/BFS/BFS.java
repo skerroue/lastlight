@@ -73,6 +73,7 @@ public class BFS {
 			}
 			
 			
+			
 			this.adjTiles.clear();
 		}
 		

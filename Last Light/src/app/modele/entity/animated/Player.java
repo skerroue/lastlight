@@ -1,7 +1,9 @@
 package app.modele.entity.animated;
 
 import app.modele.weapon.Weapon;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,7 +20,9 @@ public class Player extends AnimatedEntity {
 	private IntegerProperty money;
 	
 	//private BooleanProperty boots;
-	//private BooleanProperty necklace;
+	
+	private boolean necklace;
+	private BooleanProperty necklaceIsActive;
 	
 	private ObservableList<Weapon> weapons;
 	private IntegerProperty activeWeaponIndex;
@@ -34,7 +38,8 @@ public class Player extends AnimatedEntity {
 		this.potentialHP = new SimpleIntegerProperty(6);
 		
 		//this.boots = new SimpleBooleanProperty(false);
-		//this.necklace = new SimpleBooleanProperty(false);
+		this.necklace = false;
+		this.necklaceIsActive = new SimpleBooleanProperty(false);
 		this.weapons = FXCollections.observableArrayList();
 		this.activeWeaponIndex = new SimpleIntegerProperty(-1);
 	}
@@ -61,6 +66,26 @@ public class Player extends AnimatedEntity {
 	
 	public IntegerProperty getPotentialHP() {
 		return potentialHP;
+	}
+	
+	public void setNecklage(boolean b) {
+		this.necklace = b;
+	}
+	
+	public boolean hasNecklace() {
+		return this.necklace;
+	}
+	
+	public BooleanProperty necklaceIsActive() {
+		return this.necklaceIsActive;
+	}
+	
+	public void setNecklaceActive() {
+		this.necklaceIsActive.set(true);
+	}
+	
+	public void setNecklaceInactive() {
+		this.necklaceIsActive.set(false);
 	}
 	
 	public ObservableList<Weapon> getWeapons() {

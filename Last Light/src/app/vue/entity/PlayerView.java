@@ -1,6 +1,6 @@
 package app.vue.entity;
  
-import app.modele.entity.animated.Bullet;
+import app.modele.entity.animated.Bullet; 
 import app.modele.entity.animated.Player;
 import app.modele.weapon.Weapon;
 import javafx.beans.value.ChangeListener;
@@ -68,6 +68,18 @@ public class PlayerView extends AnimatedEntityView {
 					if (c.wasAdded())
 						if (player.getWeapons().get(player.getWeapons().size()-1).getId().equals("taser"))
 							initializeBullets();
+			}
+			
+		});
+		
+		this.player.necklaceIsActive().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue)
+					setOpacity(0.5);
+				else
+					setOpacity(1);
 			}
 			
 		});
