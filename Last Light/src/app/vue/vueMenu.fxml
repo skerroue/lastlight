@@ -12,18 +12,18 @@
             <Image url="@../../img/menu-background.jpeg" />
          </image>
       </ImageView>
-      <Button fx:id="playButton" layoutX="200.0" layoutY="150.0" mnemonicParsing="false" onAction="#play" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: transparent;">
+      <Button fx:id="playButton" layoutX="150.0" layoutY="200.0" mnemonicParsing="false" onAction="#play" prefHeight="52.0" prefWidth="205.0" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fitHeight="92.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="52.0" fitWidth="205.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../img/play-button.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="quitButton" layoutX="200.0" layoutY="220.0" mnemonicParsing="false" onAction="#quit" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: transparent;">
+      <Button fx:id="quitButton" layoutX="150.0" layoutY="300.0" mnemonicParsing="false" onAction="#quit" prefHeight="52.0" prefWidth="205.0" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fitHeight="92.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="52.0" fitWidth="205.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../img/quit-button.png" />
                </image>

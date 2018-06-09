@@ -3,16 +3,18 @@ package app.modele.entity;
 import java.util.ArrayList;
 
 import app.modele.Game;
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 
 public abstract class AnimatedEntity extends Entity {
 	
-	protected String id;
 	protected int attaque;
 	protected IntegerProperty hp;
 	protected BooleanProperty isAttacking;
@@ -20,9 +22,11 @@ public abstract class AnimatedEntity extends Entity {
 	protected int nbFrame;
 	protected int frameMax;
 	
-	public AnimatedEntity(int x, int y, int hp, int att, int v, int nb, int fmax) {
-		this.x = new SimpleIntegerProperty(x);
-		this.y = new SimpleIntegerProperty(y);
+	private Animation invicibilityFrame;
+	protected boolean isInvicible;
+	
+	public AnimatedEntity(String id, int x, int y, int hp, int att, int v, int nb, int fmax) {
+		super(id, x, y);
 		this.hp = new SimpleIntegerProperty(hp);
 		this.attaque = att;
 		this.velocity = v;
@@ -30,45 +34,55 @@ public abstract class AnimatedEntity extends Entity {
 		this.frameMax = fmax;
 		
 		this.isAttacking = new SimpleBooleanProperty(false);
-	}
-	
-	@Override
-	public void update(ObservableList<AnimatedEntity> entities) {
-		// TODO Auto-generated method stub
+		this.isInvicible = false;
 		
+		this.invicibilityFrame = new PauseTransition(Duration.seconds(3));
+		this.invicibilityFrame.setOnFinished(e -> this.setInvicible(false) );
 	}
 	
-	public void moveLeft(ObservableList<AnimatedEntity> entities) {
+	public boolean moveLeft(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
 		this.setOrientation(KeyCode.LEFT);
-		if (canMove(entities))
+		if (canMove(entities, inanimatedEntities)) {
 			x.set(x.get() - velocity);
+			return true;
+		}
+		return false;
 	}
 	
-	public void moveRight(ObservableList<AnimatedEntity> entities) {
+	public boolean moveRight(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
 		this.setOrientation(KeyCode.RIGHT);
-		if (canMove(entities))
+		if (canMove(entities, inanimatedEntities)) {
 			x.set(x.get() + velocity);
+			return true;
+		}
+		return false;
 	}
 
-	public void moveDown(ObservableList<AnimatedEntity> entities) {
+	public boolean moveDown(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
 		this.setOrientation(KeyCode.DOWN);
-		if (canMove(entities))
+		if (canMove(entities, inanimatedEntities)) {
 			y.set(y.get() + velocity);
+			return true;
+		}
+		return false;
 	}
 	
-	public void moveUp(ObservableList<AnimatedEntity> entities) {
+	public boolean moveUp(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
 		this.setOrientation(KeyCode.UP);
-		if (canMove(entities))
+		if (canMove(entities, inanimatedEntities)) {
 			y.set(y.get() - velocity);
+			return true;
+		}
+		return false;
 	}
 	
-	public boolean canMove(ObservableList<AnimatedEntity> entities) {
+	public boolean canMove(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
 		boolean canMove = false;
 		boolean emptyTile = true;
 		
 		switch (this.orientation.getValue()) {
 		case LEFT :
-			emptyTile = tileIsEmpty(entities, LEFT);
+			emptyTile = tileIsEmpty(entities, inanimatedEntities, LEFT);
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
@@ -81,7 +95,7 @@ public abstract class AnimatedEntity extends Entity {
 					canMove = true;
 			break;
 		case UP :
-			emptyTile = tileIsEmpty(entities, UP);
+			emptyTile = tileIsEmpty(entities, inanimatedEntities, UP);
 			if (y.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0 && y.get() > 0) {
@@ -94,7 +108,7 @@ public abstract class AnimatedEntity extends Entity {
 					canMove = true;
 			break;
 		case DOWN :
-			emptyTile = tileIsEmpty(entities, DOWN);
+			emptyTile = tileIsEmpty(entities, inanimatedEntities, DOWN);
 			if (y.get() % 32 != 0 && emptyTile) 
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
@@ -107,7 +121,7 @@ public abstract class AnimatedEntity extends Entity {
 					canMove = true;
 			break;
 		case RIGHT :
-			emptyTile = tileIsEmpty(entities, RIGHT);
+			emptyTile = tileIsEmpty(entities, inanimatedEntities, RIGHT);
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
@@ -145,29 +159,49 @@ public abstract class AnimatedEntity extends Entity {
 		}
  	}
 	
-	public boolean tileIsEmpty(ObservableList<AnimatedEntity> entities, int DIRECTION) {
+	public void setOrientation(int n) {
+		this.orientation.set(n);
+	}
+	
+	public boolean tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int DIRECTION) {
     	
 		switch (DIRECTION) {
 		case LEFT :
-			for (Entity e : entities)
+			for (AnimatedEntity e : entities)
+	    		if (this.getX().get() == e.getX().get() + 32 && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
+	    			return e.push(LEFT, entities, inanimatedEntities);
+			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getX().get() == e.getX().get() + 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
 	    			return false;
 			break;
 		case UP :
-			for (Entity e : entities)
+			for (AnimatedEntity e : entities)
+	    		if (this.getY().get() == e.getY().get() + 32 && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
+	    			return e.push(UP, entities, inanimatedEntities);
+			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() == e.getY().get() + 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
 	    			return false;
 			break;
 		case RIGHT :
-			for (Entity e : entities)
+			for (AnimatedEntity e : entities)
+	    		if (this.getX().get() == e.getX().get() - 32 && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
+	    			return e.push(RIGHT, entities, inanimatedEntities);
+			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getX().get() == e.getX().get() - 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
 	    			return false;
 			break;
 		case DOWN :
-			for (Entity e : entities)
+			for (AnimatedEntity e : entities)
+	    		if (this.getY().get() == e.getY().get() - 32 && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
+	    			return e.push(DOWN, entities, inanimatedEntities);
+			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() == e.getY().get() - 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
 	    			return false;
@@ -181,39 +215,18 @@ public abstract class AnimatedEntity extends Entity {
 	
 	public void attack(ObservableList<AnimatedEntity> entities) {
 		
-		this.isAttacking.set(true);
-		
-		switch (this.getOrientation().get()) {
-		case LEFT :
-			for (AnimatedEntity e : entities)
-	    		if (this.getX().get() <= e.getX().get() + 64 && this.getX().get() >= e.getX().get() + 32 && 
-	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			e.loseHP(1);
-			break;
-		case UP :
-			for (AnimatedEntity e : entities)
-	    		if (this.getY().get() <= e.getY().get() + 64 && this.getY().get() >= e.getY().get() + 32 && 
-	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			e.loseHP(1);
-			break;
-		case RIGHT :
-			for (AnimatedEntity e : entities) {
-				if (this.getX().get() >= e.getX().get() - 64 && this.getX().get() <= e.getX().get() - 32 && 
-		    		this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-					e.loseHP(1);
-			}
-			break;
-		case DOWN :
-			for (AnimatedEntity e : entities)
-	    		if (this.getY().get() >= e.getY().get() - 64 && this.getY().get() <= e.getY().get() - 32 && 
-	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			e.loseHP(1);
-			break;
-		default :
-			break;
-			
-		}
-		
+	}
+	
+	public boolean push(int DIRECTION, ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+		return false;
+	}
+	
+	public boolean interact() {
+		return false;
+	}
+	
+	public String getDialog() {
+		return null;
 	}
 	
 	public void resetIsAttacking() {
@@ -224,8 +237,12 @@ public abstract class AnimatedEntity extends Entity {
 		return this.isAttacking;
 	}
 	
-	public IntegerProperty getOrientation() {
-		return this.orientation;
+	public void setInvicible(boolean b) {
+		this.isInvicible = b;
+	}
+	
+	public boolean isInvicible() {
+		return this.isInvicible;
 	}
 	
 	public String getId() {
@@ -260,7 +277,13 @@ public abstract class AnimatedEntity extends Entity {
 	}
 	
 	public void loseHP(int a) {
-		this.hp.set(this.hp.get() - a);
+		if (!this.isInvicible) {
+			this.hp.set(this.hp.get() - a);
+			if (this.hp.get() == 0)
+				this.die();
+			this.isInvicible = true;
+			this.invicibilityFrame.play();
+		}
 	}
 
 }

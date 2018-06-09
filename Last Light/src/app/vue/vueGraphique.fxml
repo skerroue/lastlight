@@ -8,14 +8,15 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controler.Controler">
+<Pane maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controler.Controler">
    <children>
       <Pane fx:id="tileContainer" layoutY="50.0" maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0" prefWidth="512.0" />
       <Pane fx:id="entityContainer" focusTraversable="true" layoutY="50.0" maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="512.0" prefWidth="512.0" />
       <Pane fx:id="interfaceContainer" maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0" prefWidth="512.0">
          <children>
             <Rectangle height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="512.0" />
-         </children></Pane>
+         </children>
+      </Pane>
       <Pane fx:id="pausePane" maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0" prefWidth="512.0" visible="false">
          <children>
             <ImageView fitHeight="512.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="true">
@@ -41,16 +42,16 @@
                   </ImageView>
                </graphic></Button>
          </children></Pane>
-      <Pane fx:id="interactPane" onKeyPressed="#closeText" prefHeight="512.0" prefWidth="512.0" visible="false">
+      <Pane fx:id="dialogPane" onKeyPressed="#closeText" prefHeight="512.0" prefWidth="512.0" visible="false">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="512.0" layoutY="362.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="dialogBackground" fitHeight="150.0" fitWidth="512.0" layoutY="362.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../img/textbox.png" />
                </image>
             </ImageView>
-            <Label fx:id="discussionLabel" alignment="TOP_LEFT" ellipsisString="" layoutX="30.0" layoutY="390.0" maxHeight="83.0" maxWidth="450.0" minHeight="83.0" minWidth="450.0" prefHeight="83.0" prefWidth="450.0" text="blablabla" textFill="WHITE">
+            <Label fx:id="dialogContainer" alignment="TOP_LEFT" layoutX="30.0" layoutY="390.0" prefHeight="83.0" prefWidth="450.0" textFill="WHITE">
                <font>
-                  <Font name="VCR OSD Mono" size="15.0" />
+                  <Font size="15.0" />
                </font>
             </Label>
          </children>

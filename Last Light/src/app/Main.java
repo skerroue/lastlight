@@ -5,6 +5,7 @@ import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -26,6 +27,7 @@ public class Main extends Application {
      	primaryStage.setTitle("Last Light");
      	primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
+		primaryStage.getIcons().add(new Image("file:src/img/icon.png"));
 		primaryStage.show();
 
 		} catch (Exception e) {

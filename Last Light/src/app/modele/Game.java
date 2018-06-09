@@ -1,24 +1,37 @@
 package app.modele;
 
-import java.io.BufferedReader; 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import app.modele.BFS.BFS;
 import app.modele.entity.AnimatedEntity;
+import app.modele.entity.Rock;
 import app.modele.entity.Enemy;
 import app.modele.entity.Entity;
+import app.modele.entity.InanimatedEntity;
+import app.modele.entity.ItemEntity;
+import app.modele.entity.NPC;
 import app.modele.entity.Player;
+import app.modele.entity.Walker;
 import app.modele.field.Field;
 import app.modele.field.Tile;
+import app.modele.weapon.Weapon;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -36,61 +49,86 @@ public class Game {
 	final static int LEFT_TOP_LIMIT = 0;
 	final static int RIGHT_BOTTOM_LIMIT = 768;
 	
+	final static int FILE_MAP_WIDTH = 3;
+	final static int FILE_MAP_HEIGHT = 4;
+	
 	static protected ArrayList<Integer> crossableTiles;
 
 	private Timeline gameloop;
-	private float compteur;
-	private int[][] fieldsMap;	// contient les indices des fichiers de chaque map
-								// valeurs allant de 1 à ... (0 = pas de map)
+	
+	private static int[][] fieldsMap;	// contient les indices des fichiers de chaque map
+								// valeurs allant de 1 a ... (0 = pas de map)
 	private static Field map;
 	private Player player;
 	private ObservableList<AnimatedEntity> entities;
+	private ObservableList<InanimatedEntity> inanimatedEntities;
 	private static BooleanProperty mapChanged;
 	
 	private BFS bfs;
+	
+	private StringProperty currentText;
 	
 	public Game() {
 		this.gameloop = new Timeline();
 		this.gameloop.setCycleCount(Timeline.INDEFINITE);
 		this.fieldsMap = readFileMaps();
 		this.crossableTiles = readFileCrossableTiles();
-		this.map = new Field(1, 0, this.fieldsMap[1][0] , 25, 25, crossableTiles);	// coordonnées à modifier
-		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);	// coordonnées à modifier
+		this.map = new Field(3, 0, this.fieldsMap[3][0] , 25, 25, crossableTiles);	// coordonnées à modifier
+		this.player = new Player(416, 416, 3, 0, 8, 0, 6, 18);	// coordonnées à modifier
 		this.entities = FXCollections.observableArrayList();
+		this.inanimatedEntities = FXCollections.observableArrayList();
 		this.mapChanged = new SimpleBooleanProperty(true);
 		this.entities.add(player);
 		
 		this.bfs = new BFS(player, map);
 		
-		this.compteur = 0;
+		this.currentText = new SimpleStringProperty("");
 		
 		initializeGame();
 	}
 	
 	public void initializeGame() {
+		try {
+			
+			File f = new File("src/map/takenItems.txt");
+			FileWriter fw = new FileWriter(f);
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			bw.write("");
+			
+			bw.close();
+			fw.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("takenItems : Fichier introuvable");
+		} catch (IOException e) {
+			System.out.println("takenItems : Erreur de lecture");
+		}
+
 		spawnEntities();
-	
-		KeyFrame compt = new KeyFrame(Duration.seconds(0.017), e -> {
-	           compteur += Duration.seconds(0.017).toMillis();
-
-	           if ((int)this.compteur % ((int)Duration.seconds(0.017).toMillis()*10) == 0) {
-	               this.compteur = 0;
-	               if (player.getIsAttacking().get())
-	                   player.resetIsAttacking();
-	           }
-
+		
+		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {	
+			updateEnemies();
+			
+			if (player.getActiveWeaponIndex().get() > -1)
+				for (Weapon w : this.player.getWeapons())
+					w.update(entities);
+			
+			for (int k = 0; k < getEntities().size(); k++)
+				if (getEntities().get(k).getIsDead().get()) 
+					getEntities().remove(getEntities().get(k));
+			
+			for (int i = 0 ; i < getInanimatedEntities().size() ; i++)
+				if (getInanimatedEntities().get(i).getIsDead().get())
+					getInanimatedEntities().remove(getInanimatedEntities().get(i));
 		});
 		
-		KeyFrame moveEnemies = new KeyFrame(Duration.seconds(0.035), e -> {
-			moveAllEnemies();
-		});
+		gameloop.getKeyFrames().add(updateEntities);
 		
-		gameloop.getKeyFrames().add(moveEnemies);
-		gameloop.getKeyFrames().add(compt);
 	}
 	
 	private int[][] readFileMaps() { 
-		int[][] fieldsMap = new int [2][2];	// taille à modifier
+		int[][] fieldsMap = new int [FILE_MAP_HEIGHT][FILE_MAP_WIDTH];	// taille à modifier
 		        
         try {
         	
@@ -101,8 +139,8 @@ public class Game {
 			
 			try {
 				
-				for (int i = 0; i < 2; i++) {
-					for (int j = 0; j < 2; j++) {	// taille à modifier
+				for (int i = 0; i < FILE_MAP_HEIGHT; i++) {
+					for (int j = 0; j < FILE_MAP_WIDTH; j++) {	// taille à modifier
 						fieldsMap[i][j] = s.nextInt();
 					}
 				}
@@ -156,6 +194,10 @@ public class Game {
 		return map;
 	}
 	
+	public static int getMapId() {
+		return fieldsMap[map.getI()][map.getJ()];
+	}
+	
 	public Player getPlayer() {
 		return this.player;
 	}
@@ -164,8 +206,16 @@ public class Game {
 		return this.entities;
 	}
 	
+	public ObservableList<InanimatedEntity> getInanimatedEntities() {
+		return this.inanimatedEntities;
+	}
+	
 	public static BooleanProperty getMapChanged() {
 		return mapChanged;
+	}
+	
+	public StringProperty getCurrentTextProperty() {
+		return this.currentText;
 	}
 	
 	public void mapChanged() {
@@ -192,13 +242,13 @@ public class Game {
 			}
 			break;
 		case RIGHT :
-			if (j < 1 && this.fieldsMap[i][j + 1] != 0) {
+			if (j < FILE_MAP_WIDTH-1 && this.fieldsMap[i][j + 1] != 0) {
 				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25, crossableTiles);
 				changing = true;
 			}
 			break;
 		case DOWN :
-			if (i < 1 && this.fieldsMap[i + 1][j] != 0) {
+			if (i < FILE_MAP_HEIGHT-1 && this.fieldsMap[i + 1][j] != 0) {
 				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25, crossableTiles);
 				changing = true;
 			}
@@ -206,8 +256,13 @@ public class Game {
 		}
 		
 		if (changing) {
-			for (int k = 1 ; k < this.entities.size() ; k++)
+			for (int k = 1 ; k < this.entities.size() ; k++) {
 				this.entities.get(k).die();
+			}
+			for (int l = 0 ; l < this.inanimatedEntities.size() ; l++) {
+				this.inanimatedEntities.get(l).die();
+			}
+			
 			spawnEntities();
 		}
 		
@@ -235,8 +290,37 @@ public class Game {
 					Scanner s = new Scanner(line).useDelimiter(",");
 					s.nextInt();
 					
-					while (s.hasNext())
-						this.addEnnemy(s.nextInt(), s.nextInt());
+					while (s.hasNext()) {
+						int nextInt = s.nextInt();
+						switch (nextInt) {
+						case 1 :
+							this.addAnimated("walker", s.nextInt(), s.nextInt());
+							break;
+						case 3 :
+							if (!takenItem("lamp", noMap))
+								this.addInanimated(new ItemEntity("lamp", s.nextInt(), s.nextInt(), ""));
+							break;
+						case 4 :
+							if (!takenItem("pistol", noMap))
+								this.addInanimated(new ItemEntity("pistol", s.nextInt(), s.nextInt(), ""));
+							break;
+						case 5 :
+							if (!takenItem("pistol", noMap))
+								this.addInanimated(new ItemEntity("soda", s.nextInt(), s.nextInt(), ""));
+							break;
+						case 6 :
+							this.addAnimated("rock", s.nextInt(), s.nextInt());
+							break;
+						case 8 :
+							this.addAnimated("npc", s.nextInt(), s.nextInt());
+							break;
+						case 9 :
+							this.addInanimated(new ItemEntity("dispenser", s.nextInt(), s.nextInt(), "Voulez vous acheter une potion ?"));
+							break;
+						default :
+							break;
+						}
+					}
 					
 					s.close();
 				}
@@ -253,6 +337,44 @@ public class Game {
 		}
 	}
 	
+	private boolean takenItem(String id, int noMap) {
+		boolean takenItem = false;
+		String line;
+		
+		try {
+			
+			File f = new File("src/map/takenItems.txt");
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			
+			line = br.readLine();
+			
+			while (br.ready() && line.charAt(0) != Integer.toString(noMap).charAt(0))
+				line = br.readLine();
+						
+			if (line != null && line.charAt(0) == Integer.toString(noMap).charAt(0)) {
+				Scanner s = new Scanner(line).useDelimiter(",");
+				s.next();
+				
+				if (s.next().charAt(0) == id.charAt(0)) {
+					takenItem = true;
+				}
+				
+				s.close();
+			}
+				
+			br.close();
+			fr.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("takenItems : Fichier introuvable");
+		} catch (IOException e) {
+			System.out.println("takenItems : Erreur de lecture");
+		}
+		
+		return takenItem;
+	}
+	
     public void addKeyFrame(EventHandler<ActionEvent> e, double duration) {
     	gameloop.pause();
     	KeyFrame k = new KeyFrame(Duration.seconds(duration), e);
@@ -260,9 +382,27 @@ public class Game {
     	gameloop.play();
     }
     
-    public void addEnnemy(int x, int y) {
-    	AnimatedEntity e = new Enemy(x, y, 1, 0, 4, 6, 18);
-    	entities.add(e);
+    public void addInanimated(InanimatedEntity i) {
+    	inanimatedEntities.add(i);
+    	
+    	if (i.getId().equals("dispenser"))
+    		inanimatedEntities.add(new ItemEntity("dispenserTop", (int)i.getX().get(), (int)i.getY().get()-32, ""));
+    }
+    
+    public void addAnimated(String type, int x, int y) {
+    	switch (type) {
+    	case "walker" :
+    		entities.add(new Walker(x, y, 1, 1, 4, 6, 18));
+    		break;
+    	case "rock" :
+    		entities.add(new Rock(x, y));
+    		break;
+    	case "npc" :
+    		entities.add(new NPC(x, y, 1, 0, 4, 6, 18, "Martin est un fdp"));
+    		break;
+     	default :
+    		break;
+    	}
     }
     
     public void playGameLoop() {
@@ -275,61 +415,136 @@ public class Game {
     }
     
     public void movePlayer(KeyCode event) {
-    	
-    	this.bfs.lancerBFS();
-    	player.setOrientation(event);
-    	
-    	switch (event) {
-    	case LEFT :
-    		if (player.getX().get() == LEFT_TOP_LIMIT) {
-    			if (loadField(LEFT)) {
-    				player.setX(RIGHT_BOTTOM_LIMIT);
-    				this.mapChanged();
-    			}
-    		}
-    		else 
-    			player.moveLeft(entities);
-    		break;
-    	case UP :
-    		if (player.getY().get() == LEFT_TOP_LIMIT) {
-    			if (loadField(UP)) {
-    				player.setY(RIGHT_BOTTOM_LIMIT);
-    				this.mapChanged();
-    			}
-    		}
-    		else 
-    			player.moveUp(entities);
-    		break;
-    	case RIGHT :
-    		if (player.getX().get() == RIGHT_BOTTOM_LIMIT) {
-    			if (loadField(RIGHT)) {
-    				player.setX(LEFT_TOP_LIMIT);
-    				this.mapChanged();
-    			}
-    		}
-    		else 
-    			player.moveRight(entities);
-    		break;
-    	case DOWN :
-    		if (player.getY().get() == RIGHT_BOTTOM_LIMIT) {
-    			if (loadField(DOWN)) {
-    				player.setY(LEFT_TOP_LIMIT);
-    				this.mapChanged();
-    			}
-    		}
-    		else 
-    			player.moveDown(entities);
-    		break;
-		default:
-			break;
+	    
+    	if (!this.player.getIsAttacking().get()) {
+			player.setOrientation(event);
+	
+			switch (event) {
+			case LEFT :
+				if (player.getX().get() == LEFT_TOP_LIMIT) {
+					if (loadField(LEFT)) {
+						player.setX(RIGHT_BOTTOM_LIMIT);
+						this.mapChanged();
+					}
+				}
+				else 
+					player.moveLeft(entities, inanimatedEntities);
+				break;
+			case UP :
+				if (player.getY().get() == LEFT_TOP_LIMIT) {
+					if (loadField(UP)) {
+						player.setY(RIGHT_BOTTOM_LIMIT);
+						this.mapChanged();
+					}
+				}
+				else 
+					player.moveUp(entities, inanimatedEntities);
+				break;
+			case RIGHT :
+				if (player.getX().get() == RIGHT_BOTTOM_LIMIT) {
+					if (loadField(RIGHT)) {
+						player.setX(LEFT_TOP_LIMIT);
+						this.mapChanged();
+					}
+				}
+				else 
+					player.moveRight(entities, inanimatedEntities);
+				break;
+			case DOWN :
+				if (player.getY().get() == RIGHT_BOTTOM_LIMIT) {
+					if (loadField(DOWN)) {
+						player.setY(LEFT_TOP_LIMIT);
+						this.mapChanged();
+					}
+				}
+				else 
+					player.moveDown(entities, inanimatedEntities);
+				break;
+				default:
+					break;
+			}
+	
+			this.bfs.lancerBFS();
+		
     	}
+	    
+    }
+    
+    public boolean playerInteraction() {
+    	boolean hasInteracted = false;
+    	String newText = "";
+    	
+    	switch (this.player.getOrientation().get()) {
+		case LEFT :
+			for (AnimatedEntity e : entities)
+	    		if (this.player.getX().get() == e.getX().get() + 32 && 
+	    			this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
+	    			hasInteracted = e.interact();
+	    			this.currentText.set(e.getDialog());
+	    		}
+			for (InanimatedEntity e : inanimatedEntities)
+	    		if (this.player.getX().get() == e.getX().get() + 32 && 
+	    			this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
+	    			hasInteracted = e.interact(this.player);
+	    			this.currentText.set(e.getDialog());
+	    		}
+			break;
+		case UP :
+			for (AnimatedEntity e : entities)
+	    		if (this.player.getY().get() == e.getY().get() + 32 && 
+	    			this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
+	    			hasInteracted = e.interact();
+	    			this.currentText.set(e.getDialog());
+	    		}
+			for (InanimatedEntity e : inanimatedEntities)
+	    		if (this.player.getY().get() == e.getY().get() + 32 && 
+	    			this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
+	    			hasInteracted = e.interact(this.player);
+	    			this.currentText.set(e.getDialog());
+	    		}
+			break;
+		case RIGHT :
+			for (AnimatedEntity e : entities)
+				if (this.player.getX().get() == e.getX().get() - 32 && 
+    				this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
+					hasInteracted = e.interact();
+					this.currentText.set(e.getDialog());
+				}
+			for (InanimatedEntity e : inanimatedEntities)
+				if (this.player.getX().get() == e.getX().get() - 32 && 
+    				this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
+					hasInteracted = e.interact(this.player);
+					this.currentText.set(e.getDialog());
+				}
+			break;
+		case DOWN :
+			for (AnimatedEntity e : entities)
+				if (this.player.getY().get() == e.getY().get() - 32 && 
+    				this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
+					hasInteracted = e.interact();
+					this.currentText.set(e.getDialog());
+				}
+			for (InanimatedEntity e : inanimatedEntities)
+				if (this.player.getY().get() == e.getY().get() - 32 && 
+    				this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
+					hasInteracted = e.interact(this.player);
+					this.currentText.set(e.getDialog());
+				}
+			break;
+		default :
+			break;
+		}
+    	
+    	return hasInteracted;
     	
     }
     
-    public void moveAllEnemies() {
-    	for (int i = 1 ; i < entities.size() ; i++) {
-    		moveEnemy(entities.get(i));
-    	}
+    public void updateEnemies() {
+    	for (int i = 1 ; i < entities.size() ; i++) 
+    		if (entities.get(i).getId() != "rock" && entities.get(i).getId() != "sprite") {
+    			moveEnemy(entities.get(i));
+    			entities.get(i).attack(entities);
+    		}
     }
     
     public void moveEnemy(AnimatedEntity e) {
@@ -337,16 +552,16 @@ public class Game {
     	Tile enemyAt = this.map.getNextTile(e.getIndiceY(), e.getIndiceX());
     	
     	if (temp.getI() == enemyAt.getI() && temp.getJ() < enemyAt.getJ()) {
-    		e.moveLeft(entities);
+    		e.moveLeft(entities, inanimatedEntities);
     	}
     	if (temp.getI() < enemyAt.getI() && temp.getJ() == enemyAt.getJ()) {
-    		e.moveUp(entities);
+    		e.moveUp(entities, inanimatedEntities);
     	}
     	if (temp.getI() == enemyAt.getI() && temp.getJ() > enemyAt.getJ()) {
-    		e.moveRight(entities);
+    		e.moveRight(entities, inanimatedEntities);
     	}
     	if (temp.getI() > enemyAt.getI() && temp.getJ() == enemyAt.getJ()) {
-    		e.moveDown(entities);
+    		e.moveDown(entities, inanimatedEntities);
     	}
     }
 	
