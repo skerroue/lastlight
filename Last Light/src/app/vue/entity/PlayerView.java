@@ -1,16 +1,13 @@
 package app.vue.entity;
-
-import app.modele.entity.AnimatedEntity;
-import app.modele.entity.Bullet;
-import app.modele.entity.Entity;
-import app.modele.entity.Player;
+ 
+import app.modele.entity.animated.Bullet;
+import app.modele.entity.animated.Player;
 import app.modele.weapon.Weapon;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -50,7 +47,7 @@ public class PlayerView extends AnimatedEntityView {
 				case "lamp" :
 					setImage(tilesetLamp);
 					break;
-				case "pistol" :
+				case "taser" :
 					setImage(tilesetTaser);
 					break;
 				default :
@@ -66,10 +63,10 @@ public class PlayerView extends AnimatedEntityView {
 		this.player.getWeapons().addListener(new ListChangeListener<Weapon>() {
 
 			@Override
-			public void onChanged(Change c) {
+			public void onChanged(Change<? extends Weapon> c) {
 				while (c.next())
 					if (c.wasAdded())
-						if (player.getWeapons().get(player.getWeapons().size()-1).getId().equals("pistol"))
+						if (player.getWeapons().get(player.getWeapons().size()-1).getId().equals("taser"))
 							initializeBullets();
 			}
 			
@@ -94,7 +91,7 @@ public class PlayerView extends AnimatedEntityView {
 		player.getBullets().addListener(new ListChangeListener<Bullet>() {
 
 			@Override
-			public void onChanged(Change c) {
+			public void onChanged(Change<? extends Bullet> c) {
 				while (c.next()) 
 					if (c.wasAdded()) 
 						bullets.add(new BulletView(player.getBullets().get(player.getBullets().size()-1)));

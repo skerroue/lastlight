@@ -1,6 +1,6 @@
 package app.vue.entity;
 
-import app.modele.entity.AnimatedEntity;
+import app.modele.entity.animated.AnimatedEntity;
 import javafx.scene.image.Image;
 
 public class RockView extends EntityView {

@@ -1,24 +1,21 @@
 package app.modele.entity;
 
-import app.modele.Game;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.ObservableList;
-import javafx.scene.input.KeyCode;
 
 public abstract class Entity {
 	
-	final static int LEFT = 0;
-	final static int UP = 1;
-	final static int RIGHT = 2;
-	final static int DOWN = 3;
+	protected final static int LEFT = 0;
+	protected final static int UP = 1;
+	protected final static int RIGHT = 2;
+	protected final static int DOWN = 3;
 	
-	final static int LEFT_TOP_LIMIT = 31;
-	final static int RIGHT_BOTTOM_LIMIT = 768;
+	protected final static int LEFT_TOP_LIMIT = 31;
+	protected final static int RIGHT_BOTTOM_LIMIT = 768;
 	
 	protected String id;
 	protected DoubleProperty x;

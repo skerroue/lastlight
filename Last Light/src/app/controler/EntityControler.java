@@ -1,10 +1,9 @@
 package app.controler;
 
-import java.util.ArrayList;  
+import java.util.ArrayList;   
 
 import app.modele.Game;
 import app.modele.entity.Entity;
-import app.vue.entity.AnimatedEntityView;
 import app.vue.entity.BulletView;
 import app.vue.entity.EnemyView;
 import app.vue.entity.EntityView;
@@ -15,11 +14,8 @@ import app.vue.entity.RockView;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 public class EntityControler {
@@ -101,12 +97,13 @@ public class EntityControler {
     	playerView.getBullets().addListener(new ListChangeListener<BulletView>() {
 
 			@Override
-			public void onChanged(Change c) {
+			public void onChanged(Change<? extends BulletView> c) {
 				while (c.next())
 					if (c.wasAdded()) {
 						entitiesView.add(playerView.getBullets().get(playerView.getBullets().size()-1));
 						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
 					}
+				
 			}
     		
     	});

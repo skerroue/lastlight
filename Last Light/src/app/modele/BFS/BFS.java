@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import app.modele.entity.AnimatedEntity;
-import app.modele.entity.Player;
+import app.modele.entity.animated.AnimatedEntity;
+import app.modele.entity.animated.Player;
 import app.modele.field.Field;
 import app.modele.field.Tile;
 
@@ -29,7 +29,6 @@ public class BFS {
 	public void lancerBFS() {
 		int x = player.getIndiceX();
 		int y = player.getIndiceY();
-		Tile player = field.getNextTile(y, x);
 		
 		this.parents.clear();
 		this.queue.clear();

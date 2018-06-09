@@ -1,6 +1,6 @@
 package app.modele;
 
-import java.io.BufferedReader; 
+import java.io.BufferedReader;  
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,23 +11,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import app.modele.BFS.BFS;
-import app.modele.entity.AnimatedEntity;
-import app.modele.entity.Button;
-import app.modele.entity.Rock;
-import app.modele.entity.Enemy;
-import app.modele.entity.Entity;
-import app.modele.entity.InanimatedEntity;
-import app.modele.entity.ItemEntity;
-import app.modele.entity.NPC;
-import app.modele.entity.Player;
-import app.modele.entity.Walker;
+import app.modele.entity.animated.AnimatedEntity;
+import app.modele.entity.animated.NPC;
+import app.modele.entity.animated.Player;
+import app.modele.entity.animated.Rock;
+import app.modele.entity.animated.Walker;
+import app.modele.entity.inanimated.Button;
+import app.modele.entity.inanimated.Dispenser;
+import app.modele.entity.inanimated.InanimatedEntity;
+import app.modele.entity.inanimated.ItemEntity;
 import app.modele.field.Field;
 import app.modele.field.Tile;
 import app.modele.weapon.Weapon;
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -70,20 +66,22 @@ public class Game {
 	private StringProperty currentText;
 	
 	public Game() {
+		
+		fieldsMap = readFileMaps();
+		crossableTiles = readFileCrossableTiles();
+		map = new Field(3, 0, fieldsMap[3][0] , 25, 25, crossableTiles);
+		mapChanged = new SimpleBooleanProperty(true);
+		
 		this.gameloop = new Timeline();
 		this.gameloop.setCycleCount(Timeline.INDEFINITE);
-		this.fieldsMap = readFileMaps();
-		this.crossableTiles = readFileCrossableTiles();
-		this.map = new Field(3, 0, this.fieldsMap[3][0] , 25, 25, crossableTiles);	// coordonnées à modifier
-		this.player = new Player(416, 416, 3, 0, 8, 0, 6, 18);	// coordonnées à modifier
+		this.currentText = new SimpleStringProperty("");
+		
 		this.entities = FXCollections.observableArrayList();
 		this.inanimatedEntities = FXCollections.observableArrayList();
-		this.mapChanged = new SimpleBooleanProperty(true);
+		this.player = new Player(416, 416, 3, 0, 8, 0, 6, 18);
 		this.entities.add(player);
 		
 		this.bfs = new BFS(player, map);
-		
-		this.currentText = new SimpleStringProperty("");
 		
 		initializeGame();
 	}
@@ -136,6 +134,7 @@ public class Game {
 			File f = new File("src/map/maps.txt");	// nom du fichier à modifier
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
+			@SuppressWarnings("resource")
 			Scanner s = new Scanner(br).useDelimiter(",");
 			
 			try {
@@ -169,6 +168,7 @@ public class Game {
 			File f = new File("src/map/crossableTiles.txt");	// nom du fichier à modifier
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
+			@SuppressWarnings("resource")
 			Scanner s = new Scanner(br).useDelimiter(",");
 			
 			try {
@@ -224,33 +224,33 @@ public class Game {
 	}
 	
 	public boolean loadField(int direction) {
-		int i = this.map.getI();
-		int j = this.map.getJ();
+		int i = map.getI();
+		int j = map.getJ();
 		
 		boolean changing = false;
 		
 		switch (direction) {
 		case LEFT :
-			if (j > 0 && this.fieldsMap[i][j - 1] != 0) {
-				this.map = new Field(i, j - 1, this.fieldsMap[i][j - 1], 25, 25, crossableTiles);
+			if (j > 0 && fieldsMap[i][j - 1] != 0) {
+				map = new Field(i, j - 1, fieldsMap[i][j - 1], 25, 25, crossableTiles);
 				changing = true;
 			}
 			break;
 		case UP :
-			if (i > 0 && this.fieldsMap[i - 1][j] != 0) {
-				this.map = new Field(i - 1, j, this.fieldsMap[i - 1][j], 25, 25, crossableTiles);
+			if (i > 0 && fieldsMap[i - 1][j] != 0) {
+				map = new Field(i - 1, j, fieldsMap[i - 1][j], 25, 25, crossableTiles);
 				changing = true;
 			}
 			break;
 		case RIGHT :
-			if (j < FILE_MAP_WIDTH-1 && this.fieldsMap[i][j + 1] != 0) {
-				this.map = new Field(i, j + 1, this.fieldsMap[i][j + 1], 25, 25, crossableTiles);
+			if (j < FILE_MAP_WIDTH-1 && fieldsMap[i][j + 1] != 0) {
+				map = new Field(i, j + 1, fieldsMap[i][j + 1], 25, 25, crossableTiles);
 				changing = true;
 			}
 			break;
 		case DOWN :
-			if (i < FILE_MAP_HEIGHT-1 && this.fieldsMap[i + 1][j] != 0) {
-				this.map = new Field(i + 1, j, this.fieldsMap[i + 1][j], 25, 25, crossableTiles);
+			if (i < FILE_MAP_HEIGHT-1 && fieldsMap[i + 1][j] != 0) {
+				map = new Field(i + 1, j, fieldsMap[i + 1][j], 25, 25, crossableTiles);
 				changing = true;
 			}
 			break;
@@ -271,7 +271,7 @@ public class Game {
 	}
 	
 	private void spawnEntities() {
-		int noMap = this.fieldsMap[this.map.getI()][this.map.getJ()];
+		int noMap = fieldsMap[map.getI()][map.getJ()];
 		String line;
 		
 		try {
@@ -288,6 +288,7 @@ public class Game {
 					line = br.readLine();
 				
 				if (Integer.parseInt("" + line.charAt(0)) == noMap) {
+					@SuppressWarnings("resource")
 					Scanner s = new Scanner(line).useDelimiter(",");
 					s.nextInt();
 					
@@ -298,33 +299,27 @@ public class Game {
 							this.addAnimated("walker", s.nextInt(), s.nextInt());
 							break;
 						case 3 :
-							if (!takenItem("lamp", noMap))
-								this.addInanimated(new ItemEntity("lamp", s.nextInt(), s.nextInt(), ""));
+							this.addInanimated("lamp", s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 4 :
-							if (!takenItem("pistol", noMap))
-								this.addInanimated(new ItemEntity("pistol", s.nextInt(), s.nextInt(), ""));
+							this.addInanimated("taser", s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 5 :
-							if (!takenItem("pistol", noMap))
-								this.addInanimated(new ItemEntity("soda", s.nextInt(), s.nextInt(), ""));
+							this.addInanimated("soda", s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 6 :
 							this.addAnimated("rock", s.nextInt(), s.nextInt());
 							break;
 						case 7 :
-							InanimatedEntity ent = new ItemEntity("door", 512, 512, "");
-							this.addInanimated(ent);
-							this.addInanimated(new Button("button", s.nextInt(), s.nextInt(), "", ent));
+							this.addInanimated("button", s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 8 :
 							this.addAnimated("npc", s.nextInt(), s.nextInt());
 							break;
 						case 9 :
-							this.addInanimated(new ItemEntity("dispenser", s.nextInt(), s.nextInt(), "Voulez vous acheter une potion ?"));
+							this.addInanimated("dispenser", s.nextInt(), s.nextInt(), noMap);
 							break;
-						default :
-							break;
+						default : break;
 						}
 					}
 					
@@ -359,6 +354,7 @@ public class Game {
 				line = br.readLine();
 						
 			if (line != null && line.charAt(0) == Integer.toString(noMap).charAt(0)) {
+				@SuppressWarnings("resource")
 				Scanner s = new Scanner(line).useDelimiter(",");
 				s.next();
 				
@@ -388,11 +384,33 @@ public class Game {
     	gameloop.play();
     }
     
-    public void addInanimated(InanimatedEntity i) {
-    	inanimatedEntities.add(i);
+    public void addInanimated(String type, int x, int y, int noMap) {
+    	switch (type) {
+    	case "lamp" :
+    		if (!takenItem(type, noMap))
+    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
+    		break;
+    	case "taser" :
+    		if (!takenItem(type, noMap))
+    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
+    		break;
+    	case "soda" :
+    		if (!takenItem(type, noMap))
+    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
+    		break;
+    	case "dispenser" :
+    		inanimatedEntities.add(new Dispenser(type, x, y, "Voulez vous acheter une potion ?"));
+    		inanimatedEntities.add(new ItemEntity(type + "Top", x, y-32, ""));
+    		break;
+    	case "button" :
+    		// Reflechir a comment connaitre le child du boutton
+    		InanimatedEntity ent = new ItemEntity("door", 512, 512, "");
+    		inanimatedEntities.add(ent);
+    		inanimatedEntities.add(new Button(type, x, y, "", ent));
+    		break;
+    	default : break;
+    	}
     	
-    	if (i.getId().equals("dispenser"))
-    		inanimatedEntities.add(new ItemEntity("dispenserTop", (int)i.getX().get(), (int)i.getY().get()-32, ""));
     }
     
     public void addAnimated(String type, int x, int y) {
@@ -406,9 +424,9 @@ public class Game {
     	case "npc" :
     		entities.add(new NPC(x, y, 1, 0, 4, 6, 18, "Martin est un fdp"));
     		break;
-     	default :
-    		break;
+     	default : break;
     	}
+    	
     }
     
     public void playGameLoop() {
@@ -478,7 +496,6 @@ public class Game {
     
     public boolean playerInteraction() {
     	boolean hasInteracted = false;
-    	String newText = "";
     	
     	switch (this.player.getOrientation().get()) {
 		case LEFT :
@@ -555,7 +572,7 @@ public class Game {
     
     public void moveEnemy(AnimatedEntity e) {
     	Tile nextTile = this.bfs.searchWay(e);
-    	Tile enemyAt = this.map.getNextTile(e.getIndiceY(), e.getIndiceX());
+    	Tile enemyAt = map.getNextTile(e.getIndiceY(), e.getIndiceX());
     	
     	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) {
     		e.moveLeft(entities, inanimatedEntities);

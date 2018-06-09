@@ -1,10 +1,7 @@
 package app.controler;
 
-import java.util.ArrayList;
-
 import app.modele.Game;
 import app.vue.FieldView;
-import app.vue.entity.AnimatedEntityView;
 import app.vue.entity.EntityView;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
@@ -58,7 +55,7 @@ public class FieldControler {
     	setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
 		setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
     	
-    	game.getMapChanged().addListener(new ChangeListener<Boolean>() {
+    	Game.getMapChanged().addListener(new ChangeListener<Boolean>() {
     		
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {

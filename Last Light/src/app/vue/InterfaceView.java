@@ -1,8 +1,6 @@
 package app.vue;
 
-import app.modele.entity.Player;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import app.modele.entity.animated.Player; 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

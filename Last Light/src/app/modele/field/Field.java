@@ -15,7 +15,6 @@ public class Field {
 	
 	private int[][] field;
 	private Tile[][] tileField;
-	private ArrayList<Integer> crossableTiles;
 	private int i, j; // coordonnées dans la grande map
 	
 	public Field(int i, int j, int fileIndex, int height, int width, ArrayList<Integer> crossableTiles) {
@@ -23,7 +22,6 @@ public class Field {
 		this.i = i;
 		this.j = j;
 		
-		this.crossableTiles = crossableTiles;
 		this.tileField = new Tile[25][25];
 		for (int k = 0 ; k < 25 ; k++) 
 			for (int l = 0 ; l < 25 ; l++) 
@@ -50,6 +48,7 @@ public class Field {
 				fr.close();
 				
 				lines.set(4, lines.get(4).substring(17, lines.get(4).length() - 2));
+				@SuppressWarnings("resource")
 				Scanner s = new Scanner(lines.get(4)).useDelimiter(", ");
 												
 				for (int i = 0; i < 25; i++) {

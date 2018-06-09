@@ -1,17 +1,7 @@
 package app.vue.entity;
 
-import java.util.ArrayList;
-
-import app.modele.entity.Bullet;
-import app.modele.entity.Entity;
-import app.modele.entity.Player;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
+import app.modele.entity.animated.Bullet;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 public class BulletView extends EntityView {
 

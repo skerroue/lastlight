@@ -1,10 +1,7 @@
 package app.vue.entity;
 
-import app.modele.entity.InanimatedEntity;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import app.modele.entity.inanimated.InanimatedEntity; 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class InanimatedEntityView extends EntityView {
 	

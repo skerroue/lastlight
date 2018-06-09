@@ -1,7 +1,6 @@
 package app.modele.weapon;
 
-import app.modele.entity.AnimatedEntity;
-import app.modele.entity.Bullet;
+import app.modele.entity.animated.AnimatedEntity; 
 import javafx.collections.ObservableList;
 
 public class Lamp extends Weapon{

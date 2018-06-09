@@ -1,32 +1,22 @@
 package app.controler;
 
-import java.net.URL;  
+import java.net.URL;   
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import app.modele.Game;
-import app.modele.entity.Entity;
 import app.vue.FieldView;
 import app.vue.InterfaceView;
-import app.vue.entity.AnimatedEntityView;
-import app.vue.entity.BulletView;
 import app.vue.entity.EntityView;
-import app.vue.entity.InanimatedEntityView;
 import app.vue.entity.PlayerView;
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 public class Controler implements Initializable {
 	
@@ -37,8 +27,8 @@ public class Controler implements Initializable {
 
 	@FXML
 	private Pane pausePane;
-	private Button resumeButton;
-	private Button quitButton;
+	//private Button resumeButton;
+	//private Button quitButton;
 	
     @FXML
     private Pane tileContainer;

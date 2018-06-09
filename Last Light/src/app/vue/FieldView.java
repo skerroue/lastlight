@@ -1,8 +1,6 @@
 package app.vue;
 
-import app.modele.Game;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import app.modele.Game; 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
