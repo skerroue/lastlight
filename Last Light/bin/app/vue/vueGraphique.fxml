@@ -1,13 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<Pane maxHeight="800.0" maxWidth="800.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controler.Controler">
+<Pane maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controler.Controler">
    <children>
-      <Pane fx:id="tileContainer" maxHeight="800.0" maxWidth="800.0" prefHeight="800.0" prefWidth="800.0" />
-      <Pane fx:id="entityContainer" focusTraversable="true" maxHeight="800.0" maxWidth="800.0" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="800.0" prefWidth="800.0" />
-      <Pane fx:id="interfaceContainer" prefHeight="800.0" prefWidth="800.0" />
+      <Pane fx:id="tileContainer" layoutY="50.0" maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0" prefWidth="512.0" />
+      <Pane fx:id="entityContainer" focusTraversable="true" layoutY="50.0" maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" onKeyPressed="#onKeyPressed" onKeyReleased="#onKeyReleased" prefHeight="512.0" prefWidth="512.0" />
+      <Pane fx:id="interfaceContainer" maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0" prefWidth="512.0">
+         <children>
+            <Rectangle height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="512.0" />
+         </children>
+      </Pane>
+      <Pane fx:id="pausePane" maxHeight="512.0" maxWidth="512.0" minHeight="512.0" minWidth="512.0" prefHeight="512.0" prefWidth="512.0" visible="false">
+         <children>
+            <ImageView fitHeight="512.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../img/pause-background.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="resumeButton" layoutX="28.0" layoutY="124.0" mnemonicParsing="false" onAction="#resume" prefHeight="52.0" prefWidth="205.0" style="-fx-background-color: transparent;">
+               <graphic>
+                  <ImageView fitHeight="52.0" fitWidth="205.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../img/resume-button.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="quitButton" layoutX="273.0" layoutY="124.0" mnemonicParsing="false" onAction="#quit" prefHeight="52.0" prefWidth="205.0" style="-fx-background-color: transparent;">
+               <graphic>
+                  <ImageView fitHeight="52.0" fitWidth="205.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../img/quit-button.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+         </children></Pane>
+      <Pane fx:id="dialogPane" onKeyPressed="#closeText" prefHeight="512.0" prefWidth="512.0" visible="false">
+         <children>
+            <ImageView fx:id="dialogBackground" fitHeight="150.0" fitWidth="512.0" layoutY="362.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../img/textbox.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="dialogContainer" alignment="TOP_LEFT" layoutX="30.0" layoutY="390.0" prefHeight="83.0" prefWidth="450.0" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
    </children>
 </Pane>
