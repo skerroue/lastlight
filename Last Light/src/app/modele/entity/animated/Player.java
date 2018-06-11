@@ -30,7 +30,7 @@ public class Player extends AnimatedEntity {
 	private IntegerProperty activeWeaponIndex;
 	
 	public Player(int x, int y, int pv, int att, int v, int m, int nb, int fmax) {
-		super("player", x, y, pv, att, v, nb, fmax);
+		super(GameData.ENTITY_PLAYER, x, y, pv, att, v, nb, fmax);
 		
 		this.maxPotion = new SimpleIntegerProperty(3);
 		this.potion = new SimpleIntegerProperty(0);
@@ -123,7 +123,7 @@ public class Player extends AnimatedEntity {
 	
 	public ObservableList<Bullet> getBullets() {
 		for (Weapon w : this.weapons)
-			if (w.getId().equals("taser"))
+			if (w.getId().equals(GameData.ENTITY_TASER))
 				return w.getBullets();
 		
 		return null;
