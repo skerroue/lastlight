@@ -77,8 +77,12 @@ public class Controler implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
-		// Creation de la map visuellement
-		FieldControler.initializeField(tileContainer, field, interfaceContainer);
+		// Initialisation de la map
+		FieldControler.initializeScrollField(playerView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer, interfaceContainer);
+		// FieldControler.initializeField(tileContainer, field, interfaceContainer);
+
+		// Initialisation du scrolling de la map
+		FieldControler.moveScroll(entitiesView, tileContainer, field, entityContainer, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH);
 		
 		// Creation de l'interface et liaison avec les caracteristiques du joueur
 		InterfaceControler.initializeInterface(interfaceContainer, hud);
@@ -90,9 +94,6 @@ public class Controler implements Initializable {
 		
 		// Lancement de la gameloop
 		this.game.playGameLoop();
-		
-		// Initialisation de la Scroll Map
-		FieldControler.initializeScrollField(playerView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer);
         
         // Animation
         FieldControler.AnimationTransitionMap(1.0);
@@ -104,31 +105,35 @@ public class Controler implements Initializable {
 
     @FXML
     void onKeyPressed(KeyEvent event) {
+    	
+    	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
+    		game.movePlayer(event.getCode());
+    	
     	switch (event.getCode()) {
-    	case UP:
-    		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
-    			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
-    		}
-    		break;
-    	case DOWN:
-    		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
-    			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
-    		}
-    		break;
-    	case LEFT:
-    		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
-    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
-    		}
-    		break;
-    	case RIGHT:
-    		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
-    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
-    		}
-    		break;
+//    	case UP:
+//    		game.movePlayer(event.getCode());
+//    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
+//    			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
+//    		}
+//    		break;
+//    	case DOWN:
+//    		game.movePlayer(event.getCode());
+//    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
+//    			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
+//    		}
+//    		break;
+//    	case LEFT:
+//    		game.movePlayer(event.getCode());
+//    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
+//    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
+//    		}
+//    		break;
+//    	case RIGHT:
+//    		game.movePlayer(event.getCode());
+//    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
+//    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
+//    		}
+//    		break;
     	case D :
     		this.game.getPlayer().loseHP(1);
     		this.game.getPlayer().earnPotion();
