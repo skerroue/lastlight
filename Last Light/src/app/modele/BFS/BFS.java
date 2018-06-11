@@ -48,10 +48,10 @@ public class BFS {
 			if (y > 0) {
 				this.adjTiles.add(field.getNextTile(y-1, x));
 			}
-			if (x < 24) {
+			if (x < Game.getMap().getFieldSize() - 1) {
 				this.adjTiles.add(field.getNextTile(y, x+1));
 			}
-			if (y < 24) {
+			if (y < Game.getMap().getFieldSize() - 1) {
 				this.adjTiles.add(field.getNextTile(y+1, x));
 			}
 			
