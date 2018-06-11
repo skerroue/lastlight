@@ -1,5 +1,7 @@
 package app;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import java.net.URL;
 import javafx.application.Application;
@@ -15,10 +17,10 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
+		Media sound = new Media(new File("src/music/menu.mp3").toURI().toString());
+		MediaPlayer player = new MediaPlayer(sound);
 		FXMLLoader loader = new FXMLLoader();
-		URL url = new File("src/app/vue/vueMenu.fxml").
-		toURI().toURL();
+		URL url = new File("src/app/vue/vueMenu.fxml").toURI().toURL();
 		loader.setLocation(url);
 		System.out.println(loader.getLocation());
 		Pane root = new Pane();
@@ -28,6 +30,7 @@ public class Main extends Application {
      	primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("file:src/img/icon.png"));
+		player.play();
 		primaryStage.show();
 
 		} catch (Exception e) {
