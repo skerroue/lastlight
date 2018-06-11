@@ -200,7 +200,7 @@ public class Player extends AnimatedEntity {
 				break;
 			case RIGHT : x.set(x.get() + 32);
 				break;
-			case DOWN : y.set(y.get() - 32);
+			case DOWN : y.set(y.get() + 32);
 				break;
 			default : break;
 			}
