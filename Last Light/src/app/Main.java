@@ -4,6 +4,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import java.net.URL;
+
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -19,6 +21,7 @@ public class Main extends Application {
 		try {
 		Media sound = new Media(new File("src/music/menu.mp3").toURI().toString());
 		MediaPlayer player = new MediaPlayer(sound);
+		player.setCycleCount(Timeline.INDEFINITE);
 		FXMLLoader loader = new FXMLLoader();
 		URL url = new File("src/app/vue/vueMenu.fxml").toURI().toURL();
 		loader.setLocation(url);
