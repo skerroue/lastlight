@@ -18,40 +18,6 @@ public class FieldControler {
     private static FadeTransition ft;
     private static Rectangle rec;
     
-	 public static void AnimationTransitionMap(Double i) {
-	    	ft.setDuration(Duration.seconds(i));
-			ft.play();
-	    }
-	 
-	private static void creatingAnimation(Pane interfaceContainer) {
-		interfaceContainer.getChildren().add(rec);
-		rec.setFill(Color.BLACK);
-        ft.setFromValue(1.0);
-		ft.setToValue(0.0);
-		ft.setNode(rec);
-	}
-    
-    public static void initializeField(Pane tileContainer, FieldView field, Pane interfaceContainer) {
-      
-    	
-    	// Map transition
-        ft = new FadeTransition();
-        rec = new Rectangle(600,600);
-        creatingAnimation(interfaceContainer);
-        
-    	tileContainer.getChildren().addAll(field.getFieldView());
-    	
-    	Game.getMapChanged().addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-				field.refreshField();
-			}
-			
-		});
-    	
-    }
-    
     public static void initializeScrollField(EntityView playerView, FieldView field, Game game, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH, Pane tileContainer, Pane entityContainer, Pane interfaceContainer) {
     	
     	// Map transition
@@ -147,6 +113,20 @@ public class FieldControler {
     	tileContainer.setTranslateY(-a);
 		entityContainer.setTranslateY(-a);
     }
+    
+	public static void AnimationTransitionMap(Double i) {
+	   	ft.setDuration(Duration.seconds(i));
+		ft.play();
+	}
+	 
+	private static void creatingAnimation(Pane interfaceContainer) {
+		ft.setFromValue(1.0);
+		ft.setToValue(0.0);
+		ft.setNode(rec);
+		
+		rec.setFill(Color.BLACK);
+		interfaceContainer.getChildren().add(rec);
+	}
 	
 
 }
