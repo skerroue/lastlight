@@ -46,7 +46,7 @@ public class Game {
 	private static int[][] fieldsMap;	// contient les indices des fichiers de chaque map
 								// valeurs allant de 1 a ... (0 = pas de map)
 	private static Field map;
-	private Player player;
+	private static Player player;
 	private ObservableList<AnimatedEntity> entities;
 	private ObservableList<InanimatedEntity> inanimatedEntities;
 	private static BooleanProperty mapChanged;
@@ -203,8 +203,8 @@ public class Game {
 		return fieldsMap[map.getI()][map.getJ()];
 	}
 	
-	public Player getPlayer() {
-		return this.player;
+	public static Player getPlayer() {
+		return player;
 	}
 	
 	public ObservableList<AnimatedEntity> getEntities() {

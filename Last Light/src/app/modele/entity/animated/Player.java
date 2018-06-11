@@ -1,5 +1,6 @@
 package app.modele.entity.animated;
 
+import app.modele.GameData;
 import app.modele.weapon.Weapon;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;

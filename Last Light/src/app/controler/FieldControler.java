@@ -71,7 +71,7 @@ public class FieldControler {
 				AnimationTransitionMap(0.2);
 				field.refreshField();
 				
-				switch (game.getPlayer().getOrientation().get()) {
+				switch (Game.getPlayer().getOrientation().get()) {
 				case 0:
 					if (playerView.getTranslateY() - SCROLL_HEIGHT / 2 < 0)
 						setScrollY(0, tileContainer, entityContainer);

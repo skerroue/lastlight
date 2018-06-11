@@ -68,9 +68,9 @@ public class Controler implements Initializable {
     	
     	this.game = new Game();
     	this.entitiesView = new ArrayList<>();
-    	this.hud = new InterfaceView(game.getPlayer());
+    	this.hud = new InterfaceView(Game.getPlayer());
     	this.field = new FieldView();
-    	this.playerView = new PlayerView(game.getPlayer());
+    	this.playerView = new PlayerView(Game.getPlayer());
         
     }
     
@@ -135,16 +135,16 @@ public class Controler implements Initializable {
 //    		}
 //    		break;
     	case D :
-    		this.game.getPlayer().loseHP(1);
-    		this.game.getPlayer().earnPotion();
-    		this.game.getPlayer().earnMoney(1);
+    		Game.getPlayer().loseHP(1);
+    		Game.getPlayer().earnPotion();
+    		Game.getPlayer().earnMoney(1);
     		break;
     	case X :
-    		this.game.getPlayer().usePotion();
+    		Game.getPlayer().usePotion();
     		break;
     	case SPACE :
     		if (!this.game.playerInteraction())
-    			this.game.getPlayer().attack(game.getEntities());
+    			Game.getPlayer().attack(game.getEntities());
     		else 
     			if (!(this.dialogContainer.getText() == null))
     				if (!this.dialogContainer.getText().equals(""))
@@ -154,13 +154,13 @@ public class Controler implements Initializable {
     		showPauseMenu();
     		break;
     	case TAB :
-    		this.game.getPlayer().nextWeapon();
+    		Game.getPlayer().nextWeapon();
     		break;
     	case R :
-    		this.game.getPlayer().reload();
+    		Game.getPlayer().reload();
     		break;
     	case M :
-    		this.game.getPlayer().earnMoney(1);
+    		Game.getPlayer().earnMoney(1);
     		break;
     	case S :
     		this.game.playerUseNecklace();

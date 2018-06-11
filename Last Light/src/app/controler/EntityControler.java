@@ -3,6 +3,7 @@ package app.controler;
 import java.util.ArrayList;   
 
 import app.modele.Game;
+import app.modele.GameData;
 import app.modele.entity.Entity;
 import app.vue.entity.BulletView;
 import app.vue.entity.EnemyView;
@@ -43,7 +44,7 @@ public class EntityControler {
 		attackAnimation.setOnFinished(event2 -> {
 			playerView.resetAnimationAttack();
 			entityContainer.getChildren().remove(attackAnimation.getNode());
-			game.getPlayer().resetIsAttacking();
+			Game.getPlayer().resetIsAttacking();
 			attackAnimationActive = false;
 		});
     	
@@ -108,13 +109,13 @@ public class EntityControler {
     		
     	});
     	
-    	game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
+    	Game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldValue, Boolean newValue) {
 
                 if (newValue.booleanValue()) {
-                    switch (game.getPlayer().getOrientation().get()) {
+                    switch (Game.getPlayer().getOrientation().get()) {
                     case 0 :
                         playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() - 32);
                         playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 5);
@@ -158,7 +159,7 @@ public class EntityControler {
     		
     		entityDisappearance.play();
     		
-    		if (game.getPlayer().getIsAttacking().get()) 
+    		if (Game.getPlayer().getIsAttacking().get()) 
     			if (!attackAnimationActive) {
     				playerView.animationAttack();
     				attackAnimationActive = true; 
