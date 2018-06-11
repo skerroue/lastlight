@@ -1,5 +1,6 @@
 package app.vue.entity;
  
+import app.modele.GameData;
 import app.modele.entity.animated.Bullet; 
 import app.modele.entity.animated.Player;
 import app.modele.weapon.Weapon;
@@ -19,9 +20,9 @@ public class PlayerView extends AnimatedEntityView {
 	
 	private ObservableList<BulletView> bullets;
 	
-	private Image tileset = new Image("file:src/img/tilesetplayer.png");
-	private Image tilesetLamp = new Image("file:src/img/tilesetplayerlamp.png");
-	private Image tilesetTaser = new Image("file:src/img/tilesetplayertaser.png");
+	private Image tileset = new Image("file:src/img/tileset" + GameData.ENTITY_PLAYER + ".png");
+	private Image tilesetLamp = new Image("file:src/img/tilesetplayer" + GameData.ENTITY_LAMP + ".png");
+	private Image tilesetTaser = new Image("file:src/img/tilesetplayer" + GameData.ENTITY_TASER + ".png");
 
 	public PlayerView(Player e) {
 		super(e);
@@ -44,10 +45,10 @@ public class PlayerView extends AnimatedEntityView {
 			public void changed(ObservableValue<? extends Number> arg0, Number oldValue, Number newValue) {
 				
 				switch (player.getWeaponName()) {
-				case "lamp" :
+				case GameData.ENTITY_LAMP :
 					setImage(tilesetLamp);
 					break;
-				case "taser" :
+				case GameData.ENTITY_TASER :
 					setImage(tilesetTaser);
 					break;
 				default :
@@ -66,7 +67,7 @@ public class PlayerView extends AnimatedEntityView {
 			public void onChanged(Change<? extends Weapon> c) {
 				while (c.next())
 					if (c.wasAdded())
-						if (player.getWeapons().get(player.getWeapons().size()-1).getId().equals("taser"))
+						if (player.getWeapons().get(player.getWeapons().size()-1).getId().equals(GameData.ENTITY_TASER))
 							initializeBullets();
 			}
 			
