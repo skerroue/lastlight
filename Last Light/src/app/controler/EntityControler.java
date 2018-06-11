@@ -58,13 +58,13 @@ public class EntityControler {
 				while (c.next()) {
 					if (c.wasAdded()) {
 						switch (game.getEntities().get(game.getEntities().size() - 1).getId()) {
-						case "walker" :
+						case GameData.ENTITY_WALKER :
 							entitiesView.add(new EnemyView(game.getEntities().get(game.getEntities().size() - 1)));
 							break;
-						case "rock" :
+						case GameData.ENTITY_ROCK :
 							entitiesView.add(new RockView(game.getEntities().get(game.getEntities().size() - 1)));
 							break;
-						case "sprite" :
+						case GameData.ENTITY_NPC :
 							entitiesView.add(new NPCView(game.getEntities().get(game.getEntities().size() - 1)));
 						default :
 							break;
