@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import app.modele.Game;
 import app.modele.entity.animated.AnimatedEntity;
 import app.modele.entity.animated.Player;
 import app.modele.field.Field;
