@@ -56,23 +56,14 @@ public class BFS {
 			}
 			
 			/*
-			for (Tile t : adjTiles) {
-				if (t.isCrossable() && this.parents.putIfAbsent(t, temp) == null) {
+			for (Tile t : adjTiles) 
+				if (t.isCrossable() && this.parents.putIfAbsent(t, temp) == null) 
 					this.queue.add(t);
-				}
-			}
 			*/
 			
-			for (int i = 0 ; i < adjTiles.size() ; i++) {
-				
-				if (!this.parents.containsKey(adjTiles.get(i))) {
-					this.parents.put(this.adjTiles.get(i), temp);
-					this.queue.add(this.adjTiles.get(i));
-				}
-				
-			}
-			
-			
+			for (Tile t : adjTiles) 
+				if (this.parents.putIfAbsent(t, temp) == null) 
+					this.queue.add(t);
 			
 			this.adjTiles.clear();
 		}
