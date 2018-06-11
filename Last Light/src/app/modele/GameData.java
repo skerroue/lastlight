@@ -2,10 +2,10 @@ package app.modele;
 
 public class GameData {
 	
-	final static int LEFT = 0;
-	final static int UP = 1;
-	final static int RIGHT = 2;
-	final static int DOWN = 3;
+	public final static int LEFT = 0;
+	public final static int UP = 1;
+	public final static int RIGHT = 2;
+	public final static int DOWN = 3;
 	
 	final static int LEFT_TOP_LIMIT = 0;
 	final static int RIGHT_BOTTOM_LIMIT = 768;
