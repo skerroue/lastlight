@@ -1,12 +1,13 @@
 package app.modele.weapon;
 
+import app.modele.GameData;
 import app.modele.entity.animated.AnimatedEntity; 
 import javafx.collections.ObservableList;
 
-public class Lamp extends Weapon{
+public class Lamp extends Weapon {
 	
 	public Lamp(int a, int d){
-		super(a, d);
+		super(GameData.ENTITY_LAMP , a, d);
 		this.id = "lamp";
 	}
 

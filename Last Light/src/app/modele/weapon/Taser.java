@@ -1,5 +1,6 @@
 package app.modele.weapon;
 
+import app.modele.GameData;
 import app.modele.entity.animated.AnimatedEntity;
 import app.modele.entity.animated.Bullet;
 import javafx.animation.PauseTransition;
@@ -17,8 +18,7 @@ public class Taser extends Weapon {
 	private boolean canShoot;
 
 	public Taser(int a, int d) {
-		super(a, d);
-		this.id = "taser";
+		super(GameData.ENTITY_TASER, a, d);
 		this.bullets = FXCollections.observableArrayList();
 		this.magSize = 7;
 		

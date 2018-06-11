@@ -19,7 +19,8 @@ public abstract class Weapon {
 	protected IntegerProperty distance;
 	protected String id;
 	
-	public Weapon(int a, int d) {
+	public Weapon(String id, int a, int d) {
+		this.id = id;
 		this.att = new SimpleIntegerProperty(a);
 		this.distance = new SimpleIntegerProperty(d);
 	}
