@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class MenuControler {
 
@@ -24,6 +26,9 @@ public class MenuControler {
     void play(ActionEvent event) {
 
     	try {
+    		Media sound = new Media(new File("src/music/menu.mp3").toURI().toString());
+    		MediaPlayer player = new MediaPlayer(sound);
+    		player.play();
 			FXMLLoader loader = new FXMLLoader();
 			URL url = new File("src/app/vue/vueGraphique.fxml").toURI().toURL();
 			loader.setLocation(url);
