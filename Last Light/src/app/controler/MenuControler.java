@@ -3,6 +3,7 @@ package app.controler;
 import java.io.File;
 import java.net.URL;
 
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,8 +27,9 @@ public class MenuControler {
     void play(ActionEvent event) {
 
     	try {
-    		Media sound = new Media(new File("src/music/menu.mp3").toURI().toString());
+    		Media sound = new Media(new File("src/music/game.mp3").toURI().toString());
     		MediaPlayer player = new MediaPlayer(sound);
+    		player.setCycleCount(Timeline.INDEFINITE);
     		player.play();
 			FXMLLoader loader = new FXMLLoader();
 			URL url = new File("src/app/vue/vueGraphique.fxml").toURI().toURL();
