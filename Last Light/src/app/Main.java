@@ -19,9 +19,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-		Media sound = new Media(new File("src/music/menu.mp3").toURI().toString());
-		MediaPlayer player = new MediaPlayer(sound);
-		player.setCycleCount(Timeline.INDEFINITE);
 		FXMLLoader loader = new FXMLLoader();
 		URL url = new File("src/app/vue/vueMenu.fxml").toURI().toURL();
 		loader.setLocation(url);
@@ -33,7 +30,6 @@ public class Main extends Application {
      	primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("file:src/img/icon.png"));
-		player.play();
 		primaryStage.show();
 
 		} catch (Exception e) {
