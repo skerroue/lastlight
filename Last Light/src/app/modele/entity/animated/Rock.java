@@ -1,12 +1,13 @@
 package app.modele.entity.animated;
 
+import app.modele.GameData;
 import app.modele.entity.inanimated.InanimatedEntity;
 import javafx.collections.ObservableList;
 
 public class Rock extends AnimatedEntity {
 
 	public Rock(int x, int y) {
-		super("rock", x, y, 1, 0, 4, 1, 1);
+		super(GameData.ENTITY_ROCK, x, y, 1, 0, 4, 1, 1);
 		this.isInvicible = true;
 	}
 	

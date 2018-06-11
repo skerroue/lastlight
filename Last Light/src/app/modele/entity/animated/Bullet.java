@@ -1,6 +1,7 @@
 package app.modele.entity.animated;
 
 
+import app.modele.GameData;
 import app.modele.entity.Entity;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
@@ -8,7 +9,7 @@ import javafx.collections.ObservableList;
 public class Bullet extends Entity {
 
 	public Bullet(int x, int y, int orientation) {
-		super("bullet", x, y);
+		super(GameData.ENTITY_BULLET, x, y);
 		this.orientation = new SimpleIntegerProperty(orientation);
 		this.velocity = 4;
 	}
