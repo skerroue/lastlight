@@ -1,5 +1,7 @@
 package app.controler;
 
+import java.util.ArrayList;
+
 import app.modele.Game;
 import app.vue.FieldView;
 import app.vue.entity.EntityView;
@@ -50,7 +52,14 @@ public class FieldControler {
     	
     }
     
-    public static void initializeScrollField(EntityView playerView, FieldView field, Game game, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH, Pane tileContainer, Pane entityContainer) {
+    public static void initializeScrollField(EntityView playerView, FieldView field, Game game, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH, Pane tileContainer, Pane entityContainer, Pane interfaceContainer) {
+    	
+    	// Map transition
+        ft = new FadeTransition();
+        rec = new Rectangle(600,600);
+        creatingAnimation(interfaceContainer);
+        
+    	tileContainer.getChildren().addAll(field.getFieldView());
     	
     	setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
 		setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
@@ -104,6 +113,29 @@ public class FieldControler {
 			}
     		
     	});
+    }
+    
+    public static void moveScroll(ArrayList<EntityView> entitiesView, Pane tileContainer, FieldView field, Pane entityContainer, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH) {
+    	
+    	Game.getPlayer().getX().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+	    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH)
+	    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
+			}
+    		
+		});
+    	
+    	Game.getPlayer().getY().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT)
+	    			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
+			}
+		});
+    	
     }
     
     private static void setScrollX(int a, Pane tileContainer, Pane entityContainer) {
