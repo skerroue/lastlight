@@ -1,5 +1,6 @@
 package app.controler;
 
+import java.io.File;
 import java.net.URL;   
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -9,6 +10,7 @@ import app.vue.FieldView;
 import app.vue.InterfaceView;
 import app.vue.entity.EntityView;
 import app.vue.entity.PlayerView;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +19,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class Controler implements Initializable {
 	
@@ -55,6 +59,11 @@ public class Controler implements Initializable {
     @FXML
     private Label dialogContainer;
     
+    
+    private Media sound;
+   
+    private MediaPlayer player;
+    
     public Controler() {	
     	
     	this.game = new Game();
@@ -87,6 +96,9 @@ public class Controler implements Initializable {
         
         // Animation
         FieldControler.AnimationTransitionMap(1.0);
+        
+        // Musiques
+        launchMusic();
 		
 	}
 
@@ -211,6 +223,13 @@ public class Controler implements Initializable {
     	this.dialogPane.setVisible(true);
     	this.game.pauseGameLoop();
     	this.dialogPane.requestFocus();
+    }
+    
+    private void launchMusic() {
+    	this.sound = new Media(new File("src/music/game.mp3").toURI().toString());
+    	this.player = new MediaPlayer(this.sound);
+    	this.player.setCycleCount(Timeline.INDEFINITE);
+    	this.player.play();
     }
     	
 }

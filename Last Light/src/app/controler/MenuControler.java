@@ -24,16 +24,13 @@ public class MenuControler implements Initializable{
 
     @FXML
     private Button playButton;
-
-    @FXML
+    
     private Media sound;
     private MediaPlayer player;
     
     @FXML
     void play(ActionEvent event) {
     	stopMusic();
-		setSound("game");
-		setPlayer();
     	try {
 			FXMLLoader loader = new FXMLLoader();
 			URL url = new File("src/app/vue/vueGraphique.fxml").toURI().toURL();
@@ -42,7 +39,6 @@ public class MenuControler implements Initializable{
 			Pane root = new Pane(); 
 			root=loader.load();
 	     	panemenu.getScene().setRoot(root);
-			launchMusic();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -55,26 +51,18 @@ public class MenuControler implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		setSound("menu");
-		setPlayer();
-		this.player.setCycleCount(Timeline.INDEFINITE);
 		launchMusic();
-	}
-	
-	private void launchMusic() {
-		this.player.play();
 	}
 	
 	private void stopMusic() {
 		this.player.stop();
 	}
-	
-	private void setSound(String i) {
-		this.sound = new Media(new File("src/music/" + i +".mp3").toURI().toString());
-	}
-	
-	private void setPlayer() {
-		this.player = new MediaPlayer(this.sound);
-	}
+
+    private void launchMusic() {
+    	this.sound = new Media(new File("src/music/menu.mp3").toURI().toString());
+    	this.player = new MediaPlayer(this.sound);
+    	this.player.setCycleCount(Timeline.INDEFINITE);
+    	this.player.play();
+    }
 
 }
