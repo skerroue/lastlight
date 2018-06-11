@@ -21,6 +21,7 @@ public class Player extends AnimatedEntity {
 	
 	private BooleanProperty boots;
 	private boolean bootsIsActive;
+	private int bootsCount;
 	
 	private boolean necklace;
 	private BooleanProperty necklaceIsActive;
@@ -40,6 +41,7 @@ public class Player extends AnimatedEntity {
 		
 		this.boots = new SimpleBooleanProperty(false);
 		this.bootsIsActive = false;
+		bootsCount = 0;
 		this.necklace = false;
 		this.necklaceIsActive = new SimpleBooleanProperty(false);
 		this.weapons = FXCollections.observableArrayList();
@@ -203,6 +205,12 @@ public class Player extends AnimatedEntity {
 			default : break;
 			}
 			
+			bootsCount++;
+			
+			if (bootsCount >= 2) {
+				setBootsInactive();
+				bootsCount = 0;
+			}
 		}
 		
 	}
