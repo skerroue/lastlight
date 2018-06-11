@@ -15,14 +15,14 @@ import javafx.util.Duration;
 
 public class FieldControler {
 	
-    private static FadeTransition ft;
-    private static Rectangle rec;
+    private static FadeTransition mapChangeTransition;
+    private static Rectangle mapChangeTransitionNode;
     
     public static void initializeScrollField(EntityView playerView, FieldView field, Game game, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH, Pane tileContainer, Pane entityContainer, Pane interfaceContainer) {
     	
     	// Map transition
-        ft = new FadeTransition();
-        rec = new Rectangle(600,600);
+        mapChangeTransition = new FadeTransition();
+        mapChangeTransitionNode = new Rectangle(600,600);
         creatingAnimation(interfaceContainer);
         
     	tileContainer.getChildren().addAll(field.getFieldView());
@@ -115,17 +115,17 @@ public class FieldControler {
     }
     
 	public static void AnimationTransitionMap(Double i) {
-	   	ft.setDuration(Duration.seconds(i));
-		ft.play();
+	   	mapChangeTransition.setDuration(Duration.seconds(i));
+		mapChangeTransition.play();
 	}
 	 
 	private static void creatingAnimation(Pane interfaceContainer) {
-		ft.setFromValue(1.0);
-		ft.setToValue(0.0);
-		ft.setNode(rec);
+		mapChangeTransition.setFromValue(1.0);
+		mapChangeTransition.setToValue(0.0);
+		mapChangeTransition.setNode(mapChangeTransitionNode);
 		
-		rec.setFill(Color.BLACK);
-		interfaceContainer.getChildren().add(rec);
+		mapChangeTransitionNode.setFill(Color.BLACK);
+		interfaceContainer.getChildren().add(mapChangeTransitionNode);
 	}
 	
 
