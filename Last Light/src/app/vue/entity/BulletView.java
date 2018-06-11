@@ -1,5 +1,6 @@
 package app.vue.entity;
 
+import app.modele.GameData;
 import app.modele.entity.animated.Bullet;
 import javafx.scene.image.Image;
 
@@ -17,16 +18,16 @@ public class BulletView extends EntityView {
 	
 	public void rotate() {
 		switch (this.bullet.getOrientation().get()) {
-		case 0 :
+		case GameData.LEFT :
 			this.setRotate(-90);
 			break;
-		case 1 :
+		case GameData.UP :
 			this.setRotate(0);
 			break;
-		case 2 :
+		case GameData.RIGHT :
 			this.setRotate(90);
 			break;
-		case 3 :
+		case GameData.DOWN :
 			this.setRotate(180);
 			break;
 		default : break;
