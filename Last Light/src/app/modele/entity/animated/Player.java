@@ -1,5 +1,6 @@
 package app.modele.entity.animated;
 
+import app.modele.Game;
 import app.modele.GameData;
 import app.modele.weapon.Weapon;
 import javafx.beans.property.BooleanProperty;
@@ -23,6 +24,7 @@ public class Player extends AnimatedEntity {
 	private BooleanProperty boots;
 	private boolean bootsIsActive;
 	private int bootsCount;
+	private final int maxDash = 2;
 	
 	private boolean necklace;
 	private BooleanProperty necklaceIsActive;
@@ -195,22 +197,22 @@ public class Player extends AnimatedEntity {
 	public void update() {
 		if (this.bootsIsActive) {
 			switch (this.orientation.get()) {
-			case LEFT : x.set(x.get() - 32);
+			case LEFT 	: x.set(x.get() - 32);
 				break;
-			case UP : y.set(y.get() - 32);
+			case UP 	: y.set(y.get() - 32);
 				break;
-			case RIGHT : x.set(x.get() + 32);
+			case RIGHT 	: x.set(x.get() + 32);
 				break;
-			case DOWN : y.set(y.get() + 32);
+			case DOWN 	: y.set(y.get() + 32);
 				break;
 			default : break;
 			}
 			
-			bootsCount++;
+			this.bootsCount++;
 			
-			if (bootsCount >= 2) {
-				setBootsInactive();
-				bootsCount = 0;
+			if (this.bootsCount >= this.maxDash) {
+				this.setBootsInactive();
+				this.bootsCount = 0;
 			}
 		}
 		
