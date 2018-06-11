@@ -16,6 +16,7 @@ import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
@@ -115,36 +116,31 @@ public class EntityControler {
             public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldValue, Boolean newValue) {
 
                 if (newValue.booleanValue()) {
-                    switch (Game.getPlayer().getOrientation().get()) {
-                    case 0 :
-                        playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() - 32);
-                        playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 5);
-                        playerView.getAttackImage().setRotate(-90);
-                        break;
-                    case 1 :
-                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX());
-                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() - 32);
-                    	playerView.getAttackImage().setRotate(0);
-                        break;
-                    case 2 : 
-                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() + 32);
-                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 5);
-                    	playerView.getAttackImage().setRotate(90);
-                        break;
-                    case 3 :
-                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX());
-                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 32);
-                    	playerView.getAttackImage().setRotate(180);
-                        break;
-                    default :
-                        break;
-                    }
+                	
+                	rotatePlayerAttack(playerView.getAttackImage(), Game.getPlayer());
+                	
+                	switch (Game.getPlayer().getOrientation().get()) {
+                	case GameData.LEFT :
+                		translatePlayerAttack(playerView.getAttackImage(), -32, 5);
+                		break;
+                	case GameData.UP :
+                		translatePlayerAttack(playerView.getAttackImage(), 0, -32);
+                		break;
+                	case GameData.RIGHT :
+                		translatePlayerAttack(playerView.getAttackImage(), 32, 5);
+                		break;
+                	case GameData.DOWN :
+                		translatePlayerAttack(playerView.getAttackImage(), 0, 32);
+                		break;
+                	default : break;
+                	}
                     
                 }
 
             }
 
         });
+        
     	
     	game.addKeyFrame(e -> {
     		
@@ -170,5 +166,14 @@ public class EntityControler {
  		}, 0.017);
     	
     }
+    
+	public static void rotatePlayerAttack(Node n, Entity e) {
+		n.setRotate((Game.getPlayer().getOrientation().get()-1)*90);
+	}
+	
+	public static void translatePlayerAttack(Node n, int x, int y) {
+		n.setTranslateX(Game.getPlayer().getX().get() + x);
+        n.setTranslateY(Game.getPlayer().getY().get() + y);
+	}
 	
 }
