@@ -59,7 +59,7 @@ public class Game {
 	private static int[][] fieldsMap;	// contient les indices des fichiers de chaque map
 								// valeurs allant de 1 a ... (0 = pas de map)
 	private static Field map;
-	private Player player;
+	private static Player player;
 	private ObservableList<AnimatedEntity> entities;
 	private ObservableList<InanimatedEntity> inanimatedEntities;
 	private static BooleanProperty mapChanged;
@@ -69,7 +69,6 @@ public class Game {
 	private StringProperty currentText;
 	
 	private PauseTransition necklaceUse;
-	private PauseTransition bootsUse;
 	
 	public Game() {
 		
@@ -84,11 +83,6 @@ public class Game {
 		this.necklaceUse.setOnFinished(e -> {
 			this.player.setNecklaceInactive();
 			map.makeATileUncrossable(NECKLACE_WALL);
-			});
-		this.bootsUse = new PauseTransition(Duration.seconds(0.07));
-		this.bootsUse.setOnFinished(e -> {
-			System.out.println(this.player.getX());
-			this.player.setBootsInactive();
 			});
 		this.currentText = new SimpleStringProperty("");
 		
@@ -216,8 +210,8 @@ public class Game {
 		return fieldsMap[map.getI()][map.getJ()];
 	}
 	
-	public Player getPlayer() {
-		return this.player;
+	public static Player getPlayer() {
+		return player;
 	}
 	
 	public ObservableList<AnimatedEntity> getEntities() {
@@ -600,11 +594,8 @@ public class Game {
     }
     
     public void playerUseBoots() {
-    	if (!this.player.bootsIsActive() && this.player.hasBoots()) {
-    		System.out.println(this.player.getX());
+    	if (!this.player.bootsIsActive() && this.player.hasBoots())
     		this.player.setBootsActive();
-    		this.bootsUse.play();
-    	}
     }
     
     public void updateEnemies() {
