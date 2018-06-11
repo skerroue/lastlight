@@ -56,7 +56,6 @@ public class Game {
 	private StringProperty currentText;
 	
 	private PauseTransition necklaceUse;
-	private PauseTransition bootsUse;
 	
 	public Game() {
 		
@@ -71,11 +70,6 @@ public class Game {
 		this.necklaceUse.setOnFinished(e -> {
 			this.player.setNecklaceInactive();
 			map.makeATileUncrossable(GameData.NECKLACE_WALL);
-			});
-		this.bootsUse = new PauseTransition(Duration.seconds(0.07));
-		this.bootsUse.setOnFinished(e -> {
-			System.out.println(this.player.getX());
-			this.player.setBootsInactive();
 			});
 		this.currentText = new SimpleStringProperty("");
 		
@@ -587,11 +581,8 @@ public class Game {
     }
     
     public void playerUseBoots() {
-    	if (!this.player.bootsIsActive() && this.player.hasBoots()) {
-    		System.out.println(this.player.getX());
+    	if (!this.player.bootsIsActive() && this.player.hasBoots())
     		this.player.setBootsActive();
-    		this.bootsUse.play();
-    	}
     }
     
     public void updateEnemies() {
