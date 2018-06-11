@@ -17,21 +17,7 @@ public class BulletView extends EntityView {
 	}
 	
 	public void rotate() {
-		switch (this.bullet.getOrientation().get()) {
-		case GameData.LEFT :
-			this.setRotate(-90);
-			break;
-		case GameData.UP :
-			this.setRotate(0);
-			break;
-		case GameData.RIGHT :
-			this.setRotate(90);
-			break;
-		case GameData.DOWN :
-			this.setRotate(180);
-			break;
-		default : break;
-		}
+		this.setRotate((this.bullet.getOrientation().get()-1)*90);
 	}
 	
 }
