@@ -1,11 +1,12 @@
 package app.modele.entity.inanimated;
 
+import app.modele.GameData;
 import app.modele.entity.animated.Player;
 
 public class Dispenser extends InanimatedEntity {
 
-	public Dispenser(String id, int x, int y, String dialog) {
-		super(id, x, y, dialog);
+	public Dispenser(int x, int y, String dialog) {
+		super(GameData.ENTITY_DISPENSER, x, y, dialog);
 	}
 
 	@Override
