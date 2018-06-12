@@ -44,7 +44,6 @@ public class Game {
 	private BFS bfs;
 
 	private Timeline gameloop;
-	private PauseTransition necklaceUse;
 	
 	private static Field map;
 	private static Player player;
@@ -65,11 +64,6 @@ public class Game {
 		
 		this.gameloop = new Timeline();
 		this.gameloop.setCycleCount(Timeline.INDEFINITE);
-		this.necklaceUse = new PauseTransition(Duration.seconds(GameData.NECKLACE_TIME));
-		this.necklaceUse.setOnFinished(e -> {
-			this.player.setNecklaceInactive();
-			map.makeATileUncrossable(GameData.NECKLACE_WALL);
-		});
 		
 		this.currentText = new SimpleStringProperty("");
 		
@@ -177,13 +171,13 @@ public class Game {
 			}
 			break;
 		case GameData.RIGHT :
-			if (j < GameData.FILE_MAP_WIDTH-1 && GameData.mapsOfMap[i][j + 1] != 0) {
+			if (j < GameData.FILE_MAP_WIDTH - 1 && GameData.mapsOfMap[i][j + 1] != 0) {
 				map = new Field(i, j + 1, GameData.mapsOfMap[i][j + 1], 25, 25, GameData.crossableTiles);
 				changing = true;
 			}
 			break;
 		case GameData.DOWN :
-			if (i < GameData.FILE_MAP_HEIGHT-1 && GameData.mapsOfMap[i + 1][j] != 0) {
+			if (i < GameData.FILE_MAP_HEIGHT - 1 && GameData.mapsOfMap[i + 1][j] != 0) {
 				map = new Field(i + 1, j, GameData.mapsOfMap[i + 1][j], 25, 25, GameData.crossableTiles);
 				changing = true;
 			}
@@ -191,12 +185,11 @@ public class Game {
 		}
 		
 		if (changing) {
-			for (int k = 1 ; k < this.entities.size() ; k++) {
-				this.entities.get(k).die();
-			}
-			for (int l = 0 ; l < this.inanimatedEntities.size() ; l++) {
+			for (int indice = 1 ; indice < this.entities.size() ; indice++) 
+				this.entities.get(indice).die();
+			
+			for (int l = 0 ; l < this.inanimatedEntities.size() ; l++) 
 				this.inanimatedEntities.get(l).die();
-			}
 			
 			spawnEntities();
 			this.playerIsDetected = false;
@@ -243,21 +236,24 @@ public class Game {
 							this.addInanimated(GameData.ENTITY_SODA, s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 6 :
-							this.addAnimated(GameData.ENTITY_ROCK, s.nextInt(), s.nextInt());
+							this.addInanimated(GameData.ENTITY_DOOR, s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 7 :
 							this.addInanimated(GameData.ENTITY_BUTTON, s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 8 :
-							this.addAnimated(GameData.ENTITY_NPC, s.nextInt(), s.nextInt());
+							this.addAnimated(GameData.ENTITY_ROCK, s.nextInt(), s.nextInt());
 							break;
 						case 9 :
-							this.addInanimated(GameData.ENTITY_DISPENSER, s.nextInt(), s.nextInt(), noMap);
+							this.addAnimated(GameData.ENTITY_NPC, s.nextInt(), s.nextInt());
 							break;
 						case 10 :
-							this.addInanimated(GameData.ENTITY_NECKLACE, s.nextInt(), s.nextInt(), noMap);
+							this.addInanimated(GameData.ENTITY_DISPENSER, s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 11 :
+							this.addInanimated(GameData.ENTITY_NECKLACE, s.nextInt(), s.nextInt(), noMap);
+							break;
+						case 12 :
 							this.addInanimated(GameData.ENTITY_BOOTS, s.nextInt(), s.nextInt(), noMap);
 							break;
 						default : break;
@@ -344,13 +340,10 @@ public class Game {
     		inanimatedEntities.add(new ItemEntity(type + "Top", x, y-32, ""));
     		break;
     	case GameData.ENTITY_DOOR :
-    		inanimatedEntities.add(new ItemEntity("", x, y, ""));
+    		inanimatedEntities.add(new ItemEntity("door", x, y, ""));
     		break;
     	case GameData.ENTITY_BUTTON :
-    		// Reflechir a comment connaitre le child du boutton
-    		InanimatedEntity ent = new ItemEntity("door", 512, 512, "");
-    		inanimatedEntities.add(ent);
-    		inanimatedEntities.add(new Button(x, y, "", ent));
+    		inanimatedEntities.add(new Button(x, y, "", this.inanimatedEntities.get(this.inanimatedEntities.size() - 1)));
     		break;
     	case GameData.ENTITY_NECKLACE :
     		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
@@ -510,19 +503,6 @@ public class Game {
     	
     	return hasInteracted;
     	
-    }
-    
-    public void playerUseNecklace() {
-    	if (!this.player.necklaceIsActive().get() && this.player.hasNecklace()) {
-    		map.makeATileCrossable(GameData.NECKLACE_WALL);
-    		this.player.setNecklaceActive();
-    		this.necklaceUse.play();
-    	}
-    }
-    
-    public void playerUseBoots() {
-    	if (!this.player.bootsIsActive() && this.player.hasBoots())
-    		this.player.setBootsActive();
     }
     
     public void updateEnemies() {

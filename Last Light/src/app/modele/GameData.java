@@ -23,8 +23,8 @@ public class GameData {
 	final static int FILE_MAP_WIDTH = 3;
 	final static int FILE_MAP_HEIGHT = 4;
 	
-	final static double NECKLACE_TIME = 10;
-	final static int NECKLACE_WALL = 28;
+	public final static double NECKLACE_TIME = 10;
+	public final static int NECKLACE_WALL = 28;
 	
 	public final static String ENTITY_WALKER = "walker";
 	final static String ENTITY_FLYING = "flying";

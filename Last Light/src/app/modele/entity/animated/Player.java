@@ -3,12 +3,14 @@ package app.modele.entity.animated;
 import app.modele.Game;
 import app.modele.GameData;
 import app.modele.weapon.Weapon;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.Duration;
 
 public class Player extends AnimatedEntity {
 	
@@ -28,6 +30,7 @@ public class Player extends AnimatedEntity {
 	
 	private boolean necklace;
 	private BooleanProperty necklaceIsActive;
+	private PauseTransition necklaceUse;
 	
 	private ObservableList<Weapon> weapons;
 	private IntegerProperty activeWeaponIndex;
@@ -44,9 +47,17 @@ public class Player extends AnimatedEntity {
 		
 		this.boots = new SimpleBooleanProperty(false);
 		this.bootsIsActive = false;
-		bootsCount = 0;
+		this.bootsCount = 0;
+		
 		this.necklace = false;
 		this.necklaceIsActive = new SimpleBooleanProperty(false);
+		this.necklaceUse = new PauseTransition(Duration.seconds(GameData.NECKLACE_TIME));
+		this.necklaceUse.setOnFinished(e -> {
+			this.setNecklaceInactive();
+			Game.getMap().makeATileUncrossable(GameData.NECKLACE_WALL);
+		});
+		
+		
 		this.weapons = FXCollections.observableArrayList();
 		this.activeWeaponIndex = new SimpleIntegerProperty(-1);
 	}
@@ -95,6 +106,14 @@ public class Player extends AnimatedEntity {
 		this.necklaceIsActive.set(false);
 	}
 	
+    public void useNecklace() {
+    	if (!this.necklaceIsActive().get() && this.hasNecklace()) {
+    		Game.getMap().makeATileCrossable(GameData.NECKLACE_WALL);
+    		this.setNecklaceActive();
+    		this.necklaceUse.play();
+    	}
+    }
+	
 	public void setBoots(boolean b) {
 		this.boots.set(b);
 	}
@@ -114,6 +133,11 @@ public class Player extends AnimatedEntity {
 	public void setBootsInactive() {
 		this.bootsIsActive = false;
 	}
+	
+    public void playerUseBoots() {
+    	if (!this.bootsIsActive() && this.hasBoots())
+    		this.setBootsActive();
+    }
 	
 	public ObservableList<Weapon> getWeapons() {
 		return this.weapons;

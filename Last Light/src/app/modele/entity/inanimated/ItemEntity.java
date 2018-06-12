@@ -50,6 +50,8 @@ public class ItemEntity extends InanimatedEntity {
 			this.die();
 			hasInteracted = true;
 			break;
+		case GameData.ENTITY_DOOR :
+			this.die();
  		default : 
  			this.die();
  			break;

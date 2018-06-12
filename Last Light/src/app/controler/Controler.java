@@ -133,10 +133,10 @@ public class Controler implements Initializable {
 	    		Game.getPlayer().earnMoney(1);
 	    		break;
 	    	case S :
-	    		this.game.playerUseNecklace();
+	    		Game.getPlayer().useNecklace();
 	    		break;
 	    	case V :
-	    		this.game.playerUseBoots();
+	    		Game.getPlayer().playerUseBoots();
 	    		break;
 			default:
 				break;
