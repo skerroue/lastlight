@@ -20,40 +20,34 @@ public class ItemEntity extends InanimatedEntity {
 	
 	// Dumb af cette methode mais est construite dans l'id�e o� une arme spawnera une et une seule fois dans le jeu
 	public boolean interact(Player p) {
-		boolean hasInteracted = false;
+		boolean hasInteracted = true;
 		
 		switch (this.id) {
 		case GameData.ENTITY_LAMP :
 			p.getWeapons().add(new Lamp(1, 1));
 			this.die();
-			hasInteracted = true;
 			break;
 		case GameData.ENTITY_TASER :
 			p.getWeapons().add(new Taser(1, 1));
 			this.die();
-			hasInteracted = true;
 			break;
 		case GameData.ENTITY_SODA :
 			if (p.getPotion().getValue() < 3) {
 				p.earnPotion();
 				this.die();
 			}
-			hasInteracted = true;
 			break;
 		case GameData.ENTITY_NECKLACE :
 			p.setNecklace(true);
 			this.die();
-			hasInteracted = true;
 			break;
 		case GameData.ENTITY_BOOTS :
 			p.setBoots(true);
 			this.die();
-			hasInteracted = true;
 			break;
-		case GameData.ENTITY_DOOR :
-			this.die();
  		default : 
  			this.die();
+ 			hasInteracted = false;
  			break;
 		}
 		
