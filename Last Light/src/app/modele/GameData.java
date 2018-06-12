@@ -20,8 +20,8 @@ public class GameData {
 	public final static int LEFT_TOP_LIMIT = 0;
 	public final static int RIGHT_BOTTOM_LIMIT = 768;
 	
-	final static int FILE_MAP_WIDTH = 3;
-	final static int FILE_MAP_HEIGHT = 4;
+	final static int FILE_MAP_WIDTH = 6;
+	final static int FILE_MAP_HEIGHT = 5;
 	
 	public final static double NECKLACE_TIME = 10;
 	public final static int NECKLACE_WALL = 28;
@@ -47,8 +47,8 @@ public class GameData {
 	public static ArrayList<Integer> crossableTiles;
 	
 	public static int[][] mapsOfMap;
-	public final static int STARTING_MAP_LINE = 3;
-	public final static int STARTING_MAP_COLUMN = 0;
+	public final static int STARTING_MAP_LINE = 4;
+	public final static int STARTING_MAP_COLUMN = 3;
 	
 	public GameData() {
 		this.ENEMIES_ID = new ArrayList<String>();
