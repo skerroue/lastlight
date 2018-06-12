@@ -109,18 +109,18 @@ public class Controler implements Initializable {
 	    		Game.getPlayer().earnPotion();
 	    		Game.getPlayer().earnMoney(1);
 	    		break;
-	    	case X :
+	    	case SHIFT :
 	    		Game.getPlayer().usePotion();
 	    		break;
-	    	case SPACE :
+	    	case E :
 	    		if (!this.game.playerInteraction())
-	    			Game.getPlayer().attack(game.getEntities());
+	    			Game.getPlayer().attack(game.getAnimatedEntities());
 	    		else 
 	    			if (!(this.dialogContainer.getText() == null))
 	    				if (!this.dialogContainer.getText().equals(""))
 	    					this.showText();
 	    		break;
-	    	case ESCAPE:
+	    	case ESCAPE :
 	    		showPauseMenu();
 	    		break;
 	    	case TAB :
@@ -132,11 +132,11 @@ public class Controler implements Initializable {
 	    	case M :
 	    		Game.getPlayer().earnMoney(1);
 	    		break;
-	    	case S :
+	    	case A :
 	    		Game.getPlayer().useNecklace();
 	    		break;
-	    	case V :
-	    		Game.getPlayer().playerUseBoots();
+	    	case SPACE :
+	    		Game.getPlayer().useBoots();
 	    		break;
 			default:
 				break;
