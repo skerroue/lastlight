@@ -52,22 +52,22 @@ public class EntityControler {
     	entitiesView.add(playerView);
     	entityContainer.getChildren().add(playerView);
     	
-    	game.getEntities().addListener(new ListChangeListener<Entity>() {
+    	game.getAnimatedEntities().addListener(new ListChangeListener<Entity>() {
 
 			@Override
 			public void onChanged(Change<? extends Entity> c) {
 				
 				while (c.next()) {
 					if (c.wasAdded()) {
-						switch (game.getEntities().get(game.getEntities().size() - 1).getId()) {
+						switch (game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1).getId()) {
 						case GameData.ENTITY_WALKER :
-							entitiesView.add(new EnemyView(game.getEntities().get(game.getEntities().size() - 1)));
+							entitiesView.add(new EnemyView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
 							break;
 						case GameData.ENTITY_ROCK :
-							entitiesView.add(new RockView(game.getEntities().get(game.getEntities().size() - 1)));
+							entitiesView.add(new RockView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
 							break;
 						case GameData.ENTITY_NPC :
-							entitiesView.add(new NPCView(game.getEntities().get(game.getEntities().size() - 1)));
+							entitiesView.add(new NPCView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
 						default :
 							break;
 						}

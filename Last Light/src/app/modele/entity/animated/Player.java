@@ -134,7 +134,7 @@ public class Player extends AnimatedEntity {
 		this.bootsIsActive = false;
 	}
 	
-    public void playerUseBoots() {
+    public void useBoots() {
     	if (!this.bootsIsActive() && this.hasBoots())
     		this.setBootsActive();
     }

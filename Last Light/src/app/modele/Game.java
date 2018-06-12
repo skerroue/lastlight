@@ -47,7 +47,7 @@ public class Game {
 	
 	private static Field map;
 	private static Player player;
-	private ObservableList<AnimatedEntity> entities;
+	private ObservableList<AnimatedEntity> animatedEntities;
 	private ObservableList<InanimatedEntity> inanimatedEntities;
 	private static BooleanProperty mapChanged;
 	
@@ -67,10 +67,10 @@ public class Game {
 		
 		this.currentText = new SimpleStringProperty("");
 		
-		this.entities = FXCollections.observableArrayList();
+		this.animatedEntities = FXCollections.observableArrayList();
 		this.inanimatedEntities = FXCollections.observableArrayList();
 		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);
-		this.entities.add(player);
+		this.animatedEntities.add(player);
 		this.playerIsDetected = false;
 		
 		this.bfs = new BFS(player, map);
@@ -104,11 +104,11 @@ public class Game {
 			
 			if (player.getActiveWeaponIndex().get() > -1)
 				for (Weapon w : this.player.getWeapons())
-					w.update(entities);
+					w.update(animatedEntities);
 			
-			for (int k = 0; k < getEntities().size(); k++)
-				if (getEntities().get(k).getIsDead().get()) 
-					getEntities().remove(getEntities().get(k));
+			for (int k = 0; k < getAnimatedEntities().size(); k++)
+				if (getAnimatedEntities().get(k).getIsDead().get()) 
+					getAnimatedEntities().remove(getAnimatedEntities().get(k));
 			
 			for (int i = 0 ; i < getInanimatedEntities().size() ; i++)
 				if (getInanimatedEntities().get(i).getIsDead().get())
@@ -131,8 +131,8 @@ public class Game {
 		return player;
 	}
 	
-	public ObservableList<AnimatedEntity> getEntities() {
-		return this.entities;
+	public ObservableList<AnimatedEntity> getAnimatedEntities() {
+		return this.animatedEntities;
 	}
 	
 	public ObservableList<InanimatedEntity> getInanimatedEntities() {
@@ -185,8 +185,8 @@ public class Game {
 		}
 		
 		if (changing) {
-			for (int indice = 1 ; indice < this.entities.size() ; indice++) 
-				this.entities.get(indice).die();
+			for (int indice = 1 ; indice < this.animatedEntities.size() ; indice++) 
+				this.animatedEntities.get(indice).die();
 			
 			for (int l = 0 ; l < this.inanimatedEntities.size() ; l++) 
 				this.inanimatedEntities.get(l).die();
@@ -359,13 +359,13 @@ public class Game {
     public void addAnimated(String type, int x, int y) {
     	switch (type) {
     	case GameData.ENTITY_WALKER :
-    		entities.add(new Walker(x, y, 1, 1, 4, 6, 18));
+    		animatedEntities.add(new Walker(x, y, 1, 1, 4, 6, 18));
     		break;
     	case GameData.ENTITY_ROCK :
-    		entities.add(new Rock(x, y));
+    		animatedEntities.add(new Rock(x, y));
     		break;
     	case GameData.ENTITY_NPC :
-    		entities.add(new NPC(x, y, 1, 0, 4, 6, 18, "Martin"));
+    		animatedEntities.add(new NPC(x, y, 1, 0, 4, 6, 18, "Martin"));
     		break;
      	default : break;
     	}
@@ -395,7 +395,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveLeft(entities, inanimatedEntities);
+					player.moveLeft(animatedEntities, inanimatedEntities);
 				break;
 			case UP :
 				if (player.getY().get() == GameData.LEFT_TOP_LIMIT) {
@@ -405,7 +405,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveUp(entities, inanimatedEntities);
+					player.moveUp(animatedEntities, inanimatedEntities);
 				break;
 			case RIGHT :
 				if (player.getX().get() == GameData.RIGHT_BOTTOM_LIMIT) {
@@ -415,7 +415,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveRight(entities, inanimatedEntities);
+					player.moveRight(animatedEntities, inanimatedEntities);
 				break;
 			case DOWN :
 				if (player.getY().get() == GameData.RIGHT_BOTTOM_LIMIT) {
@@ -425,7 +425,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveDown(entities, inanimatedEntities);
+					player.moveDown(animatedEntities, inanimatedEntities);
 				break;
 				default:
 					break;
@@ -442,7 +442,7 @@ public class Game {
     	
     	switch (this.player.getOrientation().get()) {
 		case GameData.LEFT :
-			for (AnimatedEntity e : entities)
+			for (AnimatedEntity e : animatedEntities)
 	    		if (this.player.getX().get() == e.getX().get() + 32 && 
 	    			this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
 	    			hasInteracted = e.interact();
@@ -456,7 +456,7 @@ public class Game {
 	    		}
 			break;
 		case GameData.UP :
-			for (AnimatedEntity e : entities)
+			for (AnimatedEntity e : animatedEntities)
 	    		if (this.player.getY().get() == e.getY().get() + 32 && 
 	    			this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
 	    			hasInteracted = e.interact();
@@ -470,7 +470,7 @@ public class Game {
 	    		}
 			break;
 		case GameData.RIGHT :
-			for (AnimatedEntity e : entities)
+			for (AnimatedEntity e : animatedEntities)
 				if (this.player.getX().get() == e.getX().get() - 32 && 
     				this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
 					hasInteracted = e.interact();
@@ -484,7 +484,7 @@ public class Game {
 				}
 			break;
 		case GameData.DOWN :
-			for (AnimatedEntity e : entities)
+			for (AnimatedEntity e : animatedEntities)
 				if (this.player.getY().get() == e.getY().get() - 32 && 
     				this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
 					hasInteracted = e.interact();
@@ -506,10 +506,10 @@ public class Game {
     }
     
     public void updateEnemies() {
-    	for (int i = 1 ; i < entities.size() ; i++) 
-    		if (GameData.ENEMIES_ID.contains(entities.get(i).getId())) {
-    			moveEnemy(entities.get(i));
-    			entities.get(i).attack(entities);
+    	for (int i = 1 ; i < animatedEntities.size() ; i++) 
+    		if (GameData.ENEMIES_ID.contains(animatedEntities.get(i).getId())) {
+    			moveEnemy(animatedEntities.get(i));
+    			animatedEntities.get(i).attack(animatedEntities);
     		}
     }
     
@@ -523,13 +523,13 @@ public class Game {
 	    	
 	    	if (nextTile != null) {
 		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) 
-		    		e.moveLeft(entities, inanimatedEntities);
+		    		e.moveLeft(animatedEntities, inanimatedEntities);
 		    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		e.moveUp(entities, inanimatedEntities);
+		    		e.moveUp(animatedEntities, inanimatedEntities);
 		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) 
-		    		e.moveRight(entities, inanimatedEntities);
+		    		e.moveRight(animatedEntities, inanimatedEntities);
 		    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		e.moveDown(entities, inanimatedEntities);
+		    		e.moveDown(animatedEntities, inanimatedEntities);
 	    	}
     	}
     	
