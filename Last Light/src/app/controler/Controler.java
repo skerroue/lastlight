@@ -31,8 +31,6 @@ public class Controler implements Initializable {
 
 	@FXML
 	private Pane pausePane;
-	//private Button resumeButton;
-	//private Button quitButton;
 	
     @FXML
     private Pane tileContainer;

@@ -60,12 +60,12 @@ public class Game {
 		
 		this.gameData = new GameData();
 		
-		map = new Field(GameData.STARTING_MAP_LINE, GameData.STARTING_MAP_COLUMN, GameData.mapsOfMap[GameData.STARTING_MAP_LINE][GameData.STARTING_MAP_COLUMN] , 25, 25, GameData.crossableTiles);
+		map = new Field(GameData.STARTING_MAP_LINE, GameData.STARTING_MAP_COLUMN, GameData.mapsOfMap[GameData.STARTING_MAP_LINE][GameData.STARTING_MAP_COLUMN], 25, 25, GameData.crossableTiles);
 		mapChanged = new SimpleBooleanProperty(true);
 		
 		this.gameloop = new Timeline();
 		this.gameloop.setCycleCount(Timeline.INDEFINITE);
-		this.necklaceUse = new PauseTransition(Duration.seconds(10));
+		this.necklaceUse = new PauseTransition(Duration.seconds(GameData.NECKLACE_TIME));
 		this.necklaceUse.setOnFinished(e -> {
 			this.player.setNecklaceInactive();
 			map.makeATileUncrossable(GameData.NECKLACE_WALL);
@@ -75,7 +75,7 @@ public class Game {
 		
 		this.entities = FXCollections.observableArrayList();
 		this.inanimatedEntities = FXCollections.observableArrayList();
-		this.player = new Player(416, 416, 3, 0, 8, 0, 6, 18);
+		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);
 		this.entities.add(player);
 		this.playerIsDetected = false;
 		
@@ -343,6 +343,9 @@ public class Game {
     		inanimatedEntities.add(new Dispenser(x, y, "Voulez vous acheter une potion ?"));
     		inanimatedEntities.add(new ItemEntity(type + "Top", x, y-32, ""));
     		break;
+    	case GameData.ENTITY_DOOR :
+    		inanimatedEntities.add(new ItemEntity("", x, y, ""));
+    		break;
     	case GameData.ENTITY_BUTTON :
     		// Reflechir a comment connaitre le child du boutton
     		InanimatedEntity ent = new ItemEntity("door", 512, 512, "");
@@ -369,7 +372,7 @@ public class Game {
     		entities.add(new Rock(x, y));
     		break;
     	case GameData.ENTITY_NPC :
-    		entities.add(new NPC(x, y, 1, 0, 4, 6, 18, "Martin est un fdp"));
+    		entities.add(new NPC(x, y, 1, 0, 4, 6, 18, "Martin"));
     		break;
      	default : break;
     	}
@@ -539,18 +542,14 @@ public class Game {
 	    	Tile enemyAt = map.getNextTile(e.getIndiceY(), e.getIndiceX());
 	    	
 	    	if (nextTile != null) {
-		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) {
+		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) 
 		    		e.moveLeft(entities, inanimatedEntities);
-		    	}
-		    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) {
+		    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
 		    		e.moveUp(entities, inanimatedEntities);
-		    	}
-		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) {
+		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) 
 		    		e.moveRight(entities, inanimatedEntities);
-		    	}
-		    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) {
+		    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
 		    		e.moveDown(entities, inanimatedEntities);
-		    	}
 	    	}
     	}
     	

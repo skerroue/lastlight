@@ -214,7 +214,7 @@ public abstract class AnimatedEntity extends Entity {
 	}
 	
 	public void attack(ObservableList<AnimatedEntity> entities) {
-		
+		return;
 	}
 	
 	public boolean push(int DIRECTION, ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {

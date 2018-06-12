@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import app.modele.Game;
+import app.modele.GameData;
 import app.modele.entity.animated.Player;
 import app.modele.weapon.Lamp;
 import app.modele.weapon.Taser;
@@ -22,34 +23,36 @@ public class ItemEntity extends InanimatedEntity {
 		boolean hasInteracted = false;
 		
 		switch (this.id) {
-		case "lamp" :
+		case GameData.ENTITY_LAMP :
 			p.getWeapons().add(new Lamp(1, 1));
 			this.die();
 			hasInteracted = true;
 			break;
-		case "taser" :
+		case GameData.ENTITY_TASER :
 			p.getWeapons().add(new Taser(1, 1));
 			this.die();
 			hasInteracted = true;
 			break;
-		case "soda" :
+		case GameData.ENTITY_SODA :
 			if (p.getPotion().getValue() < 3) {
 				p.earnPotion();
 				this.die();
 			}
 			hasInteracted = true;
 			break;
-		case "necklace" :
+		case GameData.ENTITY_NECKLACE :
 			p.setNecklace(true);
 			this.die();
 			hasInteracted = true;
 			break;
-		case "boots" :
+		case GameData.ENTITY_BOOTS :
 			p.setBoots(true);
 			this.die();
 			hasInteracted = true;
 			break;
- 		default : break;
+ 		default : 
+ 			this.die();
+ 			break;
 		}
 		
 		// Remplis le fichier pour savoir si un item a ete pris
