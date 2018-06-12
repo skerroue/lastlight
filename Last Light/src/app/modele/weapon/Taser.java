@@ -55,7 +55,6 @@ public class Taser extends Weapon {
 	}
 	
 	public void reload() {
-		//if (bullets.size() > 6 && this.allBulletsDead())
 		killAllBullets();	
 		bullets.clear();
 	}
@@ -76,12 +75,6 @@ public class Taser extends Weapon {
 	public void killAllBullets() {
 		for (Bullet b : bullets)
 			b.die();
-	}
-	
-	public boolean canShoot() {
-		if (this.bullets.size() > 0)
-			return this.bullets.get(this.bullets.size()-1).getIsDead().get()?true:false;
-		else return true;
 	}
 	
 	public void addBullet(int x, int y, int orientation) {

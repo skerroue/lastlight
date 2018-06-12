@@ -1,7 +1,8 @@
 package app.modele.weapon;
 
 import app.modele.GameData;
-import app.modele.entity.animated.AnimatedEntity; 
+import app.modele.entity.animated.AnimatedEntity;
+import app.modele.entity.animated.Bullet;
 import javafx.collections.ObservableList;
 
 public class Lamp extends Weapon {
@@ -49,6 +50,24 @@ public class Lamp extends Weapon {
 
 	@Override
 	public void update(ObservableList<AnimatedEntity> entities) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void killAllBullets() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ObservableList<Bullet> getBullets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void reload() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -37,16 +37,10 @@ public abstract class Weapon {
 	
 	public abstract void update(ObservableList<AnimatedEntity> entities);
 	
-	public void killAllBullets() {
-		
-	}
+	public abstract void killAllBullets();
 	
-	public ObservableList<Bullet> getBullets() {
-		return null;
-	}
+	public abstract ObservableList<Bullet> getBullets();
 	
-	public void reload() {
-		
-	}
+	public abstract void reload();
 	
 }
