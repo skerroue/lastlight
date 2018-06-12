@@ -40,8 +40,11 @@ import javafx.util.Duration;
 public class Game {
 	
 	private GameData gameData;
+	
+	private BFS bfs;
 
 	private Timeline gameloop;
+	private PauseTransition necklaceUse;
 	
 	private static Field map;
 	private static Player player;
@@ -49,11 +52,9 @@ public class Game {
 	private ObservableList<InanimatedEntity> inanimatedEntities;
 	private static BooleanProperty mapChanged;
 	
-	private BFS bfs;
+	private boolean playerIsDetected;
 	
 	private StringProperty currentText;
-	
-	private PauseTransition necklaceUse;
 	
 	public Game() {
 		
@@ -76,6 +77,7 @@ public class Game {
 		this.inanimatedEntities = FXCollections.observableArrayList();
 		this.player = new Player(416, 416, 3, 0, 8, 0, 6, 18);
 		this.entities.add(player);
+		this.playerIsDetected = false;
 		
 		this.bfs = new BFS(player, map);
 		
@@ -121,40 +123,6 @@ public class Game {
 		
 		gameloop.getKeyFrames().add(updateEntities);
 		
-	}
-	
-	private int[][] readFileMaps() { 
-		int[][] fieldsMap = new int [GameData.FILE_MAP_HEIGHT][GameData.FILE_MAP_WIDTH];	// taille à modifier
-		        
-        try {
-        	
-			File f = new File("src/map/maps.txt");	// nom du fichier à modifier
-			FileReader fr = new FileReader(f);
-			BufferedReader br = new BufferedReader(fr);
-			@SuppressWarnings("resource")
-			Scanner s = new Scanner(br).useDelimiter(",");
-			
-			try {
-				
-				for (int i = 0; i < GameData.FILE_MAP_HEIGHT; i++) {
-					for (int j = 0; j < GameData.FILE_MAP_WIDTH; j++) {	// taille à modifier
-						fieldsMap[i][j] = s.nextInt();
-					}
-				}
-				
-				s.close();
-				br.close();
-				fr.close();
-				
-			} catch (IOException e) {
-				System.out.println("maps : Erreur lecture");
-			}
-			
-		} catch (FileNotFoundException e) {
-			System.out.println("maps : Fichier introuvable");
-		}
-		
-		return fieldsMap;
 	}
 	
 	public static Field getMap() {
@@ -231,6 +199,7 @@ public class Game {
 			}
 			
 			spawnEntities();
+			this.playerIsDetected = false;
 		}
 		
 		return changing;
@@ -555,29 +524,46 @@ public class Game {
     
     public void updateEnemies() {
     	for (int i = 1 ; i < entities.size() ; i++) 
-    		if (entities.get(i).getId() != GameData.ENTITY_ROCK && entities.get(i).getId() != GameData.ENTITY_NPC) {
+    		if (GameData.ENEMIES_ID.contains(entities.get(i).getId())) {
     			moveEnemy(entities.get(i));
     			entities.get(i).attack(entities);
     		}
     }
     
     public void moveEnemy(AnimatedEntity e) {
-    	Tile nextTile = this.bfs.searchWay(e);
-    	Tile enemyAt = map.getNextTile(e.getIndiceY(), e.getIndiceX());
+    	if (this.playerIsDetected || this.playerDetection(6, e)) {
+    		
+    		this.playerIsDetected = true;
+    		
+	    	Tile nextTile = this.bfs.searchWay(e);
+	    	Tile enemyAt = map.getNextTile(e.getIndiceY(), e.getIndiceX());
+	    	
+	    	if (nextTile != null) {
+		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) {
+		    		e.moveLeft(entities, inanimatedEntities);
+		    	}
+		    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) {
+		    		e.moveUp(entities, inanimatedEntities);
+		    	}
+		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) {
+		    		e.moveRight(entities, inanimatedEntities);
+		    	}
+		    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) {
+		    		e.moveDown(entities, inanimatedEntities);
+		    	}
+	    	}
+    	}
     	
-    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) {
-    		e.moveLeft(entities, inanimatedEntities);
-    	}
-    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) {
-    		e.moveUp(entities, inanimatedEntities);
-    	}
-    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) {
-    		e.moveRight(entities, inanimatedEntities);
-    	}
-    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) {
-    		e.moveDown(entities, inanimatedEntities);
-    	}
+    }
+    
+    public boolean playerDetection(int range, AnimatedEntity e) {
+    	int distance = range * GameData.TILE_SIZE;
     	
+    	if (player.getX().get() >= e.getX().get() - distance && player.getX().get() <= e.getX().get() + distance &&
+    		player.getY().get() >= e.getY().get() - distance && player.getY().get() <= e.getX().get() + distance)
+    		return true;
+    	
+    	return false;
     }
 	
 }
