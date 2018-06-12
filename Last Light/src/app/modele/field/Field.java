@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 
 public class Field {
 	
+	private final static int NB_TILESET_COLUMN = 8;
+	
 	private int[][] field;
 	private Tile[][] tileField;
 	private int i, j; // coordonnées dans la grande map
@@ -22,10 +24,10 @@ public class Field {
 		this.i = i;
 		this.j = j;
 		
-		this.tileField = new Tile[25][25];
-		for (int k = 0 ; k < 25 ; k++) 
-			for (int l = 0 ; l < 25 ; l++) 
-				this.tileField[k][l] = new Tile(field[k][l], crossableTiles.contains(field[k][l]), k, l);
+		this.tileField = new Tile[height][width];
+		for (int line = 0 ; line < height ; line++) 
+			for (int column = 0 ; column < width ; column++) 
+				this.tileField[line][column] = new Tile(field[line][column], crossableTiles.contains(field[line][column]), line, column);
 	}
 	
 	private int[][] readFile(int fileIndex, int height, int width) {
@@ -51,8 +53,8 @@ public class Field {
 				@SuppressWarnings("resource")
 				Scanner s = new Scanner(lines.get(4)).useDelimiter(", ");
 												
-				for (int i = 0; i < 25; i++) {
-					for (int j = 0; j < 25; j++) {
+				for (int i = 0; i < height; i++) {
+					for (int j = 0; j < width; j++) {
 						field[i][j] = s.nextInt();
 					}
 				}
@@ -92,8 +94,8 @@ public class Field {
 	
 	public ImageView intToTiles(ImageView img, int fieldValue) {
     	
-		int x = 32 * ((fieldValue-1)%8);
-		int y = 32 * ((fieldValue-1)/8);
+		int x = 32 * ((fieldValue-1) % NB_TILESET_COLUMN);
+		int y = 32 * ((fieldValue-1) / NB_TILESET_COLUMN);
 		img.setViewport(new Rectangle2D(x, y, 32, 32));
 
     	return img;

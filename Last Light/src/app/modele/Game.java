@@ -39,12 +39,10 @@ import javafx.util.Duration;
 
 public class Game {
 	
-	static protected ArrayList<Integer> crossableTiles;
+	private GameData gameData;
 
 	private Timeline gameloop;
 	
-	private static int[][] fieldsMap;	// contient les indices des fichiers de chaque map
-								// valeurs allant de 1 a ... (0 = pas de map)
 	private static Field map;
 	private static Player player;
 	private ObservableList<AnimatedEntity> entities;
@@ -59,9 +57,9 @@ public class Game {
 	
 	public Game() {
 		
-		fieldsMap = readFileMaps();
-		crossableTiles = readFileCrossableTiles();
-		map = new Field(3, 0, fieldsMap[3][0] , 25, 25, crossableTiles);
+		this.gameData = new GameData();
+		
+		map = new Field(GameData.STARTING_MAP_LINE, GameData.STARTING_MAP_COLUMN, GameData.mapsOfMap[GameData.STARTING_MAP_LINE][GameData.STARTING_MAP_COLUMN] , 25, 25, GameData.crossableTiles);
 		mapChanged = new SimpleBooleanProperty(true);
 		
 		this.gameloop = new Timeline();
@@ -70,7 +68,8 @@ public class Game {
 		this.necklaceUse.setOnFinished(e -> {
 			this.player.setNecklaceInactive();
 			map.makeATileUncrossable(GameData.NECKLACE_WALL);
-			});
+		});
+		
 		this.currentText = new SimpleStringProperty("");
 		
 		this.entities = FXCollections.observableArrayList();
@@ -158,43 +157,12 @@ public class Game {
 		return fieldsMap;
 	}
 	
-	private ArrayList<Integer> readFileCrossableTiles() {
-		ArrayList<Integer> crossableTiles = new ArrayList<>();
-		
-		try {
-        	
-			File f = new File("src/map/crossableTiles.txt");	// nom du fichier à modifier
-			FileReader fr = new FileReader(f);
-			BufferedReader br = new BufferedReader(fr);
-			@SuppressWarnings("resource")
-			Scanner s = new Scanner(br).useDelimiter(",");
-			
-			try {
-				
-				while (s.hasNextInt())
-					crossableTiles.add(s.nextInt());
-				
-				s.close();
-				br.close();
-				fr.close();
-				
-			} catch (IOException e) {
-				System.out.println("CrossableTiles : Erreur lecture");
-			}
-			
-		} catch (FileNotFoundException e) {
-			System.out.println("CrossableTiles : Fichier introuvable");
-		}
-				
-		return crossableTiles;
-	}
-	
 	public static Field getMap() {
 		return map;
 	}
 	
 	public static int getMapId() {
-		return fieldsMap[map.getI()][map.getJ()];
+		return GameData.mapsOfMap[map.getI()][map.getJ()];
 	}
 	
 	public static Player getPlayer() {
@@ -229,26 +197,26 @@ public class Game {
 		
 		switch (direction) {
 		case GameData.LEFT :
-			if (j > 0 && fieldsMap[i][j - 1] != 0) {
-				map = new Field(i, j - 1, fieldsMap[i][j - 1], 25, 25, crossableTiles);
+			if (j > 0 && GameData.mapsOfMap[i][j - 1] != 0) {
+				map = new Field(i, j - 1, GameData.mapsOfMap[i][j - 1], 25, 25, GameData.crossableTiles);
 				changing = true;
 			}
 			break;
 		case GameData.UP :
-			if (i > 0 && fieldsMap[i - 1][j] != 0) {
-				map = new Field(i - 1, j, fieldsMap[i - 1][j], 25, 25, crossableTiles);
+			if (i > 0 && GameData.mapsOfMap[i - 1][j] != 0) {
+				map = new Field(i - 1, j, GameData.mapsOfMap[i - 1][j], 25, 25, GameData.crossableTiles);
 				changing = true;
 			}
 			break;
 		case GameData.RIGHT :
-			if (j < GameData.FILE_MAP_WIDTH-1 && fieldsMap[i][j + 1] != 0) {
-				map = new Field(i, j + 1, fieldsMap[i][j + 1], 25, 25, crossableTiles);
+			if (j < GameData.FILE_MAP_WIDTH-1 && GameData.mapsOfMap[i][j + 1] != 0) {
+				map = new Field(i, j + 1, GameData.mapsOfMap[i][j + 1], 25, 25, GameData.crossableTiles);
 				changing = true;
 			}
 			break;
 		case GameData.DOWN :
-			if (i < GameData.FILE_MAP_HEIGHT-1 && fieldsMap[i + 1][j] != 0) {
-				map = new Field(i + 1, j, fieldsMap[i + 1][j], 25, 25, crossableTiles);
+			if (i < GameData.FILE_MAP_HEIGHT-1 && GameData.mapsOfMap[i + 1][j] != 0) {
+				map = new Field(i + 1, j, GameData.mapsOfMap[i + 1][j], 25, 25, GameData.crossableTiles);
 				changing = true;
 			}
 			break;
@@ -269,7 +237,7 @@ public class Game {
 	}
 	
 	private void spawnEntities() {
-		int noMap = fieldsMap[map.getI()][map.getJ()];
+		int noMap = GameData.mapsOfMap[map.getI()][map.getJ()];
 		String line;
 		
 		try {
