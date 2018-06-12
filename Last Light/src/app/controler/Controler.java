@@ -77,12 +77,8 @@ public class Controler implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
-		// Initialisation de la map
+		// Initialisation de la map et du scrolling
 		FieldControler.initializeScrollField(playerView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer, interfaceContainer);
-		// FieldControler.initializeField(tileContainer, field, interfaceContainer);
-
-		// Initialisation du scrolling de la map
-		FieldControler.moveScroll(entitiesView, tileContainer, field, entityContainer, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH);
 		
 		// Creation de l'interface et liaison avec les caracteristiques du joueur
 		InterfaceControler.initializeInterface(interfaceContainer, hud);
@@ -95,7 +91,7 @@ public class Controler implements Initializable {
 		// Lancement de la gameloop
 		this.game.playGameLoop();
         
-        // Animation
+        // Animation de début de jeu
         FieldControler.AnimationTransitionMap(1.0);
         
         // Musiques
@@ -108,69 +104,45 @@ public class Controler implements Initializable {
     	
     	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
     		game.movePlayer(event.getCode());
-    	
-    	switch (event.getCode()) {
-//    	case UP:
-//    		game.movePlayer(event.getCode());
-//    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
-//    			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
-//    		}
-//    		break;
-//    	case DOWN:
-//    		game.movePlayer(event.getCode());
-//    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
-//    			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
-//    		}
-//    		break;
-//    	case LEFT:
-//    		game.movePlayer(event.getCode());
-//    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
-//    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
-//    		}
-//    		break;
-//    	case RIGHT:
-//    		game.movePlayer(event.getCode());
-//    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
-//    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
-//    		}
-//    		break;
-    	case D :
-    		Game.getPlayer().loseHP(1);
-    		Game.getPlayer().earnPotion();
-    		Game.getPlayer().earnMoney(1);
-    		break;
-    	case X :
-    		Game.getPlayer().usePotion();
-    		break;
-    	case SPACE :
-    		if (!this.game.playerInteraction())
-    			Game.getPlayer().attack(game.getEntities());
-    		else 
-    			if (!(this.dialogContainer.getText() == null))
-    				if (!this.dialogContainer.getText().equals(""))
-    					this.showText();
-    		break;
-    	case ESCAPE:
-    		showPauseMenu();
-    		break;
-    	case TAB :
-    		Game.getPlayer().nextWeapon();
-    		break;
-    	case R :
-    		Game.getPlayer().reload();
-    		break;
-    	case M :
-    		Game.getPlayer().earnMoney(1);
-    		break;
-    	case S :
-    		this.game.playerUseNecklace();
-    		break;
-    	case V :
-    		this.game.playerUseBoots();
-    		break;
-		default:
-			break;
-    	}
+    	else 
+	    	switch (event.getCode()) {
+	    	case D :
+	    		Game.getPlayer().loseHP(1);
+	    		Game.getPlayer().earnPotion();
+	    		Game.getPlayer().earnMoney(1);
+	    		break;
+	    	case X :
+	    		Game.getPlayer().usePotion();
+	    		break;
+	    	case SPACE :
+	    		if (!this.game.playerInteraction())
+	    			Game.getPlayer().attack(game.getEntities());
+	    		else 
+	    			if (!(this.dialogContainer.getText() == null))
+	    				if (!this.dialogContainer.getText().equals(""))
+	    					this.showText();
+	    		break;
+	    	case ESCAPE:
+	    		showPauseMenu();
+	    		break;
+	    	case TAB :
+	    		Game.getPlayer().nextWeapon();
+	    		break;
+	    	case R :
+	    		Game.getPlayer().reload();
+	    		break;
+	    	case M :
+	    		Game.getPlayer().earnMoney(1);
+	    		break;
+	    	case S :
+	    		this.game.playerUseNecklace();
+	    		break;
+	    	case V :
+	    		this.game.playerUseBoots();
+	    		break;
+			default:
+				break;
+	    	}
     	
     }
 
@@ -180,23 +152,6 @@ public class Controler implements Initializable {
     	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
     		playerView.resetImage();
     	
-    	switch (event.getCode()) {
-    	case SPACE :
-    		break;
-		default :
-			break;
-    	}
-    	
-    }
-    
-    private void setScrollX(int a) {
-    	tileContainer.setTranslateX(-a);
-		entityContainer.setTranslateX(-a);
-    }
-    
-    private void setScrollY(int a) {
-    	tileContainer.setTranslateY(-a);
-		entityContainer.setTranslateY(-a);
     }
     
     @FXML

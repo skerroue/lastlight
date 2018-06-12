@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import app.modele.Game;
 import app.vue.FieldView;
 import app.vue.entity.EntityView;
+import app.vue.entity.PlayerView;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -79,16 +80,19 @@ public class FieldControler {
 			}
     		
     	});
+    	
+    	moveScroll(playerView, tileContainer, field, entityContainer, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH);
+    	
     }
     
-    public static void moveScroll(ArrayList<EntityView> entitiesView, Pane tileContainer, FieldView field, Pane entityContainer, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH) {
+    public static void moveScroll(EntityView playerView, Pane tileContainer, FieldView field, Pane entityContainer, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH) {
     	
     	Game.getPlayer().getX().addListener(new ChangeListener<Number>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-	    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH)
-	    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
+	    		if (playerView.getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && playerView.getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH)
+	    			setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
 			}
     		
 		});
@@ -97,8 +101,8 @@ public class FieldControler {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT)
-	    			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
+				if (playerView.getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && playerView.getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT)
+	    			setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
 			}
 		});
     	
