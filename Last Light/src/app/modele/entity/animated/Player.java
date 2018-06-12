@@ -221,13 +221,17 @@ public class Player extends AnimatedEntity {
 	public void update() {
 		if (this.bootsIsActive) {
 			switch (this.orientation.get()) {
-			case LEFT 	: x.set(x.get() - 32);
+			case LEFT :
+				moveLeft(Game.getAnimatedEntities(), Game.getInanimatedEntities(), 32);
 				break;
-			case UP 	: y.set(y.get() - 32);
+			case UP :
+				moveUp(Game.getAnimatedEntities(), Game.getInanimatedEntities(), 32);
 				break;
-			case RIGHT 	: x.set(x.get() + 32);
+			case RIGHT :
+				moveRight(Game.getAnimatedEntities(), Game.getInanimatedEntities(), 32);
 				break;
-			case DOWN 	: y.set(y.get() + 32);
+			case DOWN :
+				moveDown(Game.getAnimatedEntities(), Game.getInanimatedEntities(), 32);
 				break;
 			default : break;
 			}

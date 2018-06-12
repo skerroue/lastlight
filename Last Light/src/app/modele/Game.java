@@ -47,8 +47,8 @@ public class Game {
 	
 	private static Field map;
 	private static Player player;
-	private ObservableList<AnimatedEntity> animatedEntities;
-	private ObservableList<InanimatedEntity> inanimatedEntities;
+	private static ObservableList<AnimatedEntity> animatedEntities;
+	private static ObservableList<InanimatedEntity> inanimatedEntities;
 	private static BooleanProperty mapChanged;
 	
 	private boolean playerIsDetected;
@@ -131,12 +131,12 @@ public class Game {
 		return player;
 	}
 	
-	public ObservableList<AnimatedEntity> getAnimatedEntities() {
-		return this.animatedEntities;
+	public static ObservableList<AnimatedEntity> getAnimatedEntities() {
+		return animatedEntities;
 	}
 	
-	public ObservableList<InanimatedEntity> getInanimatedEntities() {
-		return this.inanimatedEntities;
+	public static ObservableList<InanimatedEntity> getInanimatedEntities() {
+		return inanimatedEntities;
 	}
 	
 	public static BooleanProperty getMapChanged() {
@@ -395,7 +395,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveLeft(animatedEntities, inanimatedEntities);
+					player.moveLeft(animatedEntities, inanimatedEntities, player.getVelocity());
 				break;
 			case UP :
 				if (player.getY().get() == GameData.LEFT_TOP_LIMIT) {
@@ -405,7 +405,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveUp(animatedEntities, inanimatedEntities);
+					player.moveUp(animatedEntities, inanimatedEntities, player.getVelocity());
 				break;
 			case RIGHT :
 				if (player.getX().get() == GameData.RIGHT_BOTTOM_LIMIT) {
@@ -415,7 +415,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveRight(animatedEntities, inanimatedEntities);
+					player.moveRight(animatedEntities, inanimatedEntities, player.getVelocity());
 				break;
 			case DOWN :
 				if (player.getY().get() == GameData.RIGHT_BOTTOM_LIMIT) {
@@ -425,7 +425,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveDown(animatedEntities, inanimatedEntities);
+					player.moveDown(animatedEntities, inanimatedEntities, player.getVelocity());
 				break;
 				default:
 					break;
@@ -523,13 +523,13 @@ public class Game {
 	    	
 	    	if (nextTile != null) {
 		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) 
-		    		e.moveLeft(animatedEntities, inanimatedEntities);
+		    		e.moveLeft(animatedEntities, inanimatedEntities, e.getVelocity());
 		    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		e.moveUp(animatedEntities, inanimatedEntities);
+		    		e.moveUp(animatedEntities, inanimatedEntities, e.getVelocity());
 		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) 
-		    		e.moveRight(animatedEntities, inanimatedEntities);
+		    		e.moveRight(animatedEntities, inanimatedEntities, e.getVelocity());
 		    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		e.moveDown(animatedEntities, inanimatedEntities);
+		    		e.moveDown(animatedEntities, inanimatedEntities, e.getVelocity());
 	    	}
     	}
     	

@@ -40,99 +40,131 @@ public abstract class AnimatedEntity extends Entity {
 		this.invicibilityFrame.setOnFinished(e -> this.setInvicible(false) );
 	}
 	
-	public boolean moveLeft(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public int moveLeft(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
 		this.setOrientation(KeyCode.LEFT);
-		if (canMove(entities, inanimatedEntities)) {
-			x.set(x.get() - velocity);
-			return true;
-		}
-		return false;
+		int space = canMove(entities, inanimatedEntities, velocity);
+		x.set(x.get() - space);
+		return space;
 	}
 	
-	public boolean moveRight(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public int moveRight(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
 		this.setOrientation(KeyCode.RIGHT);
-		if (canMove(entities, inanimatedEntities)) {
-			x.set(x.get() + velocity);
-			return true;
-		}
-		return false;
+		int space = canMove(entities, inanimatedEntities, velocity);
+		x.set(x.get() + space);
+		return space;
 	}
 
-	public boolean moveDown(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public int moveDown(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
 		this.setOrientation(KeyCode.DOWN);
-		if (canMove(entities, inanimatedEntities)) {
-			y.set(y.get() + velocity);
-			return true;
-		}
-		return false;
+		int space = canMove(entities, inanimatedEntities, velocity);
+		y.set(y.get() + space);
+		return space;
 	}
 	
-	public boolean moveUp(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public int moveUp(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
 		this.setOrientation(KeyCode.UP);
-		if (canMove(entities, inanimatedEntities)) {
-			y.set(y.get() - velocity);
-			return true;
-		}
-		return false;
+		int space = canMove(entities, inanimatedEntities, velocity);
+		y.set(y.get() - space);
+		return space;
 	}
 	
-	public boolean canMove(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
-		boolean canMove = false;
-		boolean emptyTile = true;
+	public int canMove(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
+		int canMove = 0;
+		int emptyTile = velocity;
 		
 		switch (this.orientation.getValue()) {
 		case LEFT :
-			emptyTile = tileIsEmpty(entities, inanimatedEntities, LEFT);
-			if (x.get() % 32 != 0 && emptyTile)
-				canMove = true;
-			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
-				if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() &&
-					Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()-1).isCrossable() && emptyTile)
-					canMove = true;
-			}
-			else
-				if (x.get() > LEFT_TOP_LIMIT && Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()-1).isCrossable() && emptyTile)
-					canMove = true;
+			emptyTile = tileIsEmpty(entities, inanimatedEntities, LEFT, velocity);
+			if (x.get() % 32 < velocity) {
+				if (y.get() % 32 == 0) {
+					if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).isCrossable() && emptyTile == velocity)
+						canMove = velocity;
+					else canMove = (int) x.get() % 32;
+				} else {
+					if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() - 1).isCrossable() && 
+							Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).isCrossable() && emptyTile == velocity)
+						canMove = velocity;
+					else canMove = (int) x.get() % 32;
+				}
+			} else
+				canMove = velocity;
 			break;
+			
 		case UP :
-			emptyTile = tileIsEmpty(entities, inanimatedEntities, UP);
-			if (y.get() % 32 != 0 && emptyTile)
-				canMove = true;
-			else if (y.get() % 32 == 0 && x.get() % 32 != 0 && y.get() > 0) {
-				if (Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()).isCrossable() && 
-					Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()+1).isCrossable() && emptyTile)
-					canMove = true;
-			}
-			else 
-				if (y.get() > LEFT_TOP_LIMIT && Game.getMap().getNextTile(this.getIndiceY()-1, this.getIndiceX()).isCrossable() && emptyTile)
-					canMove = true;
+			emptyTile = tileIsEmpty(entities, inanimatedEntities, UP, velocity);
+			if (y.get() % 32 < velocity) {
+				if (x.get() % 32 == 0) {
+					if (Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).isCrossable() && emptyTile == velocity)
+						canMove = velocity;
+					else canMove = (int) y.get() % 32;
+				} else {
+					if (Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX() + 1).isCrossable() && 
+							Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).isCrossable() && emptyTile == velocity)
+						canMove = velocity;
+					else canMove = (int) y.get() % 32;
+				}
+			} else
+				canMove = velocity;
 			break;
+			
 		case DOWN :
-			emptyTile = tileIsEmpty(entities, inanimatedEntities, DOWN);
-			if (y.get() % 32 != 0 && emptyTile) 
-				canMove = true;
-			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
-				if (Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()).isCrossable() && 
-					Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1).isCrossable() && emptyTile)
-					canMove = true;
-			}
-			else 
-				if (y.get() < RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()).isCrossable() && emptyTile)
-					canMove = true;
+			emptyTile = tileIsEmpty(entities, inanimatedEntities, DOWN, velocity);
+			if (y.get() % 32 < velocity) {
+				if (velocity >= 32 && y.get() % 32 != 0) {
+					if (x.get() % 32 == 0) {
+						if (Game.getMap().getNextTile(getIndiceY() + 2, getIndiceX()).isCrossable() && emptyTile == velocity)
+							canMove = velocity;
+						else canMove = (32 - ((int) y.get() % 32)) % 32;
+					} else {
+						if (Game.getMap().getNextTile(getIndiceY() + 2, getIndiceX() + 1).isCrossable() && 
+								Game.getMap().getNextTile(getIndiceY() + 2, getIndiceX()).isCrossable() && emptyTile == velocity)
+							canMove = velocity;
+						else canMove = (32 - ((int) y.get() % 32)) % 32;
+					}
+				}
+				else if (x.get() % 32 == 0) {
+					if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).isCrossable() && emptyTile == velocity)
+						canMove = velocity;
+					else canMove = (32 - ((int) y.get() % 32)) % 32;
+				} else {
+					if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() + 1).isCrossable() && 
+							Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).isCrossable() && emptyTile == velocity)
+						canMove = velocity;
+					else canMove = (32 - ((int) y.get() % 32)) % 32;
+				}
+			} else
+				canMove = velocity;
 			break;
+			
 		case RIGHT :
-			emptyTile = tileIsEmpty(entities, inanimatedEntities, RIGHT);
-			if (x.get() % 32 != 0 && emptyTile)
-				canMove = true;
-			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
-				if (Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() &&
-					Game.getMap().getNextTile(this.getIndiceY()+1, this.getIndiceX()+1).isCrossable() && emptyTile)
-					canMove = true;
-			}
-			else
-				if (x.get() < RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX()+1).isCrossable() && emptyTile)
-					canMove = true;
+			emptyTile = tileIsEmpty(entities, inanimatedEntities, RIGHT, velocity);
+			if (x.get() % 32 < velocity) {
+				if (velocity >= 32 && x.get() % 32 != 0) {
+					if (y.get() % 32 == 0) {
+						if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 2).isCrossable() && emptyTile == velocity)
+							canMove = velocity;
+						else canMove = (32 - ((int) x.get() % 32)) % 32;
+					} else {
+						if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() + 2).isCrossable() && 
+								Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 2).isCrossable() && emptyTile == velocity)
+							canMove = velocity;
+						else canMove = (32 - ((int) x.get() % 32)) % 32;
+					}
+				}
+				else if (y.get() % 32 == 0) {
+					if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).isCrossable() && emptyTile == velocity)
+						canMove = velocity;
+					else canMove = (32 - ((int) x.get() % 32)) % 32;
+				} else {
+					if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() + 1).isCrossable() && 
+							Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).isCrossable() && emptyTile == velocity)
+						canMove = velocity;
+					else canMove = (32 - ((int) x.get() % 32)) % 32;
+				}
+			} else
+				canMove = velocity;
 			break;
+			
 		default :
 			break;
 		}
@@ -163,62 +195,89 @@ public abstract class AnimatedEntity extends Entity {
 		this.orientation.set(n);
 	}
 	
-	public boolean tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int DIRECTION) {
+public int tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int direction, int velocity) {
+		
+		int emptyTile = velocity;
     	
-		switch (DIRECTION) {
+		switch (direction) {
 		case LEFT :
 			for (AnimatedEntity e : entities)
-	    		if (this.getX().get() == e.getX().get() + 32 && 
-	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return e.push(LEFT, entities, inanimatedEntities);
+	    		if (this.getX().get() - 32 == e.getX().get() &&
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31) {
+	    			emptyTile = e.push(LEFT, entities, inanimatedEntities, velocity);
+	    			if (emptyTile != velocity)
+	    				return emptyTile;
+	    		}
 			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getX().get() == e.getX().get() + 32 && 
-	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return false;
+	    		if (this.getX().get() - 32 == e.getX().get() && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31) {
+	    			emptyTile = (int) (this.getX().get() - e.getX().get() + 31);
+	    			if (emptyTile != velocity)
+	    				return emptyTile;
+	    		}
 			break;
 		case UP :
 			for (AnimatedEntity e : entities)
-	    		if (this.getY().get() == e.getY().get() + 32 && 
-	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return e.push(UP, entities, inanimatedEntities);
+	    		if (this.getY().get() - 32 == e.getY().get() && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31) {
+	    			emptyTile = e.push(UP, entities, inanimatedEntities, velocity);
+	    			if (emptyTile != velocity)
+	    				return emptyTile;
+	    		}
 			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getY().get() == e.getY().get() + 32 && 
-	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return false;
+	    		if (this.getY().get() - 32 == e.getY().get() && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31) {
+	    			emptyTile = (int) (this.getX().get() - e.getX().get() + 31);
+	    			if (emptyTile != velocity)
+	    				return emptyTile;
+	    		}
 			break;
 		case RIGHT :
-			for (AnimatedEntity e : entities)
-	    		if (this.getX().get() == e.getX().get() - 32 && 
-	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return e.push(RIGHT, entities, inanimatedEntities);
+			for (AnimatedEntity e : entities) {
+	    		if (this.getX().get() + 32 == e.getX().get() && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31) {
+	    			emptyTile = e.push(RIGHT, entities, inanimatedEntities, velocity);
+	    			if (emptyTile != velocity)
+	    				return emptyTile;
+	    		}
+			}
 			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getX().get() == e.getX().get() - 32 && 
-	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return false;
+	    		if (this.getX().get() + 32 == e.getX().get() && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31) {
+	    			emptyTile = (int) (e.getY().get() - this.getY().get() + 31);
+	    			if (emptyTile != velocity)
+	    				return emptyTile;
+	    		}
 			break;
 		case DOWN :
 			for (AnimatedEntity e : entities)
-	    		if (this.getY().get() == e.getY().get() - 32 && 
-	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return e.push(DOWN, entities, inanimatedEntities);
+	    		if (this.getY().get() + 32 == e.getY().get() && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31) {
+	    			emptyTile = e.push(DOWN, entities, inanimatedEntities, velocity);
+	    			if (emptyTile != velocity)
+	    				return emptyTile;
+	    		}
 			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getY().get() == e.getY().get() - 32 && 
-	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return false;
+	    		if (this.getY().get() + 32 == e.getY().get() && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31) {
+	    			emptyTile = (int) (e.getX().get() - this.getX().get() + 31);
+	    			if (emptyTile != velocity)
+	    				return emptyTile;
+	    		}
 			break;
 		default :
 			break;
 		}
 		
-    	return true;
+    	return emptyTile;
 	}
 	
 	public void attack(ObservableList<AnimatedEntity> entities) {
 		return;
 	}
 	
-	public boolean push(int DIRECTION, ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
-		return false;
+	public int push(int DIRECTION, ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
+		return 0;
 	}
 	
 	public boolean interact() {
