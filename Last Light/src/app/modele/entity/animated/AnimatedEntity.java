@@ -43,28 +43,32 @@ public abstract class AnimatedEntity extends Entity {
 	public int moveLeft(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
 		this.setOrientation(KeyCode.LEFT);
 		int space = canMove(entities, inanimatedEntities, velocity);
-		x.set(x.get() - space);
+		if (space == velocity)
+			x.set(x.get() - velocity);
 		return space;
 	}
 	
 	public int moveRight(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
 		this.setOrientation(KeyCode.RIGHT);
 		int space = canMove(entities, inanimatedEntities, velocity);
-		x.set(x.get() + space);
+		if (space == velocity)
+			x.set(x.get() + velocity);
 		return space;
 	}
 
 	public int moveDown(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
 		this.setOrientation(KeyCode.DOWN);
 		int space = canMove(entities, inanimatedEntities, velocity);
-		y.set(y.get() + space);
+		if (space == velocity)
+			y.set(y.get() + velocity);
 		return space;
 	}
 	
 	public int moveUp(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
 		this.setOrientation(KeyCode.UP);
 		int space = canMove(entities, inanimatedEntities, velocity);
-		y.set(y.get() - space);
+		if (space == velocity)
+			y.set(y.get() - velocity);
 		return space;
 	}
 	
@@ -195,7 +199,7 @@ public abstract class AnimatedEntity extends Entity {
 		this.orientation.set(n);
 	}
 	
-public int tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int direction, int velocity) {
+	public int tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int direction, int velocity) {
 		
 		int emptyTile = velocity;
     	
@@ -204,9 +208,10 @@ public int tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<I
 			for (AnimatedEntity e : entities)
 	    		if (this.getX().get() - 32 == e.getX().get() &&
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31) {
-	    			emptyTile = e.push(LEFT, entities, inanimatedEntities, velocity);
-	    			if (emptyTile != velocity)
-	    				return emptyTile;
+//	    			emptyTile = e.push(LEFT, entities, inanimatedEntities, velocity);
+//	    			if (emptyTile != velocity)
+//	    				return emptyTile;
+	    			return e.push(LEFT, entities, inanimatedEntities, velocity);
 	    		}
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getX().get() - 32 == e.getX().get() && 
@@ -220,9 +225,10 @@ public int tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<I
 			for (AnimatedEntity e : entities)
 	    		if (this.getY().get() - 32 == e.getY().get() && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31) {
-	    			emptyTile = e.push(UP, entities, inanimatedEntities, velocity);
-	    			if (emptyTile != velocity)
-	    				return emptyTile;
+//	    			emptyTile = e.push(UP, entities, inanimatedEntities, velocity);
+//	    			if (emptyTile != velocity)
+//	    				return emptyTile;
+	    			return e.push(UP, entities, inanimatedEntities, velocity);
 	    		}
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() - 32 == e.getY().get() && 
@@ -236,9 +242,10 @@ public int tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<I
 			for (AnimatedEntity e : entities) {
 	    		if (this.getX().get() + 32 == e.getX().get() && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31) {
-	    			emptyTile = e.push(RIGHT, entities, inanimatedEntities, velocity);
-	    			if (emptyTile != velocity)
-	    				return emptyTile;
+//	    			emptyTile = e.push(RIGHT, entities, inanimatedEntities, velocity);
+//	    			if (emptyTile != velocity)
+//	    				return emptyTile;
+	    			return e.push(RIGHT, entities, inanimatedEntities, velocity);
 	    		}
 			}
 			for (InanimatedEntity e : inanimatedEntities)
@@ -253,9 +260,10 @@ public int tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<I
 			for (AnimatedEntity e : entities)
 	    		if (this.getY().get() + 32 == e.getY().get() && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31) {
-	    			emptyTile = e.push(DOWN, entities, inanimatedEntities, velocity);
-	    			if (emptyTile != velocity)
-	    				return emptyTile;
+//	    			emptyTile = e.push(DOWN, entities, inanimatedEntities, velocity);
+//	    			if (emptyTile != velocity)
+//	    				return emptyTile;
+	    			return e.push(DOWN, entities, inanimatedEntities, velocity);
 	    		}
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() + 32 == e.getY().get() && 
