@@ -1,11 +1,8 @@
 package app.controler;
 
-import java.util.ArrayList;
-
 import app.modele.Game;
 import app.vue.FieldView;
 import app.vue.entity.EntityView;
-import app.vue.entity.PlayerView;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

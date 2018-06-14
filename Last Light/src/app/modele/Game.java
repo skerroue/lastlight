@@ -47,8 +47,8 @@ public class Game {
 	
 	private static Field map;
 	private static Player player;
-	private static ObservableList<AnimatedEntity> animatedEntities;
-	private static ObservableList<InanimatedEntity> inanimatedEntities;
+	private ObservableList<AnimatedEntity> animatedEntities;
+	private ObservableList<InanimatedEntity> inanimatedEntities;
 	private static BooleanProperty mapChanged;
 	
 	private boolean playerIsDetected;
@@ -131,12 +131,12 @@ public class Game {
 		return player;
 	}
 	
-	public static ObservableList<AnimatedEntity> getAnimatedEntities() {
-		return animatedEntities;
+	public ObservableList<AnimatedEntity> getAnimatedEntities() {
+		return this.animatedEntities;
 	}
 	
-	public static ObservableList<InanimatedEntity> getInanimatedEntities() {
-		return inanimatedEntities;
+	public ObservableList<InanimatedEntity> getInanimatedEntities() {
+		return this.inanimatedEntities;
 	}
 	
 	public static BooleanProperty getMapChanged() {
@@ -185,6 +185,8 @@ public class Game {
 		}
 		
 		if (changing) {
+			this.playerIsDetected = false;
+			
 			for (int indice = 1 ; indice < this.animatedEntities.size() ; indice++) 
 				this.animatedEntities.get(indice).die();
 			
@@ -192,7 +194,6 @@ public class Game {
 				this.inanimatedEntities.get(l).die();
 			
 			spawnEntities();
-			this.playerIsDetected = false;
 		}
 		
 		return changing;
@@ -255,6 +256,9 @@ public class Game {
 							break;
 						case 12 :
 							this.addInanimated(GameData.ENTITY_BOOTS, s.nextInt(), s.nextInt(), noMap);
+							break;
+						case 13 :
+							this.addInanimated(GameData.ENTITY_HEART, s.nextInt(), s.nextInt(), noMap);
 							break;
 						default : break;
 						}
@@ -351,6 +355,9 @@ public class Game {
     	case GameData.ENTITY_BOOTS :
     		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
     		break;
+    	case GameData.ENTITY_HEART :
+    		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
+    		break;
     	default : break;
     	}
     	
@@ -395,7 +402,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveLeft(animatedEntities, inanimatedEntities, player.getVelocity());
+					player.moveLeft(animatedEntities, inanimatedEntities);
 				break;
 			case UP :
 				if (player.getY().get() == GameData.LEFT_TOP_LIMIT) {
@@ -405,7 +412,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveUp(animatedEntities, inanimatedEntities, player.getVelocity());
+					player.moveUp(animatedEntities, inanimatedEntities);
 				break;
 			case RIGHT :
 				if (player.getX().get() == GameData.RIGHT_BOTTOM_LIMIT) {
@@ -415,7 +422,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveRight(animatedEntities, inanimatedEntities, player.getVelocity());
+					player.moveRight(animatedEntities, inanimatedEntities);
 				break;
 			case DOWN :
 				if (player.getY().get() == GameData.RIGHT_BOTTOM_LIMIT) {
@@ -425,7 +432,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveDown(animatedEntities, inanimatedEntities, player.getVelocity());
+					player.moveDown(animatedEntities, inanimatedEntities);
 				break;
 				default:
 					break;
@@ -514,7 +521,7 @@ public class Game {
     }
     
     public void moveEnemy(AnimatedEntity e) {
-    	if (this.playerIsDetected || this.playerDetection(6, e)) {
+    	if (this.playerIsDetected || this.playerDetection(GameData.ENEMY_RANGE, e)) {
     		
     		this.playerIsDetected = true;
     		
@@ -523,23 +530,21 @@ public class Game {
 	    	
 	    	if (nextTile != null) {
 		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) 
-		    		e.moveLeft(animatedEntities, inanimatedEntities, e.getVelocity());
+		    		e.moveLeft(animatedEntities, inanimatedEntities);
 		    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		e.moveUp(animatedEntities, inanimatedEntities, e.getVelocity());
+		    		e.moveUp(animatedEntities, inanimatedEntities);
 		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) 
-		    		e.moveRight(animatedEntities, inanimatedEntities, e.getVelocity());
+		    		e.moveRight(animatedEntities, inanimatedEntities);
 		    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		e.moveDown(animatedEntities, inanimatedEntities, e.getVelocity());
+		    		e.moveDown(animatedEntities, inanimatedEntities);
 	    	}
     	}
     	
     }
     
     public boolean playerDetection(int range, AnimatedEntity e) {
-    	int distance = range * GameData.TILE_SIZE;
-    	
-    	if (player.getX().get() >= e.getX().get() - distance && player.getX().get() <= e.getX().get() + distance &&
-    		player.getY().get() >= e.getY().get() - distance && player.getY().get() <= e.getX().get() + distance)
+    	if (player.getX().get() >= e.getX().get() - range && player.getX().get() <= e.getX().get() + range &&
+    		player.getY().get() >= e.getY().get() - range && player.getY().get() <= e.getX().get() + range)
     		return true;
     	
     	return false;

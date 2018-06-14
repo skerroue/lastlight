@@ -69,9 +69,5 @@ public abstract class Entity {
 	public IntegerProperty getOrientation() {
 		return this.orientation;
 	}
-	
-	public int getVelocity() {
-		return this.velocity;
-	}
 
 }

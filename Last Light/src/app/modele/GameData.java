@@ -23,7 +23,8 @@ public class GameData {
 	final static int FILE_MAP_WIDTH = 6;
 	final static int FILE_MAP_HEIGHT = 5;
 	
-	public final static double NECKLACE_TIME = 10;
+	public final static double NECKLACE_TIME = 2;
+	public final static double NECKLACE_DOWNTIME = 2;
 	public final static int NECKLACE_WALL = 28;
 	
 	public final static String ENTITY_WALKER = "walker";
@@ -40,9 +41,12 @@ public class GameData {
 	public final static String ENTITY_BOOTS = "boots";
 	public final static String ENTITY_BULLET = "bullet";
 	public final static String ENTITY_PLAYER = "player";
+	public final static String ENTITY_HEART = "h-full";
 	
 	public static ArrayList<String> ENEMIES_ID;
 	private final String[] ENEMIES_ID_ARRAY = {ENTITY_WALKER, ENTITY_FLYING};
+	public static final int ENEMY_RANGE = 4 * TILE_SIZE;
+	public static final double MONEY_DROP_RATE = 0.25;
 	
 	public static ArrayList<Integer> crossableTiles;
 	

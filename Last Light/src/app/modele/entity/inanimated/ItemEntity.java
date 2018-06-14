@@ -18,7 +18,6 @@ public class ItemEntity extends InanimatedEntity {
 		super(id, x, y, dialog);
 	}
 	
-	// Dumb af cette methode mais est construite dans l'id�e o� une arme spawnera une et une seule fois dans le jeu
 	public boolean interact(Player p) {
 		boolean hasInteracted = true;
 		
@@ -43,6 +42,10 @@ public class ItemEntity extends InanimatedEntity {
 			break;
 		case GameData.ENTITY_BOOTS :
 			p.setBoots(true);
+			this.die();
+			break;
+		case GameData.ENTITY_HEART :
+			p.unlockHeart();
 			this.die();
 			break;
  		default : 

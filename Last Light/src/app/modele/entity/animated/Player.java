@@ -30,7 +30,9 @@ public class Player extends AnimatedEntity {
 	
 	private boolean necklace;
 	private BooleanProperty necklaceIsActive;
+	private boolean canUseNecklace;
 	private PauseTransition necklaceUse;
+	private PauseTransition necklaceDownTime;
 	
 	private ObservableList<Weapon> weapons;
 	private IntegerProperty activeWeaponIndex;
@@ -51,11 +53,16 @@ public class Player extends AnimatedEntity {
 		
 		this.necklace = false;
 		this.necklaceIsActive = new SimpleBooleanProperty(false);
+		this.canUseNecklace = true;
 		this.necklaceUse = new PauseTransition(Duration.seconds(GameData.NECKLACE_TIME));
 		this.necklaceUse.setOnFinished(e -> {
 			this.setNecklaceInactive();
 			Game.getMap().makeATileUncrossable(GameData.NECKLACE_WALL);
+			this.canUseNecklace = false;
+			this.necklaceDownTime.play();
 		});
+		this.necklaceDownTime = new PauseTransition(Duration.seconds(GameData.NECKLACE_DOWNTIME));
+		this.necklaceDownTime.setOnFinished(e -> this.canUseNecklace = true);
 		
 		
 		this.weapons = FXCollections.observableArrayList();
@@ -86,6 +93,13 @@ public class Player extends AnimatedEntity {
 		return potentialHP;
 	}
 	
+	public void unlockHeart() {
+		if (this.maxHP.get() + 1 < this.potentialHP.get()) {
+			this.maxHP.set(this.maxHP.get() + 1);
+			this.hp.set(this.hp.getValue() + 1);
+		}
+	}
+	
 	public void setNecklace(boolean b) {
 		this.necklace = b;
 	}
@@ -107,7 +121,7 @@ public class Player extends AnimatedEntity {
 	}
 	
     public void useNecklace() {
-    	if (!this.necklaceIsActive().get() && this.hasNecklace()) {
+    	if (!this.necklaceIsActive().get() && this.hasNecklace() && this.canUseNecklace) {
     		Game.getMap().makeATileCrossable(GameData.NECKLACE_WALL);
     		this.setNecklaceActive();
     		this.necklaceUse.play();
@@ -221,17 +235,13 @@ public class Player extends AnimatedEntity {
 	public void update() {
 		if (this.bootsIsActive) {
 			switch (this.orientation.get()) {
-			case LEFT :
-				moveLeft(Game.getAnimatedEntities(), Game.getInanimatedEntities(), 32);
+			case LEFT 	: x.set(x.get() - 32);
 				break;
-			case UP :
-				moveUp(Game.getAnimatedEntities(), Game.getInanimatedEntities(), 32);
+			case UP 	: y.set(y.get() - 32);
 				break;
-			case RIGHT :
-				moveRight(Game.getAnimatedEntities(), Game.getInanimatedEntities(), 32);
+			case RIGHT 	: x.set(x.get() + 32);
 				break;
-			case DOWN :
-				moveDown(Game.getAnimatedEntities(), Game.getInanimatedEntities(), 32);
+			case DOWN 	: y.set(y.get() + 32);
 				break;
 			default : break;
 			}

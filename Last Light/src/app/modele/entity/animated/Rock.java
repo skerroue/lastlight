@@ -1,6 +1,5 @@
 package app.modele.entity.animated;
 
-import app.modele.Game;
 import app.modele.GameData;
 import app.modele.entity.inanimated.InanimatedEntity;
 import javafx.collections.ObservableList;
@@ -12,27 +11,19 @@ public class Rock extends AnimatedEntity {
 		this.isInvicible = true;
 	}
 	
-	public int push(int DIRECTION, ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int velocity) {
+	public boolean push(int DIRECTION, ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
 		
 		switch (DIRECTION) {
 		case LEFT :
-			if (velocity < 32)
-				return this.moveLeft(entities, inanimatedEntities, velocity);
-			return (int) (Game.getPlayer().getX().get() - this.getX().get() + 31);
+			return this.moveLeft(entities, inanimatedEntities);
 		case UP :
-			if (velocity < 32)
-				return this.moveUp(entities, inanimatedEntities, velocity);
-			return (int) (Game.getPlayer().getY().get() - this.getY().get() + 31);
+			return this.moveUp(entities, inanimatedEntities);
 		case RIGHT :
-			if (velocity < 32)
-				return this.moveRight(entities, inanimatedEntities, velocity);
-			return (int) (this.getX().get() - Game.getPlayer().getX().get() + 32);
+			return this.moveRight(entities, inanimatedEntities);
 		case DOWN :
-			if (velocity < 32)
-				return this.moveDown(entities, inanimatedEntities, velocity);
-			return (int) (this.getY().get() - Game.getPlayer().getY().get() + 32);
+			return this.moveDown(entities, inanimatedEntities);
 		default :
-			return 0;
+			return false;
 		}
 		
 	}
