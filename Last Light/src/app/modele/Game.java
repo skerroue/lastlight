@@ -47,8 +47,8 @@ public class Game {
 	
 	private static Field map;
 	private static Player player;
-	private ObservableList<AnimatedEntity> animatedEntities;
-	private ObservableList<InanimatedEntity> inanimatedEntities;
+	private static ObservableList<AnimatedEntity> animatedEntities;
+	private static ObservableList<InanimatedEntity> inanimatedEntities;
 	private static BooleanProperty mapChanged;
 	
 	private boolean playerIsDetected;
@@ -131,12 +131,12 @@ public class Game {
 		return player;
 	}
 	
-	public ObservableList<AnimatedEntity> getAnimatedEntities() {
-		return this.animatedEntities;
+	public static ObservableList<AnimatedEntity> getAnimatedEntities() {
+		return animatedEntities;
 	}
 	
-	public ObservableList<InanimatedEntity> getInanimatedEntities() {
-		return this.inanimatedEntities;
+	public static ObservableList<InanimatedEntity> getInanimatedEntities() {
+		return inanimatedEntities;
 	}
 	
 	public static BooleanProperty getMapChanged() {
