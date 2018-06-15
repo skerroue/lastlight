@@ -212,7 +212,7 @@ public class Player extends AnimatedEntity {
 	public void usePotion() {
 		if (this.potion.getValue() > 0 && this.hp.getValue() < this.maxHP.getValue()) {
 			this.potion.set(this.potion.getValue() - 1);
-			this.hp.set(this.hp.getValue() + 1);
+			this.hp.set(this.maxHP.get());
 		}
 	}
 	
@@ -270,7 +270,6 @@ public class Player extends AnimatedEntity {
 		switch (this.orientation.getValue()) {
 		case LEFT :
 			emptyTile = tileIsEmptyDash(entities, inanimatedEntities, LEFT);
-			System.out.println(this.getId() + " " + emptyTile);
 			if (x.get() % 32 < velocityDash) {
 				if (y.get() % 32 == 0) {
 					if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).isCrossable())
@@ -288,7 +287,6 @@ public class Player extends AnimatedEntity {
 			
 		case UP :
 			emptyTile = tileIsEmptyDash(entities, inanimatedEntities, UP);
-			System.out.println(this.getId() + " " + emptyTile);
 			if (y.get() % 32 < velocityDash) {
 				if (x.get() % 32 == 0) {
 					if (Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).isCrossable() && emptyTile == velocityDash)
@@ -306,7 +304,6 @@ public class Player extends AnimatedEntity {
 			
 		case DOWN :
 			emptyTile = tileIsEmptyDash(entities, inanimatedEntities, DOWN);
-			System.out.println(this.getId() + " " + emptyTile);
 			if (y.get() % 32 < velocityDash) {
 				if (y.get() % 32 != 0) {
 					if (x.get() % 32 == 0) {
@@ -336,7 +333,6 @@ public class Player extends AnimatedEntity {
 			
 		case RIGHT :
 			emptyTile = tileIsEmptyDash(entities, inanimatedEntities, RIGHT);
-			System.out.println(this.getId() + " " + emptyTile);
 			if (x.get() % 32 < velocityDash) {
 				if (x.get() % 32 != 0) {
 					if (y.get() % 32 == 0) {
