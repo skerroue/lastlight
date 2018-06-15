@@ -14,6 +14,7 @@ public class Button extends InanimatedEntity {
 	@Override
 	public boolean interact() {
 		if (this.child != null) {
+			this.hasInteracted();
 			this.child.die();
 			return true;
 		}

@@ -1,13 +1,17 @@
 package app.modele.entity.inanimated;
 
-import app.modele.entity.Entity;  
+import app.modele.entity.Entity;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;  
 
 public abstract class InanimatedEntity extends Entity {
 	
 	protected String dialog;
+	private BooleanProperty isInteracting;
 		
 	public InanimatedEntity(String id, int x, int y, String dialog) {
 		super(id, x, y);
+		this.isInteracting = new SimpleBooleanProperty(false);
 	}
 
 	public abstract boolean interact();
@@ -22,6 +26,14 @@ public abstract class InanimatedEntity extends Entity {
 	
 	public void setDialog(String s) {
 		this.dialog = s;
+	}
+	
+	public BooleanProperty isInteracting() {
+		return this.isInteracting;
+	}
+	
+	public void hasInteracted() {
+		this.isInteracting.set(!this.isInteracting.get());
 	}
 
 }
