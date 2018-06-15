@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import app.modele.BFS.BFS;
 import app.modele.entity.animated.AnimatedEntity;
+import app.modele.entity.animated.Flying;
 import app.modele.entity.animated.NPC;
 import app.modele.entity.animated.Player;
 import app.modele.entity.animated.Rock;
@@ -226,6 +227,9 @@ public class Game {
 						case 1 :
 							this.addAnimated(GameData.ENTITY_WALKER, s.nextInt(), s.nextInt());
 							break;
+						case 2 :
+							this.addAnimated(GameData.ENTITY_FLYING, s.nextInt(), s.nextInt());
+							break;
 						case 3 :
 							this.addInanimated(GameData.ENTITY_LAMP, s.nextInt(), s.nextInt(), noMap);
 							break;
@@ -326,38 +330,17 @@ public class Game {
     
     public void addInanimated(String type, int x, int y, int noMap) {
     	switch (type) {
-    	case GameData.ENTITY_LAMP :
-    		if (!takenItem(type, noMap))
-    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
-    		break;
-    	case GameData.ENTITY_TASER :
-    		if (!takenItem(type, noMap))
-    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
-    		break;
-    	case GameData.ENTITY_SODA :
-    		if (!takenItem(type, noMap))
-    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
-    		break;
     	case GameData.ENTITY_DISPENSER :
     		inanimatedEntities.add(new Dispenser(x, y, "Voulez vous acheter une potion ?"));
     		inanimatedEntities.add(new ItemEntity(type + "Top", x, y-32, ""));
     		break;
-    	case GameData.ENTITY_DOOR :
-    		inanimatedEntities.add(new ItemEntity("door", x, y, ""));
-    		break;
     	case GameData.ENTITY_BUTTON :
     		inanimatedEntities.add(new Button(x, y, "", inanimatedEntities.get(inanimatedEntities.size() - 1)));
     		break;
-    	case GameData.ENTITY_NECKLACE :
-    		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
+    	default : 
+    		if (!takenItem(type, noMap))
+    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
     		break;
-    	case GameData.ENTITY_BOOTS :
-    		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
-    		break;
-    	case GameData.ENTITY_HEART :
-    		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
-    		break;
-    	default : break;
     	}
     	
     }
@@ -366,6 +349,9 @@ public class Game {
     	switch (type) {
     	case GameData.ENTITY_WALKER :
     		animatedEntities.add(new Walker(x, y, 1, 1, 4, 6, 18));
+    		break;
+    	case GameData.ENTITY_FLYING :
+    		animatedEntities.add(new Flying(x, y, 1, 1, 4, 4, 12));
     		break;
     	case GameData.ENTITY_ROCK :
     		animatedEntities.add(new Rock(x, y));

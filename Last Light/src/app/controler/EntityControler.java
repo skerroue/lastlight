@@ -64,6 +64,9 @@ public class EntityControler {
 						case GameData.ENTITY_WALKER :
 							entitiesView.add(new EnemyView(Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1)));
 							break;
+						case GameData.ENTITY_FLYING :
+							entitiesView.add(new EnemyView(Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1)));
+							break;
 						case GameData.ENTITY_ROCK :
 							entitiesView.add(new RockView(Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1)));
 							break;

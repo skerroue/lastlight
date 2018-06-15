@@ -30,7 +30,7 @@ public class GameData {
 	public final static int BOOTS_HOLE = 28;
 	
 	public final static String ENTITY_WALKER = "walker";
-	final static String ENTITY_FLYING = "flying";
+	public final static String ENTITY_FLYING = "flying";
 	public final static String ENTITY_LAMP = "lamp";
 	public final static String ENTITY_TASER = "taser";
 	public final static String ENTITY_SODA = "soda";
