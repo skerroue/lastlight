@@ -225,10 +225,10 @@ public class Game {
 						int nextInt = s.nextInt();
 						switch (nextInt) {
 						case 1 :
-							this.addAnimated(GameData.ENTITY_WALKER, s.nextInt(), s.nextInt());
+							this.addAnimated(GameData.ENTITY_WALKER, s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 2 :
-							this.addAnimated(GameData.ENTITY_FLYING, s.nextInt(), s.nextInt());
+							this.addAnimated(GameData.ENTITY_FLYING, s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 3 :
 							this.addInanimated(GameData.ENTITY_LAMP, s.nextInt(), s.nextInt(), noMap);
@@ -246,10 +246,10 @@ public class Game {
 							this.addInanimated(GameData.ENTITY_BUTTON, s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 8 :
-							this.addAnimated(GameData.ENTITY_ROCK, s.nextInt(), s.nextInt());
+							this.addAnimated(GameData.ENTITY_ROCK, s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 9 :
-							this.addAnimated(GameData.ENTITY_NPC, s.nextInt(), s.nextInt());
+							this.addAnimated(GameData.ENTITY_NPC, s.nextInt(), s.nextInt(), noMap);
 							break;
 						case 10 :
 							this.addInanimated(GameData.ENTITY_DISPENSER, s.nextInt(), s.nextInt(), noMap);
@@ -321,6 +321,43 @@ public class Game {
 		return takenItem;
 	}
 	
+	private String leDefiDeMalcom(int noMap) {
+		String ldm = "";
+		String line;
+		
+		try {
+			
+			File f = new File("src/map/leDefiDeMalcom.txt");
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			
+			line = br.readLine();
+			
+			while (br.ready() && line.charAt(0) != Integer.toString(noMap).charAt(0))
+				line = br.readLine();
+						
+			if (line != null && line.charAt(0) == Integer.toString(noMap).charAt(0)) {
+				@SuppressWarnings("resource")
+				Scanner s = new Scanner(line).useDelimiter(",");
+				s.next();
+				
+				ldm = s.next();
+				
+				s.close();
+			}
+				
+			br.close();
+			fr.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("leDefiDeMalcom : Fichier introuvable");
+		} catch (IOException e) {
+			System.out.println("leDefiDeMalcom : Erreur de lecture");
+		}
+		
+		return ldm;
+	}
+	
     public void addKeyFrame(EventHandler<ActionEvent> e, double duration) {
     	gameloop.pause();
     	KeyFrame k = new KeyFrame(Duration.seconds(duration), e);
@@ -345,7 +382,7 @@ public class Game {
     	
     }
     
-    public void addAnimated(String type, int x, int y) {
+    public void addAnimated(String type, int x, int y, int noMap) {
     	switch (type) {
     	case GameData.ENTITY_WALKER :
     		animatedEntities.add(new Walker(x, y, 1, 1, 4, 6, 18));
@@ -357,13 +394,13 @@ public class Game {
     		animatedEntities.add(new Rock(x, y));
     		break;
     	case GameData.ENTITY_NPC :
-    		animatedEntities.add(new NPC(x, y, 1, 0, 4, 6, 18, "Martin"));
+    		animatedEntities.add(new NPC(x, y, 1, 0, 4, 6, 18, leDefiDeMalcom(noMap)));
     		break;
      	default : break;
     	}
     	
     }
-    
+        
     public void playGameLoop() {
     	gameloop.setCycleCount(Timeline.INDEFINITE);
     	gameloop.play();
