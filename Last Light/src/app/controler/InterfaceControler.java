@@ -6,6 +6,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
 
 public class InterfaceControler {
+	
+	private static int difference;
 
     public static void initializeInterface(Pane interfaceContainer, InterfaceView hud) {
     	
@@ -20,19 +22,27 @@ public class InterfaceControler {
     			
     			if (oldValue.intValue() > newValue.intValue()) {
     				
-    				for (int i = hud.getHearts().size()-1 ; i >= 0 ; i--) 
-    					if (hud.getHearts().get(i).getFull()) {
-    						hud.getHearts().get(i).setEmpty();
-    						break;
-    					}
+    				difference = oldValue.intValue() - newValue.intValue();
+    				while (difference > 0) {
+	    				for (int i = hud.getHearts().size()-1 ; i >= 0 ; i--) 
+	    					if (hud.getHearts().get(i).getFull()) {
+	    						hud.getHearts().get(i).setEmpty();
+	    						break;
+	    					}
+	    				difference--;
+    				}
     			}
     			
     			else {
-    				for (int i = 0 ; i < hud.getHearts().size() ; i++)
-    					if (hud.getHearts().get(i).getEmpty() && !hud.getHearts().get(i).getLocked()) {
-    						hud.getHearts().get(i).setFull();
-    						break;
-    					}
+    				difference = newValue.intValue() - oldValue.intValue();
+    				while (difference > 0) {
+	    				for (int i = 0 ; i < hud.getHearts().size() ; i++)
+	    					if (hud.getHearts().get(i).getEmpty() && !hud.getHearts().get(i).getLocked()) {
+	    						hud.getHearts().get(i).setFull();
+	    						break;
+	    					}
+	    				difference--;
+    				}
     			}
     				
     		}
@@ -63,19 +73,29 @@ public class InterfaceControler {
     		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
     			
     			if (oldValue.intValue() > newValue.intValue()) {
-    				for (int i = hud.getPotions().size()-1 ; i >= 0 ; i--) 
-    					if (hud.getPotions().get(i).getFull()) {
-    						hud.getPotions().get(i).setEmpty();
-    						break;
-    					}
+    				
+    				difference = oldValue.intValue() - newValue.intValue();
+    				while (difference > 0) {
+	    				for (int i = hud.getPotions().size()-1 ; i >= 0 ; i--) 
+	    					if (hud.getPotions().get(i).getFull()) {
+	    						hud.getPotions().get(i).setEmpty();
+	    						break;
+	    					}
+	    				difference--;
+	    				
+    				}
     			}
     			
     			else {
-    				for (int i = 0 ; i < hud.getPotions().size() ; i++)
-    					if (hud.getPotions().get(i).getEmpty()) {
-    						hud.getPotions().get(i).setFull();
-    						break;
-    					}
+    				difference = newValue.intValue() - oldValue.intValue();
+    				while (difference > 0) {
+	    				for (int i = 0 ; i < hud.getPotions().size() ; i++)
+	    					if (hud.getPotions().get(i).getEmpty()) {
+	    						hud.getPotions().get(i).setFull();
+	    						break;
+	    					}
+	    				difference--;
+    				}
     			}
     				
     		}
@@ -89,7 +109,7 @@ public class InterfaceControler {
     			
     			if (oldValue.intValue() > newValue.intValue()) {
     				
-    				int difference = oldValue.intValue() - newValue.intValue();
+    				difference = oldValue.intValue() - newValue.intValue();
     				while (difference > 0) {
 	    				for (int i = hud.getMoney().size()-1 ; i >= 0 ; i--) 
 	    					if (hud.getMoney().get(i).getFull()) {
@@ -98,14 +118,20 @@ public class InterfaceControler {
 	    					}
 	    				difference--;
     				}
+    				
     			}
     			
     			else {
-    				for (int i = 0 ; i < hud.getMoney().size() ; i++)
-    					if (hud.getMoney().get(i).getEmpty()) {
-    						hud.getMoney().get(i).setFull();
-    						break;
-    					}
+    				
+    				difference = newValue.intValue() - oldValue.intValue();
+    				while (difference > 0) {
+	    				for (int i = 0 ; i < hud.getMoney().size() ; i++)
+	    					if (hud.getMoney().get(i).getEmpty()) {
+	    						hud.getMoney().get(i).setFull();
+	    						break;
+	    					}
+    					difference--;
+    				}
     			}
     				
     		}
