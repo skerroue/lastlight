@@ -6,6 +6,7 @@ import app.modele.Game;
 import app.modele.GameData;
 import app.modele.entity.Entity;
 import app.vue.entity.BulletView;
+import app.vue.entity.ButtonView;
 import app.vue.entity.EnemyView;
 import app.vue.entity.EntityView;
 import app.vue.entity.InanimatedEntityView;
