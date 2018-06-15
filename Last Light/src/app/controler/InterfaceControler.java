@@ -14,6 +14,8 @@ public class InterfaceControler {
     	interfaceContainer.getChildren().addAll(hud.getHearts());
     	interfaceContainer.getChildren().addAll(hud.getPotions());
     	interfaceContainer.getChildren().addAll(hud.getMoney());
+    	interfaceContainer.getChildren().add(hud.getAmmunitionImageView());
+    	interfaceContainer.getChildren().add(hud.getAmmunitionLabel());
     	
     	hud.getPlayer().getHP().addListener(new ChangeListener<Number>() {
     		
@@ -137,6 +139,7 @@ public class InterfaceControler {
     		}
     		
 	    });
+	
     }
 	
 }

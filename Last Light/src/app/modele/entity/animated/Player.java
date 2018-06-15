@@ -1,4 +1,4 @@
-package app.modele.entity.animated;
+ package app.modele.entity.animated;
 
 import app.modele.Game;
 import app.modele.GameData;
@@ -9,6 +9,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Duration;
@@ -38,6 +40,9 @@ public class Player extends AnimatedEntity {
 	
 	private ObservableList<Weapon> weapons;
 	private IntegerProperty activeWeaponIndex;
+	
+	private IntegerProperty ammunition;
+	private StringProperty ammunitionString;
 	
 	public Player(int x, int y, int pv, int att, int v, int m, int nb, int fmax) {
 		super(GameData.ENTITY_PLAYER, x, y, pv, att, v, nb, fmax);
@@ -69,6 +74,8 @@ public class Player extends AnimatedEntity {
 		
 		this.weapons = FXCollections.observableArrayList();
 		this.activeWeaponIndex = new SimpleIntegerProperty(-1);
+		this.ammunition = new SimpleIntegerProperty(0);
+		this.ammunitionString = new SimpleStringProperty("x " + 0);
 	}
 	
 	public IntegerProperty getMaxPotion() {
@@ -190,6 +197,28 @@ public class Player extends AnimatedEntity {
 			else 
 				this.activeWeaponIndex.set(0);
 		}
+	}
+	
+	public IntegerProperty getAmmunition() {
+		return this.ammunition;
+	}
+	
+	public StringProperty getAmmunitionProperty() {
+		return this.ammunitionString;
+	}
+	
+	public void earnAmmunition() {
+		this.ammunition.set(this.ammunition.get() + 1);
+		this.ammunitionString.set("x " + this.ammunition.get());
+	}
+	
+	public boolean loseAmmunition() {
+		if (this.ammunition.get() - 1 < 0)
+			return false;
+		
+		this.ammunition.set(this.ammunition.get() - 1);
+		this.ammunitionString.set("x " + this.ammunition.get());
+		return true;
 	}
 	
 	// Gagne une potion 1 à 1

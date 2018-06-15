@@ -3,6 +3,9 @@ package app.vue;
 import app.modele.entity.animated.Player; 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class InterfaceView {
 	
@@ -10,6 +13,8 @@ public class InterfaceView {
 	private ObservableList<ComponentView> hearts;
 	private ObservableList<ComponentView> potions;
 	private ObservableList<ComponentView> money;
+	private ImageView ammunitionImageView;
+	private Label ammunitionLabel;
 	
 	public InterfaceView(Player player) {		
 		this.player = player;
@@ -17,10 +22,13 @@ public class InterfaceView {
 		this.hearts = FXCollections.observableArrayList();
 		this.potions = FXCollections.observableArrayList();
 		this.money = FXCollections.observableArrayList();
+		this.ammunitionImageView = new ImageView();
+		this.ammunitionLabel = new Label();
 		
 		initializeHearts();
 		initializePotions();
 		initializeMoney();
+		initializeAmmunition();
 	}
 	
 	public void initializeHearts() {
@@ -62,6 +70,16 @@ public class InterfaceView {
 		
 	}
 	
+	public void initializeAmmunition() {
+		this.ammunitionImageView.setImage(new Image("file:src/img/0.png"));
+		this.ammunitionImageView.setTranslateX(448);
+		this.ammunitionImageView.setTranslateY(480);
+		
+		this.ammunitionLabel.textProperty().bind(player.getAmmunitionProperty());
+		this.ammunitionLabel.setTranslateX(480);
+		this.ammunitionLabel.setTranslateY(480);
+	}
+	
 	public ObservableList<ComponentView> getHearts() {
 		return hearts;
 	}
@@ -72,6 +90,14 @@ public class InterfaceView {
 	
 	public ObservableList<ComponentView> getMoney() {
 		return money;
+	}
+	
+	public ImageView getAmmunitionImageView() {
+		return ammunitionImageView;
+	}
+	
+	public Label getAmmunitionLabel() {
+		return ammunitionLabel;
 	}
 	
 	public Player getPlayer() {

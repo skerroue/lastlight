@@ -56,8 +56,10 @@ public class Taser extends Weapon {
 	}
 	
 	public void reload() {
-		killAllBullets();	
-		bullets.clear();
+		if (this.bullets.size() >= this.magSize && Game.getPlayer().loseAmmunition()) {
+			killAllBullets();	
+			bullets.clear();
+		}
 	}
 	
 	public boolean allBulletsDead() {
