@@ -164,54 +164,64 @@ public abstract class AnimatedEntity extends Entity {
 		this.orientation.set(n);
 	}
 	
-	public boolean tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int DIRECTION) {
+	public boolean tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int direction) {
+		
+		boolean emptyTile = true;
     	
-		switch (DIRECTION) {
+		switch (direction) {
 		case LEFT :
 			for (AnimatedEntity e : entities)
 	    		if (this.getX().get() == e.getX().get() + 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return e.push(LEFT);
+	    			if (emptyTile)
+	    				emptyTile = e.push(LEFT);
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getX().get() == e.getX().get() + 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return false;
+	    			if (emptyTile)
+	    				emptyTile = false;
 			break;
 		case UP :
 			for (AnimatedEntity e : entities)
 	    		if (this.getY().get() == e.getY().get() + 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return e.push(UP);
+	    			if (emptyTile)
+	    				emptyTile = e.push(UP);
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() == e.getY().get() + 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return false;
+	    			if (emptyTile)
+	    				emptyTile = false;
 			break;
 		case RIGHT :
 			for (AnimatedEntity e : entities)
 	    		if (this.getX().get() == e.getX().get() - 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return e.push(RIGHT);
+	    			if (emptyTile)
+	    				emptyTile = e.push(RIGHT);
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getX().get() == e.getX().get() - 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return false;
+	    			if (emptyTile)
+	    				emptyTile = false;
 			break;
 		case DOWN :
 			for (AnimatedEntity e : entities)
 	    		if (this.getY().get() == e.getY().get() - 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return e.push(DOWN);
+	    			if (emptyTile)
+	    				emptyTile = e.push(DOWN);
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() == e.getY().get() - 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return false;
+	    			if (emptyTile)
+	    				emptyTile = false;
 			break;
 		default :
 			break;
 		}
 		
-    	return true;
+    	return emptyTile;
 	}
 	
 	public void attack(ObservableList<AnimatedEntity> entities) {
