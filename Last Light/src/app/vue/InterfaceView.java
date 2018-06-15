@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class InterfaceView {
 	
@@ -71,13 +72,14 @@ public class InterfaceView {
 	}
 	
 	public void initializeAmmunition() {
-		this.ammunitionImageView.setImage(new Image("file:src/img/0.png"));
+		this.ammunitionImageView.setImage(new Image("file:src/img/ammo.png"));
 		this.ammunitionImageView.setTranslateX(448);
 		this.ammunitionImageView.setTranslateY(480);
 		
 		this.ammunitionLabel.textProperty().bind(player.getAmmunitionProperty());
 		this.ammunitionLabel.setTranslateX(480);
-		this.ammunitionLabel.setTranslateY(480);
+		this.ammunitionLabel.setTranslateY(485);
+		this.ammunitionLabel.setTextFill(Color.WHITE);
 	}
 	
 	public ObservableList<ComponentView> getHearts() {
