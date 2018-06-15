@@ -1,7 +1,6 @@
 package app.modele.entity.inanimated;
 
-import app.modele.entity.Entity; 
-import app.modele.entity.animated.Player;
+import app.modele.entity.Entity;  
 
 public abstract class InanimatedEntity extends Entity {
 	
@@ -11,7 +10,7 @@ public abstract class InanimatedEntity extends Entity {
 		super(id, x, y);
 	}
 
-	public abstract boolean interact(Player p);
+	public abstract boolean interact();
 	
 	public String getId() {
 		return this.id;

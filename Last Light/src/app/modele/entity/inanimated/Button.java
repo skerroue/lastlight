@@ -1,8 +1,7 @@
 package app.modele.entity.inanimated;
 
-import app.modele.GameData;
-import app.modele.entity.animated.Player;
-
+import app.modele.GameData; 
+ 
 public class Button extends InanimatedEntity {
 	
 	private InanimatedEntity child;
@@ -13,7 +12,7 @@ public class Button extends InanimatedEntity {
 	}
 
 	@Override
-	public boolean interact(Player p) {
+	public boolean interact() {
 		if (this.child != null) {
 			this.child.die();
 			return true;

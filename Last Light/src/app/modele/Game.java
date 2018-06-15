@@ -1,13 +1,12 @@
 package app.modele;
 
-import java.io.BufferedReader;  
+import java.io.BufferedReader;   
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import app.modele.BFS.BFS;
@@ -24,7 +23,6 @@ import app.modele.field.Field;
 import app.modele.field.Tile;
 import app.modele.weapon.Weapon;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -39,6 +37,7 @@ import javafx.util.Duration;
 
 public class Game {
 	
+	@SuppressWarnings("unused")
 	private GameData gameData;
 	
 	private BFS bfs;
@@ -67,10 +66,10 @@ public class Game {
 		
 		this.currentText = new SimpleStringProperty("");
 		
-		this.animatedEntities = FXCollections.observableArrayList();
-		this.inanimatedEntities = FXCollections.observableArrayList();
-		this.player = new Player(416, 416, 3, 0, 4, 0, 6, 18);
-		this.animatedEntities.add(player);
+		animatedEntities = FXCollections.observableArrayList();
+		inanimatedEntities = FXCollections.observableArrayList();
+		player = new Player(416, 416, 3, 0, 4, 0, 6, 18);
+		animatedEntities.add(player);
 		this.playerIsDetected = false;
 		
 		this.bfs = new BFS(player, map);
@@ -103,8 +102,8 @@ public class Game {
 			player.update();
 			
 			if (player.getActiveWeaponIndex().get() > -1)
-				for (Weapon w : this.player.getWeapons())
-					w.update(animatedEntities);
+				for (Weapon w : Game.player.getWeapons())
+					w.update();
 			
 			for (int k = 0; k < getAnimatedEntities().size(); k++)
 				if (getAnimatedEntities().get(k).getIsDead().get()) 
@@ -187,11 +186,11 @@ public class Game {
 		if (changing) {
 			this.playerIsDetected = false;
 			
-			for (int indice = 1 ; indice < this.animatedEntities.size() ; indice++) 
-				this.animatedEntities.get(indice).die();
+			for (int indice = 1 ; indice < animatedEntities.size() ; indice++) 
+				Game.animatedEntities.get(indice).die();
 			
-			for (int l = 0 ; l < this.inanimatedEntities.size() ; l++) 
-				this.inanimatedEntities.get(l).die();
+			for (int l = 0 ; l < Game.inanimatedEntities.size() ; l++) 
+				Game.inanimatedEntities.get(l).die();
 			
 			spawnEntities();
 		}
@@ -347,7 +346,7 @@ public class Game {
     		inanimatedEntities.add(new ItemEntity("door", x, y, ""));
     		break;
     	case GameData.ENTITY_BUTTON :
-    		inanimatedEntities.add(new Button(x, y, "", this.inanimatedEntities.get(this.inanimatedEntities.size() - 1)));
+    		inanimatedEntities.add(new Button(x, y, "", inanimatedEntities.get(inanimatedEntities.size() - 1)));
     		break;
     	case GameData.ENTITY_NECKLACE :
     		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
@@ -390,7 +389,7 @@ public class Game {
     
     public void movePlayer(KeyCode event) {
 	    
-    	if (!this.player.getIsAttacking().get()) {
+    	if (!Game.player.getIsAttacking().get()) {
 			player.setOrientation(event);
 	
 			switch (event) {
@@ -402,7 +401,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveLeft(animatedEntities, inanimatedEntities);
+					player.moveLeft();
 				break;
 			case UP :
 				if (player.getY().get() == GameData.LEFT_TOP_LIMIT) {
@@ -412,7 +411,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveUp(animatedEntities, inanimatedEntities);
+					player.moveUp();
 				break;
 			case RIGHT :
 				if (player.getX().get() == GameData.RIGHT_BOTTOM_LIMIT) {
@@ -422,7 +421,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveRight(animatedEntities, inanimatedEntities);
+					player.moveRight();
 				break;
 			case DOWN :
 				if (player.getY().get() == GameData.RIGHT_BOTTOM_LIMIT) {
@@ -432,7 +431,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveDown(animatedEntities, inanimatedEntities);
+					player.moveDown();
 				break;
 				default:
 					break;
@@ -447,60 +446,60 @@ public class Game {
     public boolean playerInteraction() {
     	boolean hasInteracted = false;
     	
-    	switch (this.player.getOrientation().get()) {
+    	switch (player.getOrientation().get()) {
 		case GameData.LEFT :
 			for (AnimatedEntity e : animatedEntities)
-	    		if (this.player.getX().get() == e.getX().get() + 32 && 
-	    			this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
+	    		if (player.getX().get() == e.getX().get() + 32 && 
+	    			player.getY().get() >= e.getY().get() - 31 && player.getY().get() <= e.getY().get() + 31) {
 	    			hasInteracted = e.interact();
 	    			this.currentText.set(e.getDialog());
 	    		}
 			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.player.getX().get() == e.getX().get() + 32 && 
-	    			this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
-	    			hasInteracted = e.interact(this.player);
+	    		if (player.getX().get() == e.getX().get() + 32 && 
+	    			player.getY().get() >= e.getY().get() - 31 && player.getY().get() <= e.getY().get() + 31) {
+	    			hasInteracted = e.interact();
 	    			this.currentText.set(e.getDialog());
 	    		}
 			break;
 		case GameData.UP :
 			for (AnimatedEntity e : animatedEntities)
-	    		if (this.player.getY().get() == e.getY().get() + 32 && 
-	    			this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
+	    		if (player.getY().get() == e.getY().get() + 32 && 
+	    			player.getX().get() >= e.getX().get() - 31 && player.getX().get() <= e.getX().get() + 31) {
 	    			hasInteracted = e.interact();
 	    			this.currentText.set(e.getDialog());
 	    		}
 			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.player.getY().get() == e.getY().get() + 32 && 
-	    			this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
-	    			hasInteracted = e.interact(this.player);
+	    		if (player.getY().get() == e.getY().get() + 32 && 
+	    			player.getX().get() >= e.getX().get() - 31 && player.getX().get() <= e.getX().get() + 31) {
+	    			hasInteracted = e.interact();
 	    			this.currentText.set(e.getDialog());
 	    		}
 			break;
 		case GameData.RIGHT :
 			for (AnimatedEntity e : animatedEntities)
-				if (this.player.getX().get() == e.getX().get() - 32 && 
-    				this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
+				if (player.getX().get() == e.getX().get() - 32 && 
+    				player.getY().get() >= e.getY().get() - 31 && player.getY().get() <= e.getY().get() + 31) {
 					hasInteracted = e.interact();
 					this.currentText.set(e.getDialog());
 				}
 			for (InanimatedEntity e : inanimatedEntities)
-				if (this.player.getX().get() == e.getX().get() - 32 && 
-    				this.player.getY().get() >= e.getY().get() - 31 && this.player.getY().get() <= e.getY().get() + 31) {
-					hasInteracted = e.interact(this.player);
+				if (player.getX().get() == e.getX().get() - 32 && 
+    				player.getY().get() >= e.getY().get() - 31 && player.getY().get() <= e.getY().get() + 31) {
+					hasInteracted = e.interact();
 					this.currentText.set(e.getDialog());
 				}
 			break;
 		case GameData.DOWN :
 			for (AnimatedEntity e : animatedEntities)
-				if (this.player.getY().get() == e.getY().get() - 32 && 
-    				this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
+				if (player.getY().get() == e.getY().get() - 32 && 
+    				player.getX().get() >= e.getX().get() - 31 && player.getX().get() <= e.getX().get() + 31) {
 					hasInteracted = e.interact();
 					this.currentText.set(e.getDialog());
 				}
 			for (InanimatedEntity e : inanimatedEntities)
-				if (this.player.getY().get() == e.getY().get() - 32 && 
-    				this.player.getX().get() >= e.getX().get() - 31 && this.player.getX().get() <= e.getX().get() + 31) {
-					hasInteracted = e.interact(this.player);
+				if (player.getY().get() == e.getY().get() - 32 && 
+    				player.getX().get() >= e.getX().get() - 31 && player.getX().get() <= e.getX().get() + 31) {
+					hasInteracted = e.interact();
 					this.currentText.set(e.getDialog());
 				}
 			break;
@@ -530,13 +529,13 @@ public class Game {
 	    	
 	    	if (nextTile != null) {
 		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) 
-		    		e.moveLeft(animatedEntities, inanimatedEntities);
+		    		e.moveLeft();
 		    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		e.moveUp(animatedEntities, inanimatedEntities);
+		    		e.moveUp();
 		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) 
-		    		e.moveRight(animatedEntities, inanimatedEntities);
+		    		e.moveRight();
 		    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		e.moveDown(animatedEntities, inanimatedEntities);
+		    		e.moveDown();
 	    	}
     	}
     	

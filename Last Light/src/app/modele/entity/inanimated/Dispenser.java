@@ -1,7 +1,7 @@
 package app.modele.entity.inanimated;
 
+import app.modele.Game; 
 import app.modele.GameData;
-import app.modele.entity.animated.Player;
 
 public class Dispenser extends InanimatedEntity {
 
@@ -10,8 +10,8 @@ public class Dispenser extends InanimatedEntity {
 	}
 
 	@Override
-	public boolean interact(Player p) {
-		if (p.getPotion().getValue() < 3 && p.buyPotion())
+	public boolean interact() {
+		if (Game.getPlayer().getPotion().getValue() < 3 && Game.getPlayer().buyPotion())
 			this.dialog = "Vous avez acheté une potion";
 		else 
 			this.dialog = "Vous n'avez pas assez d'argent ou pas assez de place";

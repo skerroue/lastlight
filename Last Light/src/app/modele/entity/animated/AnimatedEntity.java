@@ -41,49 +41,49 @@ public abstract class AnimatedEntity extends Entity {
 		this.invicibilityFrame.setOnFinished(e -> this.setInvicible(false) );
 	}
 	
-	public boolean moveLeft(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public boolean moveLeft() {
 		this.setOrientation(KeyCode.LEFT);
-		if (canMove(entities, inanimatedEntities)) {
+		if (canMove()) {
 			x.set(x.get() - velocity);
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean moveRight(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public boolean moveRight() {
 		this.setOrientation(KeyCode.RIGHT);
-		if (canMove(entities, inanimatedEntities)) {
+		if (canMove()) {
 			x.set(x.get() + velocity);
 			return true;
 		}
 		return false;
 	}
 
-	public boolean moveDown(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public boolean moveDown() {
 		this.setOrientation(KeyCode.DOWN);
-		if (canMove(entities, inanimatedEntities)) {
+		if (canMove()) {
 			y.set(y.get() + velocity);
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean moveUp(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public boolean moveUp() {
 		this.setOrientation(KeyCode.UP);
-		if (canMove(entities, inanimatedEntities)) {
+		if (canMove()) {
 			y.set(y.get() - velocity);
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean canMove(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public boolean canMove() {
 		boolean canMove = false;
 		boolean emptyTile = true;
 		
 		switch (this.orientation.getValue()) {
 		case LEFT :
-			emptyTile = tileIsEmpty(entities, inanimatedEntities, LEFT);
+			emptyTile = tileIsEmpty(Game.getAnimatedEntities(), Game.getInanimatedEntities(), LEFT);
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
@@ -96,7 +96,7 @@ public abstract class AnimatedEntity extends Entity {
 					canMove = true;
 			break;
 		case UP :
-			emptyTile = tileIsEmpty(entities, inanimatedEntities, UP);
+			emptyTile = tileIsEmpty(Game.getAnimatedEntities(), Game.getInanimatedEntities(), UP);
 			if (y.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0 && y.get() > 0) {
@@ -109,7 +109,7 @@ public abstract class AnimatedEntity extends Entity {
 					canMove = true;
 			break;
 		case DOWN :
-			emptyTile = tileIsEmpty(entities, inanimatedEntities, DOWN);
+			emptyTile = tileIsEmpty(Game.getAnimatedEntities(), Game.getInanimatedEntities(), DOWN);
 			if (y.get() % 32 != 0 && emptyTile) 
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
@@ -122,7 +122,7 @@ public abstract class AnimatedEntity extends Entity {
 					canMove = true;
 			break;
 		case RIGHT :
-			emptyTile = tileIsEmpty(entities, inanimatedEntities, RIGHT);
+			emptyTile = tileIsEmpty(Game.getAnimatedEntities(), Game.getInanimatedEntities(), RIGHT);
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
@@ -171,7 +171,7 @@ public abstract class AnimatedEntity extends Entity {
 			for (AnimatedEntity e : entities)
 	    		if (this.getX().get() == e.getX().get() + 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return e.push(LEFT, entities, inanimatedEntities);
+	    			return e.push(LEFT);
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getX().get() == e.getX().get() + 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
@@ -181,7 +181,7 @@ public abstract class AnimatedEntity extends Entity {
 			for (AnimatedEntity e : entities)
 	    		if (this.getY().get() == e.getY().get() + 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return e.push(UP, entities, inanimatedEntities);
+	    			return e.push(UP);
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() == e.getY().get() + 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
@@ -191,7 +191,7 @@ public abstract class AnimatedEntity extends Entity {
 			for (AnimatedEntity e : entities)
 	    		if (this.getX().get() == e.getX().get() - 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			return e.push(RIGHT, entities, inanimatedEntities);
+	    			return e.push(RIGHT);
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getX().get() == e.getX().get() - 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
@@ -201,7 +201,7 @@ public abstract class AnimatedEntity extends Entity {
 			for (AnimatedEntity e : entities)
 	    		if (this.getY().get() == e.getY().get() - 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			return e.push(DOWN, entities, inanimatedEntities);
+	    			return e.push(DOWN);
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() == e.getY().get() - 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
@@ -218,7 +218,7 @@ public abstract class AnimatedEntity extends Entity {
 		return;
 	}
 	
-	public boolean push(int DIRECTION, ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public boolean push(int DIRECTION) {
 		return false;
 	}
 	

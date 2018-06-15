@@ -1,6 +1,6 @@
 package app.modele.entity.inanimated;
 
-import java.io.BufferedWriter; 
+import java.io.BufferedWriter;  
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import app.modele.Game;
 import app.modele.GameData;
-import app.modele.entity.animated.Player;
 import app.modele.weapon.Lamp;
 import app.modele.weapon.Taser;
 
@@ -18,34 +17,34 @@ public class ItemEntity extends InanimatedEntity {
 		super(id, x, y, dialog);
 	}
 	
-	public boolean interact(Player p) {
+	public boolean interact() {
 		boolean hasInteracted = true;
 		
 		switch (this.id) {
 		case GameData.ENTITY_LAMP :
-			p.getWeapons().add(new Lamp(1, 1));
+			Game.getPlayer().getWeapons().add(new Lamp(1, 1));
 			this.die();
 			break;
 		case GameData.ENTITY_TASER :
-			p.getWeapons().add(new Taser(1, 1));
+			Game.getPlayer().getWeapons().add(new Taser(1, 1));
 			this.die();
 			break;
 		case GameData.ENTITY_SODA :
-			if (p.getPotion().getValue() < 3) {
-				p.earnPotion();
+			if (Game.getPlayer().getPotion().getValue() < 3) {
+				Game.getPlayer().earnPotion();
 				this.die();
 			}
 			break;
 		case GameData.ENTITY_NECKLACE :
-			p.setNecklace(true);
+			Game.getPlayer().setNecklace(true);
 			this.die();
 			break;
 		case GameData.ENTITY_BOOTS :
-			p.setBoots(true);
+			Game.getPlayer().setBoots(true);
 			this.die();
 			break;
 		case GameData.ENTITY_HEART :
-			p.unlockHeart();
+			Game.getPlayer().unlockHeart();
 			this.die();
 			break;
  		default : 

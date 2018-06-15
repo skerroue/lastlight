@@ -52,22 +52,22 @@ public class EntityControler {
     	entitiesView.add(playerView);
     	entityContainer.getChildren().add(playerView);
     	
-    	game.getAnimatedEntities().addListener(new ListChangeListener<Entity>() {
+    	Game.getAnimatedEntities().addListener(new ListChangeListener<Entity>() {
 
 			@Override
 			public void onChanged(Change<? extends Entity> c) {
 				
 				while (c.next()) {
 					if (c.wasAdded()) {
-						switch (game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1).getId()) {
+						switch (Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1).getId()) {
 						case GameData.ENTITY_WALKER :
-							entitiesView.add(new EnemyView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
+							entitiesView.add(new EnemyView(Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1)));
 							break;
 						case GameData.ENTITY_ROCK :
-							entitiesView.add(new RockView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
+							entitiesView.add(new RockView(Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1)));
 							break;
 						case GameData.ENTITY_NPC :
-							entitiesView.add(new NPCView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
+							entitiesView.add(new NPCView(Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1)));
 						default :
 							break;
 						}
@@ -80,14 +80,14 @@ public class EntityControler {
     		
     	});
     	
-    	game.getInanimatedEntities().addListener(new ListChangeListener<Entity>() {
+    	Game.getInanimatedEntities().addListener(new ListChangeListener<Entity>() {
 
 			@Override
 			public void onChanged(Change<? extends Entity> c) {
 				
 				while (c.next()) {
 					if (c.wasAdded()) {
-						entitiesView.add(new InanimatedEntityView(game.getInanimatedEntities().get(game.getInanimatedEntities().size()-1)));
+						entitiesView.add(new InanimatedEntityView(Game.getInanimatedEntities().get(Game.getInanimatedEntities().size()-1)));
 						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
 					}
 				}

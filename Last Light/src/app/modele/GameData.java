@@ -27,6 +27,8 @@ public class GameData {
 	public final static double NECKLACE_DOWNTIME = 2;
 	public final static int NECKLACE_WALL = 28;
 	
+	public final static int BOOTS_HOLE = 28;
+	
 	public final static String ENTITY_WALKER = "walker";
 	final static String ENTITY_FLYING = "flying";
 	public final static String ENTITY_LAMP = "lamp";
@@ -55,12 +57,12 @@ public class GameData {
 	public final static int STARTING_MAP_COLUMN = 3;
 	
 	public GameData() {
-		this.ENEMIES_ID = new ArrayList<String>();
+		ENEMIES_ID = new ArrayList<String>();
 		for (int i = 0 ; i < this.ENEMIES_ID_ARRAY.length ; i++)
-			this.ENEMIES_ID.add(ENEMIES_ID_ARRAY[i]);
+			ENEMIES_ID.add(ENEMIES_ID_ARRAY[i]);
 		
-		this.crossableTiles = readFileCrossableTiles();
-		this.mapsOfMap = readMapOfMapsFile();
+		crossableTiles = readFileCrossableTiles();
+		mapsOfMap = readMapOfMapsFile();
 	}
 	
 	private ArrayList<Integer> readFileCrossableTiles() {

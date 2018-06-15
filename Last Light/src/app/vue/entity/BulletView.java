@@ -1,6 +1,5 @@
 package app.vue.entity;
 
-import app.modele.GameData;
 import app.modele.entity.animated.Bullet;
 import javafx.scene.image.Image;
 

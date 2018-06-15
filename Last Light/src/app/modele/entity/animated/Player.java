@@ -201,7 +201,7 @@ public class Player extends AnimatedEntity {
 	public boolean buyPotion() {
 		if (this.money.get() > 1 && this.potion.get() < 3) {
 			this.earnPotion();
-			this.earnMoney(-2);
+			this.spendMoney(2);
 			return true;
 		}
 		else 
@@ -222,14 +222,17 @@ public class Player extends AnimatedEntity {
 	
 	// TODO Vérifier que l'on ne passe pas en négatif
 	public void spendMoney(int a) {
+		if (this.money.get() - a < 0)
+			throw new Error("Player money negative");
+		
 		this.money.set(this.money.getValue() - a);
 	}
 	
-	public void attack(ObservableList<AnimatedEntity> entities) {
+	public void attack() {
 		
 		if (this.weapons.size() > 0  && this.activeWeaponIndex.get() > -1) {
 			this.isAttacking.set(true);
-			this.weapons.get(this.activeWeaponIndex.get()).attack(entities, this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
+			this.weapons.get(this.activeWeaponIndex.get()).attack(this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
 		}
 		
 	}
@@ -269,97 +272,109 @@ public class Player extends AnimatedEntity {
 		
 		switch (this.orientation.getValue()) {
 		case LEFT :
-			emptyTile = tileIsEmptyDash(entities, inanimatedEntities, LEFT);
-			if (x.get() % 32 < velocityDash) {
-				if (y.get() % 32 == 0) {
-					if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).isCrossable())
-						canMove = emptyTile;
-					else canMove = (int) x.get() % 32;
-				} else {
-					if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() - 1).isCrossable() && 
-							Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).isCrossable())
-						canMove = emptyTile;
-					else canMove = (int) x.get() % 32;
-				}
-			} else
-				canMove = velocityDash;
-			break;
-			
-		case UP :
-			emptyTile = tileIsEmptyDash(entities, inanimatedEntities, UP);
-			if (y.get() % 32 < velocityDash) {
-				if (x.get() % 32 == 0) {
-					if (Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).isCrossable() && emptyTile == velocityDash)
-						canMove = velocityDash;
-					else canMove = (int) y.get() % 32;
-				} else {
-					if (Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX() + 1).isCrossable() && 
-							Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).isCrossable() && emptyTile == velocityDash)
-						canMove = velocityDash;
-					else canMove = (int) y.get() % 32;
-				}
-			} else
-				canMove = velocityDash;
-			break;
-			
-		case DOWN :
-			emptyTile = tileIsEmptyDash(entities, inanimatedEntities, DOWN);
-			if (y.get() % 32 < velocityDash) {
-				if (y.get() % 32 != 0) {
-					if (x.get() % 32 == 0) {
-						if (Game.getMap().getNextTile(getIndiceY() + 2, getIndiceX()).isCrossable() && emptyTile == velocityDash)
-							canMove = velocityDash;
-						else canMove = (32 - ((int) y.get() % 32)) % 32;
-					} else {
-						if (Game.getMap().getNextTile(getIndiceY() + 2, getIndiceX() + 1).isCrossable() && 
-								Game.getMap().getNextTile(getIndiceY() + 2, getIndiceX()).isCrossable() && emptyTile == velocityDash)
-							canMove = velocityDash;
-						else canMove = (32 - ((int) y.get() % 32)) % 32;
-					}
-				}
-				else if (x.get() % 32 == 0) {
-					if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).isCrossable() && emptyTile == velocityDash)
-						canMove = velocityDash;
-					else canMove = (32 - ((int) y.get() % 32)) % 32;
-				} else {
-					if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() + 1).isCrossable() && 
-							Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).isCrossable() && emptyTile == velocityDash)
-						canMove = velocityDash;
-					else canMove = (32 - ((int) y.get() % 32)) % 32;
-				}
-			} else
-				canMove = velocityDash;
-			break;
-			
-		case RIGHT :
-			emptyTile = tileIsEmptyDash(entities, inanimatedEntities, RIGHT);
-			if (x.get() % 32 < velocityDash) {
-				if (x.get() % 32 != 0) {
+			if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).getId() == GameData.BOOTS_HOLE)
+				canMove = emptyTile;
+			else {
+				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, LEFT);
+				if (x.get() % 32 < velocityDash) {
 					if (y.get() % 32 == 0) {
-						if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 2).isCrossable() && emptyTile == velocityDash)
+						if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).isCrossable())
+							canMove = emptyTile;
+						else canMove = (int) x.get() % 32;
+					} else {
+						if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() - 1).isCrossable() && 
+								Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).isCrossable())
+							canMove = emptyTile;
+						else canMove = (int) x.get() % 32;
+					}
+				} else
+					canMove = velocityDash;
+			}
+			break;
+		case UP :
+			if (Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).getId() == GameData.BOOTS_HOLE)
+				canMove = emptyTile;
+			else {
+				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, UP);
+				if (y.get() % 32 < velocityDash) {
+					if (x.get() % 32 == 0) {
+						if (Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).isCrossable() && emptyTile == velocityDash)
+							canMove = velocityDash;
+						else canMove = (int) y.get() % 32;
+					} else {
+						if (Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX() + 1).isCrossable() && 
+								Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).isCrossable() && emptyTile == velocityDash)
+							canMove = velocityDash;
+						else canMove = (int) y.get() % 32;
+					}
+				} else
+					canMove = velocityDash;
+			}
+			break;
+		case RIGHT :
+			if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).getId() == GameData.BOOTS_HOLE)
+				canMove = emptyTile;
+			else {
+				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, RIGHT);
+				if (x.get() % 32 < velocityDash) {
+					if (x.get() % 32 != 0) {
+						if (y.get() % 32 == 0) {
+							if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 2).isCrossable() && emptyTile == velocityDash)
+								canMove = velocityDash;
+							else canMove = (32 - ((int) x.get() % 32)) % 32;
+						} else {
+							if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() + 2).isCrossable() && 
+									Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 2).isCrossable() && emptyTile == velocityDash)
+								canMove = velocityDash;
+							else canMove = (32 - ((int) x.get() % 32)) % 32;
+						}
+					}
+					else if (y.get() % 32 == 0) {
+						if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).isCrossable() && emptyTile == velocityDash)
 							canMove = velocityDash;
 						else canMove = (32 - ((int) x.get() % 32)) % 32;
 					} else {
-						if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() + 2).isCrossable() && 
-								Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 2).isCrossable() && emptyTile == velocityDash)
+						if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() + 1).isCrossable() && 
+								Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).isCrossable() && emptyTile == velocityDash)
 							canMove = velocityDash;
 						else canMove = (32 - ((int) x.get() % 32)) % 32;
 					}
-				}
-				else if (y.get() % 32 == 0) {
-					if (Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).isCrossable() && emptyTile == velocityDash)
-						canMove = velocityDash;
-					else canMove = (32 - ((int) x.get() % 32)) % 32;
-				} else {
-					if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() + 1).isCrossable() && 
-							Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).isCrossable() && emptyTile == velocityDash)
-						canMove = velocityDash;
-					else canMove = (32 - ((int) x.get() % 32)) % 32;
-				}
-			} else
-				canMove = velocityDash;
+				} else
+					canMove = velocityDash;
+			}
 			break;
-			
+		case DOWN :
+			if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).getId() == GameData.BOOTS_HOLE)
+				canMove = emptyTile;
+			else {
+				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, DOWN);
+				if (y.get() % 32 < velocityDash) {
+					if (y.get() % 32 != 0) {
+						if (x.get() % 32 == 0) {
+							if (Game.getMap().getNextTile(getIndiceY() + 2, getIndiceX()).isCrossable() && emptyTile == velocityDash)
+								canMove = velocityDash;
+							else canMove = (32 - ((int) y.get() % 32)) % 32;
+						} else {
+							if (Game.getMap().getNextTile(getIndiceY() + 2, getIndiceX() + 1).isCrossable() && 
+									Game.getMap().getNextTile(getIndiceY() + 2, getIndiceX()).isCrossable() && emptyTile == velocityDash)
+								canMove = velocityDash;
+							else canMove = (32 - ((int) y.get() % 32)) % 32;
+						}
+					}
+					else if (x.get() % 32 == 0) {
+						if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).isCrossable() && emptyTile == velocityDash)
+							canMove = velocityDash;
+						else canMove = (32 - ((int) y.get() % 32)) % 32;
+					} else {
+						if (Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX() + 1).isCrossable() && 
+								Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).isCrossable() && emptyTile == velocityDash)
+							canMove = velocityDash;
+						else canMove = (32 - ((int) y.get() % 32)) % 32;
+					}
+				} else
+					canMove = velocityDash;
+			}
+			break;
 		default :
 			break;
 		}

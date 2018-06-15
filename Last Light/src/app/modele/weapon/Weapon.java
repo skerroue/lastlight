@@ -1,6 +1,5 @@
 package app.modele.weapon;
 
-import app.modele.entity.animated.AnimatedEntity;
 import app.modele.entity.animated.Bullet;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -33,9 +32,9 @@ public abstract class Weapon {
 		return this.id;
 	}
 	
-	public abstract void attack(ObservableList<AnimatedEntity> entities, int orientation, int x, int y);
+	public abstract void attack(int orientation, int x, int y);
 	
-	public abstract void update(ObservableList<AnimatedEntity> entities);
+	public abstract void update();
 	
 	public abstract void killAllBullets();
 	

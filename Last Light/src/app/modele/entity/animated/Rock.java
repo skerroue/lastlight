@@ -1,8 +1,6 @@
 package app.modele.entity.animated;
 
-import app.modele.GameData;
-import app.modele.entity.inanimated.InanimatedEntity;
-import javafx.collections.ObservableList;
+import app.modele.GameData; 
 
 public class Rock extends AnimatedEntity {
 
@@ -11,17 +9,17 @@ public class Rock extends AnimatedEntity {
 		this.isInvicible = true;
 	}
 	
-	public boolean push(int DIRECTION, ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities) {
+	public boolean push(int DIRECTION) {
 		
 		switch (DIRECTION) {
 		case LEFT :
-			return this.moveLeft(entities, inanimatedEntities);
+			return this.moveLeft();
 		case UP :
-			return this.moveUp(entities, inanimatedEntities);
+			return this.moveUp();
 		case RIGHT :
-			return this.moveRight(entities, inanimatedEntities);
+			return this.moveRight();
 		case DOWN :
-			return this.moveDown(entities, inanimatedEntities);
+			return this.moveDown();
 		default :
 			return false;
 		}
