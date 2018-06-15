@@ -87,7 +87,15 @@ public class EntityControler {
 				
 				while (c.next()) {
 					if (c.wasAdded()) {
-						entitiesView.add(new InanimatedEntityView(Game.getInanimatedEntities().get(Game.getInanimatedEntities().size()-1)));
+						switch (Game.getInanimatedEntities().get(Game.getInanimatedEntities().size() - 1).getId()) {
+						case GameData.ENTITY_BUTTON :
+							entitiesView.add(new ButtonView(Game.getInanimatedEntities().get(Game.getInanimatedEntities().size()-1)));
+							break;
+						default :
+							entitiesView.add(new InanimatedEntityView(Game.getInanimatedEntities().get(Game.getInanimatedEntities().size()-1)));
+							break;
+						}
+						
 						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
 					}
 				}
