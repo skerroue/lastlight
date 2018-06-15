@@ -17,29 +17,29 @@ public class Lamp extends Weapon {
 	public void attack(int orientation, int x, int y) {
 		
 		switch (orientation) {
-		case LEFT :
+		case GameData.LEFT :
 			for (AnimatedEntity e : Game.getAnimatedEntities())
-	    		if (x <= e.getX().get() + 2*(this.distance.get()*TILE_SIZE) && x >= e.getX().get() + this.distance.get()*TILE_SIZE && 
-	    			y >= e.getY().get() - TILE_SIZE && y <= e.getY().get() + TILE_SIZE)
+	    		if (x <= e.getX().get() + 2*(this.distance.get()*GameData.TILE_SIZE) && x >= e.getX().get() + this.distance.get()*GameData.TILE_SIZE && 
+	    			y >= e.getY().get() - GameData.TILE_SIZE && y <= e.getY().get() + GameData.TILE_SIZE)
 	    			e.loseHP(this.att.get());
 			break;
-		case UP :
+		case GameData.UP :
 			for (AnimatedEntity e : Game.getAnimatedEntities())
-	    		if (y <= e.getY().get() + 2*(this.distance.get()*TILE_SIZE) && y >= e.getY().get() + this.distance.get()*TILE_SIZE && 
-	    			x >= e.getX().get() - TILE_SIZE && x <= e.getX().get() + TILE_SIZE)
+	    		if (y <= e.getY().get() + 2*(this.distance.get()*GameData.TILE_SIZE) && y >= e.getY().get() + this.distance.get()*GameData.TILE_SIZE && 
+	    			x >= e.getX().get() - GameData.TILE_SIZE && x <= e.getX().get() + GameData.TILE_SIZE)
 	    			e.loseHP(this.att.get());
 			break;
-		case RIGHT :
+		case GameData.RIGHT :
 			for (AnimatedEntity e : Game.getAnimatedEntities()) {
-				if (x >= e.getX().get() - 2*(this.distance.get()*TILE_SIZE) && x <= e.getX().get() - this.distance.get()*TILE_SIZE && 
-		    		y >= e.getY().get() - TILE_SIZE && y <= e.getY().get() + TILE_SIZE)
+				if (x >= e.getX().get() - 2*(this.distance.get()*GameData.TILE_SIZE) && x <= e.getX().get() - this.distance.get()*GameData.TILE_SIZE && 
+		    		y >= e.getY().get() - GameData.TILE_SIZE && y <= e.getY().get() + GameData.TILE_SIZE)
 					e.loseHP(this.att.get());
 			}
 			break;
-		case DOWN :
+		case GameData.DOWN :
 			for (AnimatedEntity e : Game.getAnimatedEntities())
-	    		if (y >= e.getY().get() - 2*(this.distance.get()*TILE_SIZE) && y <= e.getY().get() - this.distance.get()*TILE_SIZE && 
-	    			x >= e.getX().get() - TILE_SIZE && x <= e.getX().get() + TILE_SIZE)
+	    		if (y >= e.getY().get() - 2*(this.distance.get()*GameData.TILE_SIZE) && y <= e.getY().get() - this.distance.get()*GameData.TILE_SIZE && 
+	    			x >= e.getX().get() - GameData.TILE_SIZE && x <= e.getX().get() + GameData.TILE_SIZE)
 	    			e.loseHP(this.att.get());
 			break;
 		default :

@@ -83,10 +83,10 @@ public class Taser extends Weapon {
 	public void addBullet(int x, int y, int orientation) {
 		
 		switch (orientation) {
-		case LEFT 	: x -= 32; break;
-		case UP 	: y -= 32; break;
-		case RIGHT 	: x += 32; break;
-		case DOWN 	: y += 32; break;
+		case GameData.LEFT 	: x -= 32; break;
+		case GameData.UP 	: y -= 32; break;
+		case GameData.RIGHT : x += 32; break;
+		case GameData.DOWN 	: y += 32; break;
 		default 	: break;
 		}
 		

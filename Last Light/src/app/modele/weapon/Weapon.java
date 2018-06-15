@@ -6,13 +6,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
 public abstract class Weapon {
-	
-	final static int LEFT = 0;
-	final static int UP = 1;
-	final static int RIGHT = 2;
-	final static int DOWN = 3;
-	
-	final static int TILE_SIZE = 32;
 
 	protected IntegerProperty att;
 	protected IntegerProperty distance;
