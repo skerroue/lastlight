@@ -301,7 +301,7 @@ public class Player extends AnimatedEntity {
 		
 		switch (this.orientation.getValue()) {
 		case LEFT :
-			if (x.get() > LEFT_TOP_LIMIT && Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).getId() == GameData.BOOTS_HOLE)
+			if (x.get() % 32 == 0 && bootsCount == 0 && x.get() > LEFT_TOP_LIMIT && Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).getId() == GameData.BOOTS_HOLE)
 				canMove = emptyTile;
 			else {
 				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, LEFT);
@@ -316,13 +316,16 @@ public class Player extends AnimatedEntity {
 							canMove = emptyTile;
 						else canMove = (int) x.get() % 32;
 					}
+					
 				} else
 					canMove = velocityDash;
 			}
 			break;
 		case UP :
-			if (y.get() > LEFT_TOP_LIMIT && Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).getId() == GameData.BOOTS_HOLE)
+			if (y.get() % 32 == 0 && bootsCount == 0 && y.get() > LEFT_TOP_LIMIT && Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).getId() == GameData.BOOTS_HOLE) {
+				System.out.println("270");
 				canMove = emptyTile;
+			}
 			else {
 				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, UP);
 				if (y.get() % 32 < velocityDash) {
@@ -341,7 +344,7 @@ public class Player extends AnimatedEntity {
 			}
 			break;
 		case RIGHT :
-			if (x.get() < RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).getId() == GameData.BOOTS_HOLE)
+			if (x.get() % 32 == 0 && bootsCount == 0 && x.get() < RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).getId() == GameData.BOOTS_HOLE)
 				canMove = emptyTile;
 			else {
 				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, RIGHT);
@@ -373,7 +376,7 @@ public class Player extends AnimatedEntity {
 			}
 			break;
 		case DOWN :
-			if (y.get() < RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).getId() == GameData.BOOTS_HOLE)
+			if (y.get() % 32 == 0 && bootsCount == 0 && y.get() < RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).getId() == GameData.BOOTS_HOLE)
 				canMove = emptyTile;
 			else {
 				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, DOWN);
