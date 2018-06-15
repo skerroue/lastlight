@@ -88,8 +88,11 @@ public class FieldControler {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-	    		if (playerView.getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && playerView.getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH)
-	    			setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
+	    		setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
+	    		if (getScrollX(tileContainer) < 0)
+	    			setScrollX(0, tileContainer, entityContainer);
+	    		else if (getScrollX(tileContainer) + SCROLL_WIDTH > PANE_WIDTH)
+	    			setScrollX(PANE_WIDTH - SCROLL_WIDTH, tileContainer, entityContainer);
 			}
     		
 		});
@@ -98,8 +101,11 @@ public class FieldControler {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				if (playerView.getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && playerView.getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT)
-	    			setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
+	    		setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
+	    		if (getScrollY(tileContainer) < 0)
+	    			setScrollY(0, tileContainer, entityContainer);
+	    		else if (getScrollY(tileContainer) + SCROLL_HEIGHT > PANE_HEIGHT)
+	    			setScrollY(PANE_HEIGHT - SCROLL_HEIGHT, tileContainer, entityContainer);
 			}
 		});
     	
@@ -113,6 +119,14 @@ public class FieldControler {
     private static void setScrollY(int a, Pane tileContainer, Pane entityContainer) {
     	tileContainer.setTranslateY(-a);
 		entityContainer.setTranslateY(-a);
+    }
+    
+    private static int getScrollX(Pane container) {
+    	return - (int) container.getTranslateX();
+    }
+    
+    private static int getScrollY(Pane container) {
+    	return - (int) container.getTranslateY();
     }
     
 	public static void AnimationTransitionMap(Double i) {
