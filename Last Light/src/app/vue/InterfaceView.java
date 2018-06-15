@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class InterfaceView {
 	
@@ -78,8 +79,9 @@ public class InterfaceView {
 		
 		this.ammunitionLabel.textProperty().bind(player.getAmmunitionProperty());
 		this.ammunitionLabel.setTranslateX(480);
-		this.ammunitionLabel.setTranslateY(485);
+		this.ammunitionLabel.setTranslateY(488);
 		this.ammunitionLabel.setTextFill(Color.WHITE);
+		this.ammunitionLabel.setFont(new Font("Arial", 18));
 	}
 	
 	public ObservableList<ComponentView> getHearts() {
