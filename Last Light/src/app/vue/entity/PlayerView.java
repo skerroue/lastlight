@@ -99,7 +99,7 @@ public class PlayerView extends AnimatedEntityView {
 		return this.attaque;
 	}
 	
-	public void initializeBullets() {
+	private void initializeBullets() {
 		
 		player.getBullets().addListener(new ListChangeListener<Bullet>() {
 

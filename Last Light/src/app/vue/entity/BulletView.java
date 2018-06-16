@@ -15,7 +15,7 @@ public class BulletView extends EntityView {
 		this.rotate();
 	}
 	
-	public void rotate() {
+	private void rotate() {
 		this.setRotate((this.bullet.getOrientation().get()-1)*90);
 	}
 	

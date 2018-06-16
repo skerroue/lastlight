@@ -33,7 +33,7 @@ public class InterfaceView {
 		initializeAmmunition();
 	}
 	
-	public void initializeHearts() {
+	private void initializeHearts() {
 		
 		for (int i = 0 ; i < player.getPotentialHP().get() ; i++) {
 			hearts.add(new ComponentView("h"));
@@ -48,7 +48,7 @@ public class InterfaceView {
 		
 	}
 
-	public void initializePotions() {
+	private void initializePotions() {
 		
 		for (int i = 0 ; i < player.getMaxPotion().get() ; i++) {
 			potions.add(new ComponentView("soda"));
@@ -60,7 +60,7 @@ public class InterfaceView {
 		
 	}
 	
-	public void initializeMoney() {
+	private void initializeMoney() {
 		
 		for (int i = 0 ; i < player.getMaxMoney().get() ; i++) {
 			money.add(new ComponentView("money"));
@@ -72,7 +72,7 @@ public class InterfaceView {
 		
 	}
 	
-	public void initializeAmmunition() {
+	private void initializeAmmunition() {
 		this.ammunitionImageView.setImage(new Image("file:src/img/ammo.png"));
 		this.ammunitionImageView.setTranslateX(448);
 		this.ammunitionImageView.setTranslateY(480);

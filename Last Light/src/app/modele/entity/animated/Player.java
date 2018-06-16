@@ -301,7 +301,7 @@ public class Player extends AnimatedEntity {
 		
 		switch (this.orientation.getValue()) {
 		case GameData.LEFT :
-			if (x.get() % 32 == 0 && bootsCount == 0 && x.get() > GameData.LEFT_TOP_LIMIT && Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).getId() == GameData.BOOTS_HOLE)
+			if (x.get() % 32 == 0 && bootsCount == 0 && x.get() > GameData.LEFT_TOP_LIMIT && GameData.BOOTS_HOLES.contains(Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).getId()))
 				canMove = emptyTile;
 			else {
 				if (x.get() % 32 < velocityDash) {
@@ -321,7 +321,7 @@ public class Player extends AnimatedEntity {
 			}
 			break;
 		case GameData.UP :
-			if (y.get() % 32 == 0 && bootsCount == 0 && y.get() > GameData.LEFT_TOP_LIMIT && Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).getId() == GameData.BOOTS_HOLE) {
+			if (y.get() % 32 == 0 && bootsCount == 0 && y.get() > GameData.LEFT_TOP_LIMIT && GameData.BOOTS_HOLES.contains(Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).getId())) {
 				canMove = emptyTile;
 			}
 			else {
@@ -341,7 +341,7 @@ public class Player extends AnimatedEntity {
 			}
 			break;
 		case GameData.RIGHT :
-			if (x.get() % 32 == 0 && bootsCount == 0 && x.get() < GameData.RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).getId() == GameData.BOOTS_HOLE)
+			if (x.get() % 32 == 0 && bootsCount == 0 && x.get() < GameData.RIGHT_BOTTOM_LIMIT && GameData.BOOTS_HOLES.contains(Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).getId()))
 				canMove = emptyTile;
 			else {
 				if (x.get() % 32 < velocityDash) {
@@ -372,7 +372,7 @@ public class Player extends AnimatedEntity {
 			}
 			break;
 		case GameData.DOWN :
-			if (y.get() % 32 == 0 && bootsCount == 0 && y.get() < GameData.RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).getId() == GameData.BOOTS_HOLE)
+			if (y.get() % 32 == 0 && bootsCount == 0 && y.get() < GameData.RIGHT_BOTTOM_LIMIT && GameData.BOOTS_HOLES.contains(Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).getId()))
 				canMove = emptyTile;
 			else {
 				if (y.get() % 32 < velocityDash) {

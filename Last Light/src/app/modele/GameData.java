@@ -28,9 +28,10 @@ public class GameData {
 	
 	public final static double NECKLACE_TIME = 4;
 	public final static double NECKLACE_DOWNTIME = 8;
-	public final static int NECKLACE_WALL = 28;
+	public final static int NECKLACE_WALL = 451;
 	
-	public final static int BOOTS_HOLE = 28;
+	private final static int[] BOOTS_HOLES_ARRAY = {423, 424, 576};
+	public static ArrayList<Integer> BOOTS_HOLES;
 	
 	public final static String ENTITY_WALKER = "walker";
 	public final static String ENTITY_FLYING = "flying";
@@ -63,6 +64,10 @@ public class GameData {
 		ENEMIES_ID = new ArrayList<String>();
 		for (int i = 0 ; i < this.ENEMIES_ID_ARRAY.length ; i++)
 			ENEMIES_ID.add(ENEMIES_ID_ARRAY[i]);
+		
+		BOOTS_HOLES = new ArrayList<Integer>();
+		for (int i = 0 ; i < BOOTS_HOLES_ARRAY.length ; i++)
+			BOOTS_HOLES.add(BOOTS_HOLES_ARRAY[i]);
 		
 		crossableTiles = readFileCrossableTiles();
 		mapsOfMap = readMapOfMapsFile();
