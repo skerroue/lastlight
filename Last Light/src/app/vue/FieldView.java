@@ -3,10 +3,13 @@ package app.vue;
 import app.modele.Game; 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class FieldView {
+	
+	private final static int NB_TILESET_COLUMN = 8;
 	
 	private ObservableList<ImageView> fieldView;
 	private Image tileset;
@@ -34,7 +37,7 @@ public class FieldView {
 		int hauteur = 0, largeur = 0;
 		
 		for (int i = 0 ; i < this.fieldView.size() ; i++) {
-			this.fieldView.set(i, Game.getMap().intToTiles(this.fieldView.get(i), Game.getMap().getNextTile(hauteur, largeur).getId()));
+			this.fieldView.set(i, this.intToTiles(this.fieldView.get(i), Game.getMap().getNextTile(hauteur, largeur).getId()));
 			
 			largeur++;
 			
@@ -44,6 +47,15 @@ public class FieldView {
 			}
 		}
 	}
+	
+	public ImageView intToTiles(ImageView img, int fieldValue) {
+    	
+		int x = 32 * ((fieldValue-1) % NB_TILESET_COLUMN);
+		int y = 32 * ((fieldValue-1) / NB_TILESET_COLUMN);
+		img.setViewport(new Rectangle2D(x, y, 32, 32));
+
+    	return img;
+    }
 	
 	public ObservableList<ImageView> getFieldView() {
 		return fieldView;
