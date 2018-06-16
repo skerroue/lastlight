@@ -538,7 +538,7 @@ public class Game {
     	for (int i = 1 ; i < animatedEntities.size() ; i++) 
     		if (GameData.ENEMIES_ID.contains(animatedEntities.get(i).getId())) {
     			moveEnemy(animatedEntities.get(i));
-    			animatedEntities.get(i).attack(animatedEntities);
+    			animatedEntities.get(i).attack();
     		}
     }
     

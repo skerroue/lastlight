@@ -224,7 +224,7 @@ public abstract class AnimatedEntity extends Entity {
     	return emptyTile;
 	}
 	
-	public void attack(ObservableList<AnimatedEntity> entities) {
+	public void attack() {
 		return;
 	}
 	
