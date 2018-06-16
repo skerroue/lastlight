@@ -13,8 +13,6 @@ import javafx.scene.image.ImageView;
 
 public class Field {
 	
-	private final static int NB_TILESET_COLUMN = 8;
-	
 	private int[][] field;
 	private Tile[][] tileField;
 	private int i, j; // coordonnées dans la grande map
@@ -91,15 +89,6 @@ public class Field {
 	public int getJ() {
 		return this.j;
 	}
-	
-	public ImageView intToTiles(ImageView img, int fieldValue) {
-    	
-		int x = 32 * ((fieldValue-1) % NB_TILESET_COLUMN);
-		int y = 32 * ((fieldValue-1) / NB_TILESET_COLUMN);
-		img.setViewport(new Rectangle2D(x, y, 32, 32));
-
-    	return img;
-    }
 	
 	public void makeATileCrossable(int id) {
 		for (int i = 0 ; i < this.tileField.length ; i++)
