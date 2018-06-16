@@ -292,15 +292,22 @@ public abstract class AnimatedEntity extends Entity {
 	}
 	
 	public void loseHP(int a) {
+		
 		if (!this.isInvicible) {
+			
 			this.hp.set(this.hp.get() - a);
-			if (this.hp.get() == 0) {
+			
+			if (this.hp.get() <= 0) {
 				this.die();
-				if (Math.random() < GameData.MONEY_DROP_RATE)
+				if (Math.random() < GameData.MONEY_DROP_RATE && Game.getPlayer() != null)
 					Game.getPlayer().earnMoney(1);
 			}
-			this.isInvicible = true;
-			this.invicibilityFrame.play();
+			
+			if (!this.getIsDead().get()) {
+				this.isInvicible = true;
+				this.invicibilityFrame.play();
+			}
+			
 		}
 	}
 
