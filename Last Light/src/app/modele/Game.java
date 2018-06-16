@@ -207,6 +207,7 @@ public class Game {
 		return changing;
 	}
 	
+	@SuppressWarnings("resource")
 	private void spawnEntities() {
 		int noMap = GameData.mapsOfMap[map.getI()][map.getJ()];
 		String line;
@@ -220,12 +221,16 @@ public class Game {
 			try {
 				
 				line = br.readLine();
+				Scanner current = new Scanner(line).useDelimiter(",");
+				int currentInt = current.nextInt();
 				
-				while (br.ready() && Integer.parseInt("" + line.charAt(0)) != noMap)
+				while (br.ready() && currentInt != noMap) {
 					line = br.readLine();
+					current = new Scanner(line).useDelimiter(",");
+					currentInt = current.nextInt();
+				}
 				
-				if (Integer.parseInt("" + line.charAt(0)) == noMap) {
-					@SuppressWarnings("resource")
+				if (currentInt == noMap) {
 					Scanner s = new Scanner(line).useDelimiter(",");
 					s.nextInt();
 					
@@ -276,6 +281,7 @@ public class Game {
 					}
 					
 					s.close();
+					current.close();
 				}
 				
 				br.close();
@@ -327,6 +333,7 @@ public class Game {
     	
     }
 	
+	@SuppressWarnings("resource")
 	private boolean takenItem(String id, int noMap) {
 		boolean takenItem = false;
 		String line;
@@ -338,12 +345,21 @@ public class Game {
 			BufferedReader br = new BufferedReader(fr);
 			
 			line = br.readLine();
+			Scanner current;
+			int currentInt = 0;
 			
-			while (br.ready() && line.charAt(0) != Integer.toString(noMap).charAt(0))
+			if (line != null) {
+				current = new Scanner(line).useDelimiter(",");
+				currentInt = current.nextInt();
+			}
+			
+			while (br.ready() && currentInt != noMap) {
 				line = br.readLine();
-						
-			if (line != null && line.charAt(0) == Integer.toString(noMap).charAt(0)) {
-				@SuppressWarnings("resource")
+				current = new Scanner(line).useDelimiter(",");
+				currentInt = current.nextInt();
+			}
+			
+			if (currentInt == noMap) {
 				Scanner s = new Scanner(line).useDelimiter(",");
 				s.next();
 				
@@ -366,8 +382,9 @@ public class Game {
 		return takenItem;
 	}
 	
+	@SuppressWarnings("resource")
 	private String readNPCDialog(int noMap) {
-		String ldm = "";
+		String NPCDialog = "";
 		String line;
 		
 		try {
@@ -377,16 +394,25 @@ public class Game {
 			BufferedReader br = new BufferedReader(fr);
 			
 			line = br.readLine();
+			Scanner current;
+			int currentInt = 0;
 			
-			while (br.ready() && line.charAt(0) != Integer.toString(noMap).charAt(0))
+			if (line != null) {
+				current = new Scanner(line).useDelimiter(",");
+				currentInt = current.nextInt();
+			}
+			
+			while (br.ready() && currentInt != noMap) {
 				line = br.readLine();
-						
-			if (line != null && line.charAt(0) == Integer.toString(noMap).charAt(0)) {
-				@SuppressWarnings("resource")
+				current = new Scanner(line).useDelimiter(",");
+				currentInt = current.nextInt();
+			}
+			
+			if (currentInt == noMap) {
 				Scanner s = new Scanner(line).useDelimiter(",");
 				s.next();
 				
-				ldm = s.next();
+				NPCDialog = s.next();
 				
 				s.close();
 			}
@@ -400,7 +426,7 @@ public class Game {
 			System.out.println("NPCDialog : Erreur de lecture");
 		}
 		
-		return ldm;
+		return NPCDialog;
 	}
 	
     public void addKeyFrame(EventHandler<ActionEvent> e, double duration) {

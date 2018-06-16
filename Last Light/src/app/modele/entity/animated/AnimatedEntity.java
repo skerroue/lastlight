@@ -174,28 +174,24 @@ public abstract class AnimatedEntity extends Entity {
 			for (AnimatedEntity e : animatedEntities)
 	    		if (this.getX().get() == e.getX().get() + 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			if (emptyTile)
 	    				emptyTile = e.push(animatedEntities, inanimatedEntities, GameData.LEFT);
 			break;
 		case GameData.UP :
 			for (AnimatedEntity e : animatedEntities)
 	    		if (this.getY().get() == e.getY().get() + 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			if (emptyTile)
 	    				emptyTile = e.push(animatedEntities, inanimatedEntities, GameData.UP);
 			break;
 		case GameData.RIGHT :
 			for (AnimatedEntity e : animatedEntities)
 	    		if (this.getX().get() == e.getX().get() - 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			if (emptyTile)
 	    				emptyTile = e.push(animatedEntities, inanimatedEntities, GameData.RIGHT);
 			break;
 		case GameData.DOWN :
 			for (AnimatedEntity e : animatedEntities)
 	    		if (this.getY().get() == e.getY().get() - 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			if (emptyTile)
 	    				emptyTile = e.push(animatedEntities, inanimatedEntities, GameData.DOWN);
 			break;
 		default :
@@ -214,28 +210,24 @@ public abstract class AnimatedEntity extends Entity {
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getX().get() == e.getX().get() + 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			if (emptyTile)
 	    				emptyTile = false;
 			break;
 		case GameData.UP :
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() == e.getY().get() + 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			if (emptyTile)
 	    				emptyTile = false;
 			break;
 		case GameData.RIGHT :
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getX().get() == e.getX().get() - 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			if (emptyTile)
 	    				emptyTile = false;
 			break;
 		case GameData.DOWN :
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() == e.getY().get() - 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			if (emptyTile)
 	    				emptyTile = false;
 			break;
 		default :

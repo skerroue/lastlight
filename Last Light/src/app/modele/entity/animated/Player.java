@@ -77,6 +77,8 @@ public class Player extends AnimatedEntity {
 		this.activeWeaponIndex = new SimpleIntegerProperty(-1);
 		this.ammunition = new SimpleIntegerProperty(0);
 		this.ammunitionString = new SimpleStringProperty("x " + 0);
+		
+		this.isInvicible = true;
 	}
 	
 	public IntegerProperty getMaxPotion() {
