@@ -46,7 +46,7 @@ public class MenuControler implements Initializable{
 
     @FXML
     void quit(ActionEvent event) {
-        System.exit(0);
+        Platform.exit();
     }
 
 	@Override
