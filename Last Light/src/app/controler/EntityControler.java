@@ -155,6 +155,9 @@ public class EntityControler {
         
     	
     	game.addKeyFrame(e -> {
+		
+		if (Game.getPlayer().getIsDead().get())
+    			Platform.exit();
     		
     		for (int i = 0 ; i < entitiesView.size() ; i++)
     			entitiesView.get(i).update();
