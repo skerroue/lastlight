@@ -1,5 +1,6 @@
 package app.modele.entity.animated;
 
+import app.modele.Game;
 import app.modele.GameData;
 import javafx.scene.input.KeyCode;
 
@@ -11,7 +12,7 @@ public class Flying extends Enemy {
 	
 	public boolean moveLeft() {
 		this.setOrientation(KeyCode.LEFT);
-		if (x.get() > GameData.LEFT_TOP_LIMIT) {
+		if (x.get() > GameData.LEFT_TOP_LIMIT && tileIsEmptyAnimated(Game.getAnimatedEntities())) {
 			x.set(x.get() - velocity);
 			return true;
 		}
@@ -20,7 +21,7 @@ public class Flying extends Enemy {
 	
 	public boolean moveRight() {
 		this.setOrientation(KeyCode.RIGHT);
-		if (x.get() < GameData.RIGHT_BOTTOM_LIMIT) {
+		if (x.get() < GameData.RIGHT_BOTTOM_LIMIT && tileIsEmptyAnimated(Game.getAnimatedEntities())) {
 			x.set(x.get() + velocity);
 			return true;
 		}
@@ -29,7 +30,7 @@ public class Flying extends Enemy {
 
 	public boolean moveDown() {
 		this.setOrientation(KeyCode.DOWN);
-		if (y.get() < GameData.RIGHT_BOTTOM_LIMIT) {
+		if (y.get() < GameData.RIGHT_BOTTOM_LIMIT && tileIsEmptyAnimated(Game.getAnimatedEntities())) {
 			y.set(y.get() + velocity);
 			return true;
 		}
@@ -38,7 +39,7 @@ public class Flying extends Enemy {
 	
 	public boolean moveUp() {
 		this.setOrientation(KeyCode.UP);
-		if (y.get() > GameData.LEFT_TOP_LIMIT) {
+		if (y.get() > GameData.LEFT_TOP_LIMIT && tileIsEmptyAnimated(Game.getAnimatedEntities())) {
 			y.set(y.get() - velocity);
 			return true;
 		}

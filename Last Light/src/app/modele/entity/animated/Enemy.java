@@ -2,6 +2,7 @@ package app.modele.entity.animated;
 
 import app.modele.Game;
 import app.modele.GameData;
+import app.modele.field.Tile;
 
 public class Enemy extends AnimatedEntity {
 
@@ -37,6 +38,41 @@ public class Enemy extends AnimatedEntity {
 		default :
 			break;
 		}
+		
 	}
-
+	
+	public void update() {
+		this.move();
+		this.attack();
+	}
+	
+    private void move() {
+    	if (Game.playerIsDetected() || this.playerDetection(GameData.ENEMY_RANGE, this)) {
+    		
+    		Game.setPlayerDetected();
+    		
+	    	Tile nextTile = Game.getBFS().searchWay(this);
+	    	Tile enemyAt = Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX());
+	    	
+	    	if (nextTile != null) {
+		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) 
+		    		this.moveLeft();
+		    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
+		    		this.moveUp();
+		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) 
+		    		this.moveRight();
+		    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
+		    		this.moveDown();
+	    	}
+    	}
+    	
+    }
+    
+    private boolean playerDetection(int range, AnimatedEntity e) {
+    	if (Game.getPlayer().getX().get() >= e.getX().get() - range && Game.getPlayer().getX().get() <= e.getX().get() + range &&
+    		Game.getPlayer().getY().get() >= e.getY().get() - range && Game.getPlayer().getY().get() <= e.getX().get() + range)
+    		return true;
+    	
+    	return false;
+    }
 }

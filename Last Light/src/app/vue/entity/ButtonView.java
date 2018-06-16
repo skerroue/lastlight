@@ -20,7 +20,7 @@ public class ButtonView extends InanimatedEntityView {
 		});
 	}
 	
-	public void setGif() {
+	private void setGif() {
 		this.setImage(new Image("file:src/img/" + this.inanimatedEntity.getId() + "-gif.gif"));
 	}
 

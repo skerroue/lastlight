@@ -1,6 +1,6 @@
 package app.modele;
 
-import java.io.BufferedReader;   
+import java.io.BufferedReader;    
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +21,6 @@ import app.modele.entity.inanimated.Dispenser;
 import app.modele.entity.inanimated.InanimatedEntity;
 import app.modele.entity.inanimated.ItemEntity;
 import app.modele.field.Field;
-import app.modele.field.Tile;
 import app.modele.weapon.Weapon;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -40,10 +39,10 @@ public class Game {
 	
 	@SuppressWarnings("unused")
 	private GameData gameData;
-	
-	private BFS bfs;
 
 	private Timeline gameloop;
+	
+	private static BFS bfs;
 	
 	private static Field map;
 	private static Player player;
@@ -51,7 +50,8 @@ public class Game {
 	private static ObservableList<InanimatedEntity> inanimatedEntities;
 	private static BooleanProperty mapChanged;
 	
-	private boolean playerIsDetected;
+	// variable static permettant a tout les ennemis de la map de reperer le joueur une fois qu'un l'a apercu
+	private static boolean playerIsDetected;
 	
 	private StringProperty currentText;
 	
@@ -59,21 +59,21 @@ public class Game {
 		
 		this.gameData = new GameData();
 		
-		map = new Field(GameData.STARTING_MAP_LINE, GameData.STARTING_MAP_COLUMN, GameData.mapsOfMap[GameData.STARTING_MAP_LINE][GameData.STARTING_MAP_COLUMN], 25, 25, GameData.crossableTiles);
-		mapChanged = new SimpleBooleanProperty(true);
-		
 		this.gameloop = new Timeline();
 		this.gameloop.setCycleCount(Timeline.INDEFINITE);
 		
 		this.currentText = new SimpleStringProperty("");
 		
+		map = new Field(GameData.STARTING_MAP_LINE, GameData.STARTING_MAP_COLUMN, GameData.mapsOfMap[GameData.STARTING_MAP_LINE][GameData.STARTING_MAP_COLUMN], 25, 25, GameData.crossableTiles);
+		mapChanged = new SimpleBooleanProperty(true);
+		
 		animatedEntities = FXCollections.observableArrayList();
 		inanimatedEntities = FXCollections.observableArrayList();
 		player = new Player(416, 416, 3, 0, 4, 0, 6, 18);
 		animatedEntities.add(player);
-		this.playerIsDetected = false;
+		playerIsDetected = false;
 		
-		this.bfs = new BFS(player, map);
+		bfs = new BFS(player, map);
 		
 		initializeGame();
 	}
@@ -99,8 +99,9 @@ public class Game {
 		spawnEntities();
 		
 		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {	
-			updateEnemies();
-			player.update();
+			
+			for (AnimatedEntity animated : animatedEntities)
+				animated.update();
 			
 			if (player.getActiveWeaponIndex().get() > -1)
 				for (Weapon w : Game.player.getWeapons())
@@ -147,6 +148,10 @@ public class Game {
 		return this.currentText;
 	}
 	
+	public static BFS getBFS() {
+		return bfs;
+	}
+	
 	public void mapChanged() {
 		mapChanged.set(!mapChanged.get());
 	}
@@ -185,7 +190,7 @@ public class Game {
 		}
 		
 		if (changing) {
-			this.playerIsDetected = false;
+			setPlayerUndetected();
 			
 			for (int indice = 1 ; indice < animatedEntities.size() ; indice++) 
 				Game.animatedEntities.get(indice).die();
@@ -280,7 +285,44 @@ public class Game {
 		} catch (FileNotFoundException e) {
 			System.out.println("entityLocations : Fichier introuvable");
 		}
+		
 	}
+	
+    private void addInanimated(String type, int x, int y, int noMap) {
+    	switch (type) {
+    	case GameData.ENTITY_DISPENSER :
+    		inanimatedEntities.add(new Dispenser(x, y, "Voulez vous acheter une potion ?"));
+    		inanimatedEntities.add(new ItemEntity(type + "Top", x, y-32, ""));
+    		break;
+    	case GameData.ENTITY_BUTTON :
+    		inanimatedEntities.add(new Button(x, y, "", inanimatedEntities.get(inanimatedEntities.size() - 1)));
+    		break;
+    	default : 
+    		if (!takenItem(type, noMap))
+    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
+    		break;
+    	}
+    	
+    }
+    
+    private void addAnimated(String type, int x, int y, int noMap) {
+    	switch (type) {
+    	case GameData.ENTITY_WALKER :
+    		animatedEntities.add(new Walker(x, y, 1, 1, 4, 6, 18));
+    		break;
+    	case GameData.ENTITY_FLYING :
+    		animatedEntities.add(new Flying(x, y, 1, 1, 4, 4, 12));
+    		break;
+    	case GameData.ENTITY_ROCK :
+    		animatedEntities.add(new Rock(x, y));
+    		break;
+    	case GameData.ENTITY_NPC :
+    		animatedEntities.add(new NPC(x, y, 1, 0, 4, 6, 18, readNPCDialog(noMap)));
+    		break;
+     	default : break;
+    	}
+    	
+    }
 	
 	private boolean takenItem(String id, int noMap) {
 		boolean takenItem = false;
@@ -321,13 +363,13 @@ public class Game {
 		return takenItem;
 	}
 	
-	private String leDefiDeMalcom(int noMap) {
+	private String readNPCDialog(int noMap) {
 		String ldm = "";
 		String line;
 		
 		try {
 			
-			File f = new File("src/map/leDefiDeMalcom.txt");
+			File f = new File("src/map/NPCDialog.txt");
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
 			
@@ -350,9 +392,9 @@ public class Game {
 			fr.close();
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("leDefiDeMalcom : Fichier introuvable");
+			System.out.println("NPCDialog : Fichier introuvable");
 		} catch (IOException e) {
-			System.out.println("leDefiDeMalcom : Erreur de lecture");
+			System.out.println("NPCDialog : Erreur de lecture");
 		}
 		
 		return ldm;
@@ -363,42 +405,6 @@ public class Game {
     	KeyFrame k = new KeyFrame(Duration.seconds(duration), e);
     	gameloop.getKeyFrames().add(k);
     	gameloop.play();
-    }
-    
-    private void addInanimated(String type, int x, int y, int noMap) {
-    	switch (type) {
-    	case GameData.ENTITY_DISPENSER :
-    		inanimatedEntities.add(new Dispenser(x, y, "Voulez vous acheter une potion ?"));
-    		inanimatedEntities.add(new ItemEntity(type + "Top", x, y-32, ""));
-    		break;
-    	case GameData.ENTITY_BUTTON :
-    		inanimatedEntities.add(new Button(x, y, "", inanimatedEntities.get(inanimatedEntities.size() - 1)));
-    		break;
-    	default : 
-    		if (!takenItem(type, noMap))
-    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
-    		break;
-    	}
-    	
-    }
-    
-    private void addAnimated(String type, int x, int y, int noMap) {
-    	switch (type) {
-    	case GameData.ENTITY_WALKER :
-    		animatedEntities.add(new Walker(x, y, 1, 1, 4, 6, 18));
-    		break;
-    	case GameData.ENTITY_FLYING :
-    		animatedEntities.add(new Flying(x, y, 1, 1, 4, 4, 12));
-    		break;
-    	case GameData.ENTITY_ROCK :
-    		animatedEntities.add(new Rock(x, y));
-    		break;
-    	case GameData.ENTITY_NPC :
-    		animatedEntities.add(new NPC(x, y, 1, 0, 4, 6, 18, leDefiDeMalcom(noMap)));
-    		break;
-     	default : break;
-    	}
-    	
     }
         
     public void playGameLoop() {
@@ -460,7 +466,7 @@ public class Game {
 					break;
 			}
 	
-			this.bfs.lancerBFS();
+			bfs.lancerBFS();
 		
     	}
 	    
@@ -534,42 +540,16 @@ public class Game {
     	
     }
     
-    private void updateEnemies() {
-    	for (int i = 1 ; i < animatedEntities.size() ; i++) 
-    		if (GameData.ENEMIES_ID.contains(animatedEntities.get(i).getId())) {
-    			moveEnemy(animatedEntities.get(i));
-    			animatedEntities.get(i).attack();
-    		}
-    }
-    
-    private void moveEnemy(AnimatedEntity e) {
-    	if (this.playerIsDetected || this.playerDetection(GameData.ENEMY_RANGE, e)) {
-    		
-    		this.playerIsDetected = true;
-    		
-	    	Tile nextTile = this.bfs.searchWay(e);
-	    	Tile enemyAt = map.getNextTile(e.getIndiceY(), e.getIndiceX());
-	    	
-	    	if (nextTile != null) {
-		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) 
-		    		e.moveLeft();
-		    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		e.moveUp();
-		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) 
-		    		e.moveRight();
-		    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		e.moveDown();
-	    	}
-    	}
-    	
-    }
-    
-    private boolean playerDetection(int range, AnimatedEntity e) {
-    	if (player.getX().get() >= e.getX().get() - range && player.getX().get() <= e.getX().get() + range &&
-    		player.getY().get() >= e.getY().get() - range && player.getY().get() <= e.getX().get() + range)
-    		return true;
-    	
-    	return false;
-    }
+	public static boolean playerIsDetected() {
+		return playerIsDetected;
+	}
+	
+	public static void setPlayerDetected() {
+		playerIsDetected = true;
+	}
+	
+	public static void setPlayerUndetected() {
+		playerIsDetected = false;
+	}
 	
 }

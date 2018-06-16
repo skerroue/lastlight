@@ -83,7 +83,7 @@ public abstract class AnimatedEntity extends Entity {
 		
 		switch (this.orientation.getValue()) {
 		case GameData.LEFT :
-			emptyTile = tileIsEmpty(Game.getAnimatedEntities(), Game.getInanimatedEntities(), GameData.LEFT);
+			emptyTile = tileIsEmptyAnimated(Game.getAnimatedEntities()) && tileIsEmptyInanimated(Game.getInanimatedEntities());;
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
@@ -96,7 +96,7 @@ public abstract class AnimatedEntity extends Entity {
 					canMove = true;
 			break;
 		case GameData.UP :
-			emptyTile = tileIsEmpty(Game.getAnimatedEntities(), Game.getInanimatedEntities(), GameData.UP);
+			emptyTile = tileIsEmptyAnimated(Game.getAnimatedEntities()) && tileIsEmptyInanimated(Game.getInanimatedEntities());
 			if (y.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0 && y.get() > 0) {
@@ -109,7 +109,7 @@ public abstract class AnimatedEntity extends Entity {
 					canMove = true;
 			break;
 		case GameData.DOWN :
-			emptyTile = tileIsEmpty(Game.getAnimatedEntities(), Game.getInanimatedEntities(), GameData.DOWN);
+			emptyTile = tileIsEmptyAnimated(Game.getAnimatedEntities()) && tileIsEmptyInanimated(Game.getInanimatedEntities());
 			if (y.get() % 32 != 0 && emptyTile) 
 				canMove = true;
 			else if (y.get() % 32 == 0 && x.get() % 32 != 0) {
@@ -122,7 +122,7 @@ public abstract class AnimatedEntity extends Entity {
 					canMove = true;
 			break;
 		case GameData.RIGHT :
-			emptyTile = tileIsEmpty(Game.getAnimatedEntities(), Game.getInanimatedEntities(), GameData.RIGHT);
+			emptyTile = tileIsEmptyAnimated(Game.getAnimatedEntities()) && tileIsEmptyInanimated(Game.getInanimatedEntities());
 			if (x.get() % 32 != 0 && emptyTile)
 				canMove = true;
 			else if (x.get() % 32 == 0 && y.get() % 32 != 0) {
@@ -164,22 +164,17 @@ public abstract class AnimatedEntity extends Entity {
 		this.orientation.set(n);
 	}
 	
-	protected boolean tileIsEmpty(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int direction) {
+	protected boolean tileIsEmptyAnimated(ObservableList<AnimatedEntity> entities) {
 		
 		boolean emptyTile = true;
     	
-		switch (direction) {
+		switch (this.orientation.get()) {
 		case GameData.LEFT :
 			for (AnimatedEntity e : entities)
 	    		if (this.getX().get() == e.getX().get() + 32 && 
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
 	    			if (emptyTile)
 	    				emptyTile = e.push(GameData.LEFT);
-			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getX().get() == e.getX().get() + 32 && 
-	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			if (emptyTile)
-	    				emptyTile = false;
 			break;
 		case GameData.UP :
 			for (AnimatedEntity e : entities)
@@ -187,11 +182,6 @@ public abstract class AnimatedEntity extends Entity {
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
 	    			if (emptyTile)
 	    				emptyTile = e.push(GameData.UP);
-			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getY().get() == e.getY().get() + 32 && 
-	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
-	    			if (emptyTile)
-	    				emptyTile = false;
 			break;
 		case GameData.RIGHT :
 			for (AnimatedEntity e : entities)
@@ -199,11 +189,6 @@ public abstract class AnimatedEntity extends Entity {
 	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
 	    			if (emptyTile)
 	    				emptyTile = e.push(GameData.RIGHT);
-			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getX().get() == e.getX().get() - 32 && 
-	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
-	    			if (emptyTile)
-	    				emptyTile = false;
 			break;
 		case GameData.DOWN :
 			for (AnimatedEntity e : entities)
@@ -211,6 +196,41 @@ public abstract class AnimatedEntity extends Entity {
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
 	    			if (emptyTile)
 	    				emptyTile = e.push(GameData.DOWN);
+			break;
+		default :
+			break;
+		}
+		
+    	return emptyTile;
+	}
+	
+	protected boolean tileIsEmptyInanimated(ObservableList<InanimatedEntity> inanimatedEntities) {
+		
+		boolean emptyTile = true;
+    	
+		switch (this.orientation.get()) {
+		case GameData.LEFT :
+			for (InanimatedEntity e : inanimatedEntities)
+	    		if (this.getX().get() == e.getX().get() + 32 && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
+	    			if (emptyTile)
+	    				emptyTile = false;
+			break;
+		case GameData.UP :
+			for (InanimatedEntity e : inanimatedEntities)
+	    		if (this.getY().get() == e.getY().get() + 32 && 
+	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
+	    			if (emptyTile)
+	    				emptyTile = false;
+			break;
+		case GameData.RIGHT :
+			for (InanimatedEntity e : inanimatedEntities)
+	    		if (this.getX().get() == e.getX().get() - 32 && 
+	    			this.getY().get() >= e.getY().get() - 31 && this.getY().get() <= e.getY().get() + 31)
+	    			if (emptyTile)
+	    				emptyTile = false;
+			break;
+		case GameData.DOWN :
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (this.getY().get() == e.getY().get() - 32 && 
 	    			this.getX().get() >= e.getX().get() - 31 && this.getX().get() <= e.getX().get() + 31)
@@ -225,6 +245,10 @@ public abstract class AnimatedEntity extends Entity {
 	}
 	
 	public void attack() {
+		return;
+	}
+	
+	public void update() {
 		return;
 	}
 	

@@ -157,7 +157,7 @@ public class EntityControler {
     	
     	game.addKeyFrame(e -> {
 		
-		if (Game.getPlayer().getIsDead().get())
+    		if (Game.getPlayer().getIsDead().get())
     			Platform.exit();
     		
     		for (int i = 0 ; i < entitiesView.size() ; i++)
@@ -171,13 +171,15 @@ public class EntityControler {
     		
     		entityDisappearance.play();
     		
-    		if (Game.getPlayer().getIsAttacking().get()) 
+    		if (Game.getPlayer().getIsAttacking().get()) { 
+    			playerView.resetImage();
     			if (!attackAnimationActive) {
     				playerView.animationAttack();
     				attackAnimationActive = true; 
     				entityContainer.getChildren().add(attackAnimation.getNode());
     				attackAnimation.play();
     			}
+    		}
     		
  		}, 0.017);
     	

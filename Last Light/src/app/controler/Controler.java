@@ -98,7 +98,7 @@ public class Controler implements Initializable {
 	}
 
     @FXML
-    void onKeyPressed(KeyEvent event) {
+    private void onKeyPressed(KeyEvent event) {
     	
     	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
     		game.movePlayer(event.getCode());
@@ -145,7 +145,7 @@ public class Controler implements Initializable {
     }
 
     @FXML
-    void onKeyReleased(KeyEvent event) {
+    private void onKeyReleased(KeyEvent event) {
     	
     	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
     		playerView.resetImage();
@@ -153,12 +153,12 @@ public class Controler implements Initializable {
     }
     
     @FXML
-    void quit(ActionEvent event) {	
+    private void quit(ActionEvent event) {	
     	System.exit(0);
     }
 
     @FXML
-    void resume(ActionEvent event) {
+    private void resume(ActionEvent event) {
     	this.pausePane.setVisible(false);
     	this.game.playGameLoop();
     }
@@ -170,7 +170,7 @@ public class Controler implements Initializable {
     }
     
     @FXML
-    void closeText(KeyEvent event) {
+    private void closeText(KeyEvent event) {
     	if (event.getCode() == KeyCode.SPACE) {
     		this.dialogPane.setVisible(false);
         	this.game.playGameLoop();

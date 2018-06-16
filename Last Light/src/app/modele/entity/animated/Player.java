@@ -304,7 +304,6 @@ public class Player extends AnimatedEntity {
 			if (x.get() % 32 == 0 && bootsCount == 0 && x.get() > GameData.LEFT_TOP_LIMIT && Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).getId() == GameData.BOOTS_HOLE)
 				canMove = emptyTile;
 			else {
-				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, GameData.LEFT);
 				if (x.get() % 32 < velocityDash) {
 					if (y.get() % 32 == 0) {
 						if (x.get() > GameData.LEFT_TOP_LIMIT && Game.getMap().getNextTile(getIndiceY(), getIndiceX() - 1).isCrossable())
@@ -323,11 +322,9 @@ public class Player extends AnimatedEntity {
 			break;
 		case GameData.UP :
 			if (y.get() % 32 == 0 && bootsCount == 0 && y.get() > GameData.LEFT_TOP_LIMIT && Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).getId() == GameData.BOOTS_HOLE) {
-				System.out.println("270");
 				canMove = emptyTile;
 			}
 			else {
-				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, GameData.UP);
 				if (y.get() % 32 < velocityDash) {
 					if (x.get() % 32 == 0) {
 						if (y.get() > GameData.LEFT_TOP_LIMIT && Game.getMap().getNextTile(getIndiceY() - 1, getIndiceX()).isCrossable() && emptyTile == velocityDash)
@@ -347,7 +344,6 @@ public class Player extends AnimatedEntity {
 			if (x.get() % 32 == 0 && bootsCount == 0 && x.get() < GameData.RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(getIndiceY(), getIndiceX() + 1).getId() == GameData.BOOTS_HOLE)
 				canMove = emptyTile;
 			else {
-				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, GameData.RIGHT);
 				if (x.get() % 32 < velocityDash) {
 					if (x.get() % 32 != 0) {
 						if (y.get() % 32 == 0) {
@@ -379,7 +375,6 @@ public class Player extends AnimatedEntity {
 			if (y.get() % 32 == 0 && bootsCount == 0 && y.get() < GameData.RIGHT_BOTTOM_LIMIT && Game.getMap().getNextTile(getIndiceY() + 1, getIndiceX()).getId() == GameData.BOOTS_HOLE)
 				canMove = emptyTile;
 			else {
-				emptyTile = tileIsEmptyDash(entities, inanimatedEntities, GameData.DOWN);
 				if (y.get() % 32 < velocityDash) {
 					if (y.get() % 32 != 0) {
 						if (x.get() % 32 == 0) {
@@ -412,83 +407,6 @@ public class Player extends AnimatedEntity {
 		}
 		
 		return canMove;
-	}
-	
-	private int tileIsEmptyDash(ObservableList<AnimatedEntity> entities, ObservableList<InanimatedEntity> inanimatedEntities, int direction) {
-		
-		int emptyTile = velocityDash;
-    	
-		switch (direction) {
-		case GameData.LEFT :
-			for (AnimatedEntity e : entities)
-	    		if (this.getX().get() - velocityDash == e.getX().get() &&
-	    			this.getY().get() >= e.getY().get() - velocityDash - 1 && this.getY().get() <= e.getY().get() + velocityDash - 1) {
-	    			emptyTile = 0;
-	    			if (emptyTile != velocityDash)
-	    				return emptyTile;
-	    		}
-			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getX().get() - velocityDash == e.getX().get() && 
-	    			this.getY().get() >= e.getY().get() - velocityDash - 1 && this.getY().get() <= e.getY().get() + velocityDash - 1) {
-	    			emptyTile = (int) (this.getX().get() - e.getX().get() - 32);
-	    			if (emptyTile != velocityDash)
-	    				return emptyTile;
-	    		}
-			break;
-		case GameData.UP :
-			for (AnimatedEntity e : entities)
-	    		if (this.getY().get() - velocityDash == e.getY().get() && 
-	    			this.getX().get() >= e.getX().get() - velocityDash - 1 && this.getX().get() <= e.getX().get() + velocityDash - 1) {
-	    			emptyTile = 0;
-	    			if (emptyTile != velocityDash)
-	    				return emptyTile;
-	    		}
-			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getY().get() - velocityDash == e.getY().get() && 
-	    			this.getX().get() >= e.getX().get() - velocityDash - 1 && this.getX().get() <= e.getX().get() + velocityDash - 1) {
-	    			emptyTile = (int) (this.getY().get() - e.getY().get() - 32);
-	    			if (emptyTile != velocityDash)
-	    				return emptyTile;
-	    		}
-			break;
-		case GameData.RIGHT :
-			for (AnimatedEntity e : entities) {
-	    		if (this.getX().get() + velocityDash == e.getX().get() && 
-	    			this.getY().get() >= e.getY().get() - velocityDash - 1 && this.getY().get() <= e.getY().get() + velocityDash - 1) {
-	    			emptyTile = 0;
-	    			if (emptyTile != velocityDash)
-	    				return emptyTile;
-	    		}
-			}
-			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getX().get() + velocityDash == e.getX().get() && 
-	    			this.getY().get() >= e.getY().get() - velocityDash - 1 && this.getY().get() <= e.getY().get() + velocityDash - 1) {
-	    			emptyTile = (int) (e.getX().get() - this.getX().get() + 31);
-	    			if (emptyTile != velocityDash)
-	    				return emptyTile;
-	    		}
-			break;
-		case GameData.DOWN :
-			for (AnimatedEntity e : entities)
-	    		if (this.getY().get() + velocityDash == e.getY().get() && 
-	    			this.getX().get() >= e.getX().get() - velocityDash - 1 && this.getX().get() <= e.getX().get() + velocityDash - 1) {
-	    			emptyTile = 0;
-	    			if (emptyTile != velocityDash)
-	    				return emptyTile;
-	    		}
-			for (InanimatedEntity e : inanimatedEntities)
-	    		if (this.getY().get() + velocityDash == e.getY().get() && 
-	    			this.getX().get() >= e.getX().get() - velocityDash - 1 && this.getX().get() <= e.getX().get() + velocityDash - 1) {
-	    			emptyTile = (int) (e.getY().get() - this.getY().get() + 31);
-	    			if (emptyTile != velocityDash)
-	    				return emptyTile;
-	    		}
-			break;
-		default :
-			break;
-		}
-		
-    	return emptyTile;
 	}
 	
 }
