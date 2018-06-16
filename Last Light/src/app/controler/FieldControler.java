@@ -28,14 +28,14 @@ public class FieldControler {
     	setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
 		setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
     	
-    	Game.getMapChanged().addListener(new ChangeListener<Boolean>() {
+    	game.getMapChanged().addListener(new ChangeListener<Boolean>() {
     		
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				AnimationTransitionMap(0.2);
 				field.refreshField();
 				
-				switch (Game.getPlayer().getOrientation().get()) {
+				switch (game.getPlayer().getOrientation().get()) {
 				case 0:
 					if (playerView.getTranslateY() - SCROLL_HEIGHT / 2 < 0)
 						setScrollY(0, tileContainer, entityContainer);
@@ -78,13 +78,13 @@ public class FieldControler {
     		
     	});
     	
-    	moveScroll(playerView, tileContainer, field, entityContainer, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH);
+    	moveScroll(playerView, tileContainer, game, field, entityContainer, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH);
     	
     }
     
-    private static void moveScroll(EntityView playerView, Pane tileContainer, FieldView field, Pane entityContainer, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH) {
+    private static void moveScroll(EntityView playerView, Pane tileContainer, Game game, FieldView field, Pane entityContainer, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH) {
     	
-    	Game.getPlayer().getX().addListener(new ChangeListener<Number>() {
+    	game.getPlayer().getX().addListener(new ChangeListener<Number>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -97,7 +97,7 @@ public class FieldControler {
     		
 		});
     	
-    	Game.getPlayer().getY().addListener(new ChangeListener<Number>() {
+    	game.getPlayer().getY().addListener(new ChangeListener<Number>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {

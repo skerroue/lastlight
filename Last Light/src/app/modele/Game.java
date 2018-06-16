@@ -37,17 +37,17 @@ import javafx.util.Duration;
 
 public class Game {
 
-	private static GameData gameData;
+	private GameData gameData;
 
 	private Timeline gameloop;
 	
-	private static BFS bfs;
+	private BFS bfs;
 	
 	private static Field map;
-	private static Player player;
-	private static ObservableList<AnimatedEntity> animatedEntities;
-	private static ObservableList<InanimatedEntity> inanimatedEntities;
-	private static BooleanProperty mapChanged;
+	private BooleanProperty mapChanged;
+	private Player player;
+	private ObservableList<AnimatedEntity> animatedEntities;
+	private ObservableList<InanimatedEntity> inanimatedEntities;
 	
 	// variable static permettant a tout les ennemis de la map de reperer le joueur une fois qu'un l'a apercu
 	private static boolean playerIsDetected;
@@ -61,18 +61,18 @@ public class Game {
 		
 		this.currentText = new SimpleStringProperty("");
 		
-		gameData = new GameData();
+		this.gameData = new GameData();
 		
 		map = new Field(GameData.STARTING_MAP_LINE, GameData.STARTING_MAP_COLUMN, GameData.mapsOfMap[GameData.STARTING_MAP_LINE][GameData.STARTING_MAP_COLUMN], 25, 25, GameData.crossableTiles);
-		mapChanged = new SimpleBooleanProperty(true);
+		this.mapChanged = new SimpleBooleanProperty(true);
 		
-		animatedEntities = FXCollections.observableArrayList();
-		inanimatedEntities = FXCollections.observableArrayList();
-		player = new Player(416, 416, 3, 0, GameData.PLAYER_SPEED, 0, 6, 18);
-		animatedEntities.add(player);
+		this.animatedEntities = FXCollections.observableArrayList();
+		this.inanimatedEntities = FXCollections.observableArrayList();
+		this.player = new Player(416, 416, 3, 0, GameData.PLAYER_SPEED, 0, 6, 18);
+		this.animatedEntities.add(player);
+		
+		this.bfs = new BFS(player, map);
 		playerIsDetected = false;
-		
-		bfs = new BFS(player, map);
 		
 		initializeGame();
 	}
@@ -100,11 +100,11 @@ public class Game {
 		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {	
 			
 			for (AnimatedEntity animated : animatedEntities)
-				animated.update();
+				animated.update(animatedEntities, inanimatedEntities, bfs);
 			
 			if (player.getActiveWeaponIndex().get() > -1)
-				for (Weapon w : Game.player.getWeapons())
-					w.update();
+				for (Weapon w : this.player.getWeapons())
+					w.update(animatedEntities);
 			
 			for (int k = 0; k < getAnimatedEntities().size(); k++)
 				if (getAnimatedEntities().get(k).getIsDead().get()) 
@@ -127,32 +127,32 @@ public class Game {
 		return GameData.mapsOfMap[map.getI()][map.getJ()];
 	}
 	
-	public static Player getPlayer() {
-		return player;
+	public Player getPlayer() {
+		return this.player;
 	}
 	
-	public static ObservableList<AnimatedEntity> getAnimatedEntities() {
-		return animatedEntities;
+	public ObservableList<AnimatedEntity> getAnimatedEntities() {
+		return this.animatedEntities;
 	}
 	
-	public static ObservableList<InanimatedEntity> getInanimatedEntities() {
-		return inanimatedEntities;
+	public ObservableList<InanimatedEntity> getInanimatedEntities() {
+		return this.inanimatedEntities;
 	}
 	
-	public static BooleanProperty getMapChanged() {
-		return mapChanged;
+	public BooleanProperty getMapChanged() {
+		return this.mapChanged;
 	}
 	
 	public StringProperty getCurrentTextProperty() {
 		return this.currentText;
 	}
 	
-	public static BFS getBFS() {
-		return bfs;
+	public BFS getBFS() {
+		return this.bfs;
 	}
 	
-	public static GameData getGameData() {
-		return gameData;
+	public GameData getGameData() {
+		return this.gameData;
 	}
 	
 	public void mapChanged() {
@@ -196,10 +196,10 @@ public class Game {
 			setPlayerUndetected();
 			
 			for (int indice = 1 ; indice < animatedEntities.size() ; indice++) 
-				Game.animatedEntities.get(indice).die();
+				this.animatedEntities.get(indice).die();
 			
-			for (int l = 0 ; l < Game.inanimatedEntities.size() ; l++) 
-				Game.inanimatedEntities.get(l).die();
+			for (int l = 0 ; l < this.inanimatedEntities.size() ; l++) 
+				this.inanimatedEntities.get(l).die();
 			
 			spawnEntities();
 		}
@@ -421,7 +421,7 @@ public class Game {
     
     public void movePlayer(KeyCode event) {
 	    
-    	if (!Game.player.getIsAttacking().get()) {
+    	if (!this.player.getIsAttacking().get()) {
 			player.setOrientation(event);
 	
 			switch (event) {
@@ -433,7 +433,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveLeft();
+					player.moveLeft(animatedEntities, inanimatedEntities);
 				break;
 			case UP :
 				if (player.getY().get() == GameData.LEFT_TOP_LIMIT) {
@@ -443,7 +443,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveUp();
+					player.moveUp(animatedEntities, inanimatedEntities);
 				break;
 			case RIGHT :
 				if (player.getX().get() == GameData.RIGHT_BOTTOM_LIMIT) {
@@ -453,7 +453,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveRight();
+					player.moveRight(animatedEntities, inanimatedEntities);
 				break;
 			case DOWN :
 				if (player.getY().get() == GameData.RIGHT_BOTTOM_LIMIT) {
@@ -463,7 +463,7 @@ public class Game {
 					}
 				}
 				else 
-					player.moveDown();
+					player.moveDown(animatedEntities, inanimatedEntities);
 				break;
 				default:
 					break;
@@ -489,7 +489,7 @@ public class Game {
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (player.getX().get() == e.getX().get() + 32 && 
 	    			player.getY().get() >= e.getY().get() - 31 && player.getY().get() <= e.getY().get() + 31) {
-	    			hasInteracted = e.interact();
+	    			hasInteracted = e.interact(this.player);
 	    			this.currentText.set(e.getDialog());
 	    		}
 			break;
@@ -503,7 +503,7 @@ public class Game {
 			for (InanimatedEntity e : inanimatedEntities)
 	    		if (player.getY().get() == e.getY().get() + 32 && 
 	    			player.getX().get() >= e.getX().get() - 31 && player.getX().get() <= e.getX().get() + 31) {
-	    			hasInteracted = e.interact();
+	    			hasInteracted = e.interact(this.player);
 	    			this.currentText.set(e.getDialog());
 	    		}
 			break;
@@ -517,7 +517,7 @@ public class Game {
 			for (InanimatedEntity e : inanimatedEntities)
 				if (player.getX().get() == e.getX().get() - 32 && 
     				player.getY().get() >= e.getY().get() - 31 && player.getY().get() <= e.getY().get() + 31) {
-					hasInteracted = e.interact();
+					hasInteracted = e.interact(this.player);
 					this.currentText.set(e.getDialog());
 				}
 			break;
@@ -531,7 +531,7 @@ public class Game {
 			for (InanimatedEntity e : inanimatedEntities)
 				if (player.getY().get() == e.getY().get() - 32 && 
     				player.getX().get() >= e.getX().get() - 31 && player.getX().get() <= e.getX().get() + 31) {
-					hasInteracted = e.interact();
+					hasInteracted = e.interact(this.player);
 					this.currentText.set(e.getDialog());
 				}
 			break;

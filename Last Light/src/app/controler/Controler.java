@@ -66,9 +66,9 @@ public class Controler implements Initializable {
     	
     	this.game = new Game();
     	this.entitiesView = new ArrayList<>();
-    	this.hud = new InterfaceView(Game.getPlayer());
+    	this.hud = new InterfaceView(game.getPlayer());
     	this.field = new FieldView();
-    	this.playerView = new PlayerView(Game.getPlayer());
+    	this.playerView = new PlayerView(game.getPlayer());
         
     }
     
@@ -104,17 +104,12 @@ public class Controler implements Initializable {
     		game.movePlayer(event.getCode());
     	else 
 	    	switch (event.getCode()) {
-	    	case D :
-	    		Game.getPlayer().loseHP(1);
-	    		Game.getPlayer().earnPotion();
-	    		Game.getPlayer().earnMoney(1);
-	    		break;
 	    	case SHIFT :
-	    		Game.getPlayer().usePotion();
+	    		game.getPlayer().usePotion();
 	    		break;
 	    	case E :
 	    		if (!this.game.playerInteraction())
-	    			Game.getPlayer().attack();
+	    			game.getPlayer().attack(game.getAnimatedEntities());
 	    		else 
 	    			if (!(this.dialogContainer.getText() == null))
 	    				if (!this.dialogContainer.getText().equals(""))
@@ -124,19 +119,20 @@ public class Controler implements Initializable {
 	    		showPauseMenu();
 	    		break;
 	    	case TAB :
-	    		Game.getPlayer().nextWeapon();
+	    		game.getPlayer().nextWeapon();
 	    		break;
 	    	case R :
-	    		Game.getPlayer().reload();
+	    		if (game.getPlayer().loseAmmunition())
+	    			game.getPlayer().reload();
 	    		break;
 	    	case M :
-	    		Game.getPlayer().earnMoney(1);
+	    		game.getPlayer().earnMoney(1);
 	    		break;
 	    	case A :
-	    		Game.getPlayer().useNecklace();
+	    		game.getPlayer().useNecklace();
 	    		break;
 	    	case SPACE :
-	    		Game.getPlayer().useBoots();
+	    		game.getPlayer().useBoots();
 	    		break;
 			default:
 				break;

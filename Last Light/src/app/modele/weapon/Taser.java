@@ -1,6 +1,5 @@
 package app.modele.weapon;
 
-import app.modele.Game;
 import app.modele.GameData;
 import app.modele.entity.animated.AnimatedEntity;
 import app.modele.entity.animated.Bullet;
@@ -29,7 +28,7 @@ public class Taser extends Weapon {
 	}
 
 	@Override
-	public void attack(int orientation, int x, int y) {
+	public void attack(int orientation, int x, int y, ObservableList<AnimatedEntity> animatedEntities) {
 		
 		if (this.bullets.size() < this.magSize && this.canShoot) {
 			this.addBullet(x, y, orientation);
@@ -40,12 +39,12 @@ public class Taser extends Weapon {
 	}
 	
 	@Override
-	public void update() {
+	public void update(ObservableList<AnimatedEntity> animatedEntities) {
 		
 		for (Bullet b : bullets) 
 			if (!b.getIsDead().get()) {
 				b.update();
-				this.hittedEntity = b.isCollidingWith(Game.getAnimatedEntities());
+				this.hittedEntity = b.isCollidingWith(animatedEntities);
 				if (this.hittedEntity != null) {
 					this.hittedEntity.loseHP(this.att.get());
 					b.die();
@@ -56,7 +55,7 @@ public class Taser extends Weapon {
 	}
 	
 	public void reload() {
-		if (this.bullets.size() >= this.magSize && Game.getPlayer().loseAmmunition()) {
+		if (this.bullets.size() >= this.magSize) {
 			killAllBullets();	
 			bullets.clear();
 		}

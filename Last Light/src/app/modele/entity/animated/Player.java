@@ -2,6 +2,7 @@
 
 import app.modele.Game;
 import app.modele.GameData;
+import app.modele.BFS.BFS;
 import app.modele.entity.inanimated.InanimatedEntity;
 import app.modele.weapon.Weapon;
 import javafx.animation.PauseTransition;
@@ -257,18 +258,18 @@ public class Player extends AnimatedEntity {
 		this.money.set(this.money.getValue() - a);
 	}
 	
-	public void attack() {
+	public void attack(ObservableList<AnimatedEntity> animatedEntities) {
 		
 		if (this.weapons.size() > 0  && this.activeWeaponIndex.get() > -1) {
 			this.isAttacking.set(true);
-			this.weapons.get(this.activeWeaponIndex.get()).attack(this.orientation.get(), (int)this.getX().get(), (int)this.getY().get());
+			this.weapons.get(this.activeWeaponIndex.get()).attack(this.orientation.get(), (int)this.getX().get(), (int)this.getY().get(), animatedEntities);
 		}
 		
 	}
 	
-	public void update() {
+	public void update(ObservableList<AnimatedEntity> animatedEntities, ObservableList<InanimatedEntity> inanimatedEntities, BFS bfs) {
 		if (this.bootsIsActive) {
-			int space = canMoveDash(Game.getAnimatedEntities(), Game.getInanimatedEntities());
+			int space = canMoveDash(animatedEntities, inanimatedEntities);
 			switch (this.orientation.get()) {
 			case GameData.LEFT : 
 				x.set(x.get() - space);

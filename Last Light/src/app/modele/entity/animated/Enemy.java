@@ -2,7 +2,10 @@ package app.modele.entity.animated;
 
 import app.modele.Game;
 import app.modele.GameData;
+import app.modele.BFS.BFS;
+import app.modele.entity.inanimated.InanimatedEntity;
 import app.modele.field.Tile;
+import javafx.collections.ObservableList;
 
 public class Enemy extends AnimatedEntity {
 
@@ -10,9 +13,9 @@ public class Enemy extends AnimatedEntity {
 		super(id, x, y, pv, att, v, nb, fmax);
 	}
 	
-	public void attack() {
+	public void attack(AnimatedEntity player) {
 		
-		Player p = Game.getPlayer();
+		AnimatedEntity p = player;
 		
 		switch (this.getOrientation().get()) {
 		case GameData.LEFT :
@@ -41,36 +44,36 @@ public class Enemy extends AnimatedEntity {
 		
 	}
 	
-	public void update() {
-		this.move();
-		this.attack();
+	public void update(ObservableList<AnimatedEntity> animatedEntities, ObservableList<InanimatedEntity> inanimatedEntities, BFS bfs) {
+		this.move(animatedEntities, inanimatedEntities, bfs);
+		this.attack(animatedEntities.get(0));
 	}
 	
-    private void move() {
-    	if (Game.playerIsDetected() || this.playerDetection(GameData.ENEMY_RANGE, this)) {
+    private void move(ObservableList<AnimatedEntity> animatedEntities, ObservableList<InanimatedEntity> inanimatedEntities, BFS bfs) {
+    	if (Game.playerIsDetected() || this.playerDetection(GameData.ENEMY_RANGE, this, animatedEntities.get(0))) {
     		
     		Game.setPlayerDetected();
     		
-	    	Tile nextTile = Game.getBFS().searchWay(this);
+	    	Tile nextTile = bfs.searchWay(this);
 	    	Tile enemyAt = Game.getMap().getNextTile(this.getIndiceY(), this.getIndiceX());
 	    	
 	    	if (nextTile != null) {
 		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() < enemyAt.getJ()) 
-		    		this.moveLeft();
+		    		this.moveLeft(animatedEntities, inanimatedEntities);
 		    	if (nextTile.getI() < enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		this.moveUp();
+		    		this.moveUp(animatedEntities, inanimatedEntities);
 		    	if (nextTile.getI() == enemyAt.getI() && nextTile.getJ() > enemyAt.getJ()) 
-		    		this.moveRight();
+		    		this.moveRight(animatedEntities, inanimatedEntities);
 		    	if (nextTile.getI() > enemyAt.getI() && nextTile.getJ() == enemyAt.getJ()) 
-		    		this.moveDown();
+		    		this.moveDown(animatedEntities, inanimatedEntities);
 	    	}
     	}
     	
     }
     
-    private boolean playerDetection(int range, AnimatedEntity e) {
-    	if (Game.getPlayer().getX().get() >= e.getX().get() - range && Game.getPlayer().getX().get() <= e.getX().get() + range &&
-    		Game.getPlayer().getY().get() >= e.getY().get() - range && Game.getPlayer().getY().get() <= e.getX().get() + range)
+    private boolean playerDetection(int range, AnimatedEntity e, AnimatedEntity player) {
+    	if (player.getX().get() >= e.getX().get() - range && player.getX().get() <= e.getX().get() + range &&
+    		player.getY().get() >= e.getY().get() - range && player.getY().get() <= e.getX().get() + range)
     		return true;
     	
     	return false;

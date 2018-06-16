@@ -1,6 +1,5 @@
 package app.modele.weapon;
 
-import app.modele.Game;
 import app.modele.GameData;
 import app.modele.entity.animated.AnimatedEntity;
 import app.modele.entity.animated.Bullet;
@@ -14,30 +13,30 @@ public class Lamp extends Weapon {
 	}
 
 	@Override
-	public void attack(int orientation, int x, int y) {
+	public void attack(int orientation, int x, int y, ObservableList<AnimatedEntity> animatedEntities) {
 		
 		switch (orientation) {
 		case GameData.LEFT :
-			for (AnimatedEntity e : Game.getAnimatedEntities())
+			for (AnimatedEntity e : animatedEntities)
 	    		if (x <= e.getX().get() + 2*(this.distance.get()*GameData.TILE_SIZE) && x >= e.getX().get() + this.distance.get()*GameData.TILE_SIZE && 
 	    			y >= e.getY().get() - GameData.TILE_SIZE && y <= e.getY().get() + GameData.TILE_SIZE)
 	    			e.loseHP(this.att.get());
 			break;
 		case GameData.UP :
-			for (AnimatedEntity e : Game.getAnimatedEntities())
+			for (AnimatedEntity e : animatedEntities)
 	    		if (y <= e.getY().get() + 2*(this.distance.get()*GameData.TILE_SIZE) && y >= e.getY().get() + this.distance.get()*GameData.TILE_SIZE && 
 	    			x >= e.getX().get() - GameData.TILE_SIZE && x <= e.getX().get() + GameData.TILE_SIZE)
 	    			e.loseHP(this.att.get());
 			break;
 		case GameData.RIGHT :
-			for (AnimatedEntity e : Game.getAnimatedEntities()) {
+			for (AnimatedEntity e : animatedEntities) {
 				if (x >= e.getX().get() - 2*(this.distance.get()*GameData.TILE_SIZE) && x <= e.getX().get() - this.distance.get()*GameData.TILE_SIZE && 
 		    		y >= e.getY().get() - GameData.TILE_SIZE && y <= e.getY().get() + GameData.TILE_SIZE)
 					e.loseHP(this.att.get());
 			}
 			break;
 		case GameData.DOWN :
-			for (AnimatedEntity e : Game.getAnimatedEntities())
+			for (AnimatedEntity e : animatedEntities)
 	    		if (y >= e.getY().get() - 2*(this.distance.get()*GameData.TILE_SIZE) && y <= e.getY().get() - this.distance.get()*GameData.TILE_SIZE && 
 	    			x >= e.getX().get() - GameData.TILE_SIZE && x <= e.getX().get() + GameData.TILE_SIZE)
 	    			e.loseHP(this.att.get());
@@ -50,7 +49,7 @@ public class Lamp extends Weapon {
 	}
 
 	@Override
-	public void update() {
+	public void update(ObservableList<AnimatedEntity> animatedEntities) {
 		// TODO Auto-generated method stub
 		
 	}

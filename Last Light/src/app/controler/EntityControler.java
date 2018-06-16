@@ -47,32 +47,32 @@ public class EntityControler {
 		attackAnimation.setOnFinished(event2 -> {
 			playerView.resetAnimationAttack();
 			entityContainer.getChildren().remove(attackAnimation.getNode());
-			Game.getPlayer().resetIsAttacking();
+			game.getPlayer().resetIsAttacking();
 			attackAnimationActive = false;
 		});
     	
     	entitiesView.add(playerView);
     	entityContainer.getChildren().add(playerView);
     	
-    	Game.getAnimatedEntities().addListener(new ListChangeListener<Entity>() {
+    	game.getAnimatedEntities().addListener(new ListChangeListener<Entity>() {
 
 			@Override
 			public void onChanged(Change<? extends Entity> c) {
 				
 				while (c.next()) {
 					if (c.wasAdded()) {
-						switch (Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1).getId()) {
+						switch (game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1).getId()) {
 						case GameData.ENTITY_WALKER :
-							entitiesView.add(new EnemyView(Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1)));
+							entitiesView.add(new EnemyView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
 							break;
 						case GameData.ENTITY_FLYING :
-							entitiesView.add(new EnemyView(Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1)));
+							entitiesView.add(new EnemyView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
 							break;
 						case GameData.ENTITY_ROCK :
-							entitiesView.add(new RockView(Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1)));
+							entitiesView.add(new RockView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
 							break;
 						case GameData.ENTITY_NPC :
-							entitiesView.add(new NPCView(Game.getAnimatedEntities().get(Game.getAnimatedEntities().size() - 1)));
+							entitiesView.add(new NPCView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
 						default :
 							break;
 						}
@@ -85,19 +85,19 @@ public class EntityControler {
     		
     	});
     	
-    	Game.getInanimatedEntities().addListener(new ListChangeListener<Entity>() {
+    	game.getInanimatedEntities().addListener(new ListChangeListener<Entity>() {
 
 			@Override
 			public void onChanged(Change<? extends Entity> c) {
 				
 				while (c.next()) {
 					if (c.wasAdded()) {
-						switch (Game.getInanimatedEntities().get(Game.getInanimatedEntities().size() - 1).getId()) {
+						switch (game.getInanimatedEntities().get(game.getInanimatedEntities().size() - 1).getId()) {
 						case GameData.ENTITY_BUTTON :
-							entitiesView.add(new ButtonView(Game.getInanimatedEntities().get(Game.getInanimatedEntities().size()-1)));
+							entitiesView.add(new ButtonView(game.getInanimatedEntities().get(game.getInanimatedEntities().size()-1)));
 							break;
 						default :
-							entitiesView.add(new InanimatedEntityView(Game.getInanimatedEntities().get(Game.getInanimatedEntities().size()-1)));
+							entitiesView.add(new InanimatedEntityView(game.getInanimatedEntities().get(game.getInanimatedEntities().size()-1)));
 							break;
 						}
 						
@@ -123,27 +123,27 @@ public class EntityControler {
     		
     	});
     	
-    	Game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
+    	game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldValue, Boolean newValue) {
 
                 if (newValue.booleanValue()) {
                 	
-                	rotatePlayerAttack(playerView.getAttackImage(), Game.getPlayer());
+                	rotatePlayerAttack(playerView.getAttackImage(), game.getPlayer());
                 	
-                	switch (Game.getPlayer().getOrientation().get()) {
+                	switch (game.getPlayer().getOrientation().get()) {
                 	case GameData.LEFT :
-                		translatePlayerAttack(playerView.getAttackImage(), -32, 5);
+                		translatePlayerAttack(playerView.getAttackImage(), game.getPlayer(), -32, 5);
                 		break;
                 	case GameData.UP :
-                		translatePlayerAttack(playerView.getAttackImage(), 0, -32);
+                		translatePlayerAttack(playerView.getAttackImage(), game.getPlayer(), 0, -32);
                 		break;
                 	case GameData.RIGHT :
-                		translatePlayerAttack(playerView.getAttackImage(), 32, 5);
+                		translatePlayerAttack(playerView.getAttackImage(), game.getPlayer(), 32, 5);
                 		break;
                 	case GameData.DOWN :
-                		translatePlayerAttack(playerView.getAttackImage(), 0, 32);
+                		translatePlayerAttack(playerView.getAttackImage(), game.getPlayer(), 0, 32);
                 		break;
                 	default : break;
                 	}
@@ -157,7 +157,7 @@ public class EntityControler {
     	
     	game.addKeyFrame(e -> {
 		
-    		if (Game.getPlayer().getIsDead().get())
+    		if (game.getPlayer().getIsDead().get())
     			Platform.exit();
     		
     		for (int i = 0 ; i < entitiesView.size() ; i++)
@@ -171,7 +171,7 @@ public class EntityControler {
     		
     		entityDisappearance.play();
     		
-    		if (Game.getPlayer().getIsAttacking().get()) { 
+    		if (game.getPlayer().getIsAttacking().get()) { 
     			playerView.resetImage();
     			if (!attackAnimationActive) {
     				playerView.animationAttack();
@@ -186,12 +186,12 @@ public class EntityControler {
     }
     
 	private static void rotatePlayerAttack(Node n, Entity e) {
-		n.setRotate((Game.getPlayer().getOrientation().get()-1)*90);
+		n.setRotate((e.getOrientation().get()-1)*90);
 	}
 	
-	private static void translatePlayerAttack(Node n, int x, int y) {
-		n.setTranslateX(Game.getPlayer().getX().get() + x);
-        n.setTranslateY(Game.getPlayer().getY().get() + y);
+	private static void translatePlayerAttack(Node n, Entity e, int x, int y) {
+		n.setTranslateX(e.getX().get() + x);
+        n.setTranslateY(e.getY().get() + y);
 	}
 	
 }

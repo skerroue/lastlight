@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import app.modele.Game;
 import app.modele.GameData;
+import app.modele.entity.animated.Player;
 import app.modele.weapon.Lamp;
 import app.modele.weapon.Taser;
 
@@ -17,34 +18,34 @@ public class ItemEntity extends InanimatedEntity {
 		super(id, x, y, dialog);
 	}
 	
-	public boolean interact() {
+	public boolean interact(Player p) {
 		boolean hasInteracted = true;
 		
 		switch (this.id) {
 		case GameData.ENTITY_LAMP :
-			Game.getPlayer().getWeapons().add(new Lamp(1, 1));
+			p.getWeapons().add(new Lamp(1, 1));
 			this.die();
 			break;
 		case GameData.ENTITY_TASER :
-			Game.getPlayer().getWeapons().add(new Taser(1, 1));
+			p.getWeapons().add(new Taser(1, 1));
 			this.die();
 			break;
 		case GameData.ENTITY_SODA :
-			if (Game.getPlayer().getPotion().getValue() < 3) {
-				Game.getPlayer().earnPotion();
+			if (p.getPotion().getValue() < 3) {
+				p.earnPotion();
 				this.die();
 			}
 			break;
 		case GameData.ENTITY_NECKLACE :
-			Game.getPlayer().setNecklace(true);
+			p.setNecklace(true);
 			this.die();
 			break;
 		case GameData.ENTITY_BOOTS :
-			Game.getPlayer().setBoots(true);
+			p.setBoots(true);
 			this.die();
 			break;
 		case GameData.ENTITY_HEART :
-			Game.getPlayer().unlockHeart();
+			p.unlockHeart();
 			this.die();
 			break;
  		default : 

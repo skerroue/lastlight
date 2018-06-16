@@ -1,6 +1,7 @@
 package app.modele.entity.inanimated;
 
 import app.modele.entity.Entity;
+import app.modele.entity.animated.Player;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;  
 
@@ -14,7 +15,7 @@ public abstract class InanimatedEntity extends Entity {
 		this.isInteracting = new SimpleBooleanProperty(false);
 	}
 
-	public abstract boolean interact();
+	public abstract boolean interact(Player p);
 	
 	public String getId() {
 		return this.id;
