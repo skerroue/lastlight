@@ -221,13 +221,23 @@ public class Game {
 			try {
 				
 				line = br.readLine();
-				Scanner current = new Scanner(line).useDelimiter(",");
-				int currentInt = current.nextInt();
+				String str = "" + line.charAt(0);
+				int i = 1;
+				while (line.charAt(i) != ',') {
+					str = str + line.charAt(i);
+					i++;
+				}
+				int currentInt = Integer.parseInt(str);
 				
 				while (br.ready() && currentInt != noMap) {
 					line = br.readLine();
-					current = new Scanner(line).useDelimiter(",");
-					currentInt = current.nextInt();
+					str = "" + line.charAt(0);
+					i = 1;
+					while (line.charAt(i) != ',') {
+						str = str + line.charAt(i);
+						i++;
+					}
+					currentInt = Integer.parseInt(str);
 				}
 				
 				if (currentInt == noMap) {
@@ -281,7 +291,6 @@ public class Game {
 					}
 					
 					s.close();
-					current.close();
 				}
 				
 				br.close();
