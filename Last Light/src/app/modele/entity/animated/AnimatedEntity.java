@@ -323,8 +323,8 @@ public abstract class AnimatedEntity extends Entity {
 			
 			if (this.hp.get() <= 0) {
 				this.die();
-				if (Math.random() < GameData.MONEY_DROP_RATE && Game.getPlayer() != null)
-					Game.getPlayer().earnMoney(1);
+				if (Game.getGameData() != null)
+					this.dropMoney();
 			}
 			
 			if (!this.getIsDead().get()) {
@@ -333,6 +333,11 @@ public abstract class AnimatedEntity extends Entity {
 			}
 			
 		}
+	}
+	
+	public void dropMoney() {
+		if (Math.random() < GameData.MONEY_DROP_RATE && GameData.ENEMIES_ID.contains(this.id) && Game.getPlayer() != null)
+			Game.getPlayer().earnMoney(1);
 	}
 
 }

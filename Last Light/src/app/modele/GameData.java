@@ -23,8 +23,11 @@ public class GameData {
 	final static int FILE_MAP_WIDTH = 6;
 	final static int FILE_MAP_HEIGHT = 5;
 	
-	public final static double NECKLACE_TIME = 2;
-	public final static double NECKLACE_DOWNTIME = 2;
+	public final static int PLAYER_SPEED = 8;
+	public final static int ENEMY_SPEED = 4;
+	
+	public final static double NECKLACE_TIME = 4;
+	public final static double NECKLACE_DOWNTIME = 8;
 	public final static int NECKLACE_WALL = 28;
 	
 	public final static int BOOTS_HOLE = 28;

@@ -8,7 +8,7 @@ import javafx.scene.layout.Pane;
 
 public class DialogControler {
 	
-	public static void initializeDialogContainer(Pane dialogPane, Game game, Label dialogContainer) {
+	protected static void initializeDialogContainer(Pane dialogPane, Game game, Label dialogContainer) {
 		
 		game.getCurrentTextProperty().addListener(new ChangeListener<String>() {
 

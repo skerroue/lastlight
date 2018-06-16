@@ -5,7 +5,7 @@ import app.modele.GameData;
 public class Rock extends AnimatedEntity {
 
 	public Rock(int x, int y) {
-		super(GameData.ENTITY_ROCK, x, y, 1, 0, 4, 1, 1);
+		super(GameData.ENTITY_ROCK, x, y, 1, 0, GameData.PLAYER_SPEED, 1, 1);
 		this.isInvicible = true;
 	}
 	

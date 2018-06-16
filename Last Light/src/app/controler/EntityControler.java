@@ -28,7 +28,7 @@ public class EntityControler {
 	private static FadeTransition attackAnimation;
 	private static boolean attackAnimationActive = false;
 	
-    public static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<EntityView> entitiesView) {
+	protected static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<EntityView> entitiesView) {
     	
     	entityDisappearance = new FadeTransition();
     	entityDisappearance.setFromValue(1.0);
@@ -185,11 +185,11 @@ public class EntityControler {
     	
     }
     
-	public static void rotatePlayerAttack(Node n, Entity e) {
+	private static void rotatePlayerAttack(Node n, Entity e) {
 		n.setRotate((Game.getPlayer().getOrientation().get()-1)*90);
 	}
 	
-	public static void translatePlayerAttack(Node n, int x, int y) {
+	private static void translatePlayerAttack(Node n, int x, int y) {
 		n.setTranslateX(Game.getPlayer().getX().get() + x);
         n.setTranslateY(Game.getPlayer().getY().get() + y);
 	}

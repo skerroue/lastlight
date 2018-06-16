@@ -16,7 +16,7 @@ public class FieldControler {
     private static FadeTransition mapChangeTransition;
     private static Rectangle mapChangeTransitionNode;
     
-    public static void initializeScrollField(EntityView playerView, FieldView field, Game game, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH, Pane tileContainer, Pane entityContainer, Pane interfaceContainer) {
+    protected static void initializeScrollField(EntityView playerView, FieldView field, Game game, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH, Pane tileContainer, Pane entityContainer, Pane interfaceContainer) {
     	
     	// Map transition
         mapChangeTransition = new FadeTransition();
@@ -82,7 +82,7 @@ public class FieldControler {
     	
     }
     
-    public static void moveScroll(EntityView playerView, Pane tileContainer, FieldView field, Pane entityContainer, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH) {
+    private static void moveScroll(EntityView playerView, Pane tileContainer, FieldView field, Pane entityContainer, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH) {
     	
     	Game.getPlayer().getX().addListener(new ChangeListener<Number>() {
 
@@ -129,7 +129,7 @@ public class FieldControler {
     	return - (int) container.getTranslateY();
     }
     
-	public static void AnimationTransitionMap(Double i) {
+	protected static void AnimationTransitionMap(Double i) {
 	   	mapChangeTransition.setDuration(Duration.seconds(i));
 		mapChangeTransition.play();
 	}

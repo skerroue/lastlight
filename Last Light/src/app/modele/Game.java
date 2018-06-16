@@ -36,9 +36,8 @@ import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
 public class Game {
-	
-	@SuppressWarnings("unused")
-	private GameData gameData;
+
+	private static GameData gameData;
 
 	private Timeline gameloop;
 	
@@ -57,19 +56,19 @@ public class Game {
 	
 	public Game() {
 		
-		this.gameData = new GameData();
-		
 		this.gameloop = new Timeline();
 		this.gameloop.setCycleCount(Timeline.INDEFINITE);
 		
 		this.currentText = new SimpleStringProperty("");
+		
+		gameData = new GameData();
 		
 		map = new Field(GameData.STARTING_MAP_LINE, GameData.STARTING_MAP_COLUMN, GameData.mapsOfMap[GameData.STARTING_MAP_LINE][GameData.STARTING_MAP_COLUMN], 25, 25, GameData.crossableTiles);
 		mapChanged = new SimpleBooleanProperty(true);
 		
 		animatedEntities = FXCollections.observableArrayList();
 		inanimatedEntities = FXCollections.observableArrayList();
-		player = new Player(416, 416, 3, 0, 4, 0, 6, 18);
+		player = new Player(416, 416, 3, 0, GameData.PLAYER_SPEED, 0, 6, 18);
 		animatedEntities.add(player);
 		playerIsDetected = false;
 		
@@ -150,6 +149,10 @@ public class Game {
 	
 	public static BFS getBFS() {
 		return bfs;
+	}
+	
+	public static GameData getGameData() {
+		return gameData;
 	}
 	
 	public void mapChanged() {
@@ -308,16 +311,16 @@ public class Game {
     private void addAnimated(String type, int x, int y, int noMap) {
     	switch (type) {
     	case GameData.ENTITY_WALKER :
-    		animatedEntities.add(new Walker(x, y, 1, 1, 4, 6, 18));
+    		animatedEntities.add(new Walker(x, y, 1, 1, GameData.ENEMY_SPEED, 6, 18));
     		break;
     	case GameData.ENTITY_FLYING :
-    		animatedEntities.add(new Flying(x, y, 1, 1, 4, 4, 12));
+    		animatedEntities.add(new Flying(x, y, 1, 1, GameData.ENEMY_SPEED, 4, 12));
     		break;
     	case GameData.ENTITY_ROCK :
     		animatedEntities.add(new Rock(x, y));
     		break;
     	case GameData.ENTITY_NPC :
-    		animatedEntities.add(new NPC(x, y, 1, 0, 4, 6, 18, readNPCDialog(noMap)));
+    		animatedEntities.add(new NPC(x, y, 1, 0, GameData.PLAYER_SPEED, 6, 18, readNPCDialog(noMap)));
     		break;
      	default : break;
     	}

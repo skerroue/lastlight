@@ -30,7 +30,7 @@ public class MenuControler implements Initializable{
     private MediaPlayer player;
     
     @FXML
-    void play(ActionEvent event) {
+    private void play(ActionEvent event) {
     	stopMusic();
     	try {
 			FXMLLoader loader = new FXMLLoader();
@@ -46,7 +46,7 @@ public class MenuControler implements Initializable{
     }
 
     @FXML
-    void quit(ActionEvent event) {
+    private void quit(ActionEvent event) {
         Platform.exit();
     }
 

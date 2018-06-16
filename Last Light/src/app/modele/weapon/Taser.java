@@ -61,14 +61,6 @@ public class Taser extends Weapon {
 			bullets.clear();
 		}
 	}
-	
-	public boolean allBulletsDead() {
-		for (Bullet b : bullets)
-			if (!b.getIsDead().get())
-				return false;
-		
-		return true;
-	}
 
 	@Override
 	public ObservableList<Bullet> getBullets() {
@@ -80,7 +72,7 @@ public class Taser extends Weapon {
 			b.die();
 	}
 	
-	public void addBullet(int x, int y, int orientation) {
+	private void addBullet(int x, int y, int orientation) {
 		
 		switch (orientation) {
 		case GameData.LEFT 	: x -= 32; break;
