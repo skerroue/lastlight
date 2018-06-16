@@ -78,7 +78,7 @@ public class Game {
 		initializeGame();
 	}
 	
-	public void initializeGame() {
+	private void initializeGame() {
 		try {
 			
 			File f = new File("src/map/takenItems.txt");
@@ -151,7 +151,7 @@ public class Game {
 		mapChanged.set(!mapChanged.get());
 	}
 	
-	public boolean loadField(int direction) {
+	private boolean loadField(int direction) {
 		int i = map.getI();
 		int j = map.getJ();
 		
@@ -365,7 +365,7 @@ public class Game {
     	gameloop.play();
     }
     
-    public void addInanimated(String type, int x, int y, int noMap) {
+    private void addInanimated(String type, int x, int y, int noMap) {
     	switch (type) {
     	case GameData.ENTITY_DISPENSER :
     		inanimatedEntities.add(new Dispenser(x, y, "Voulez vous acheter une potion ?"));
@@ -382,7 +382,7 @@ public class Game {
     	
     }
     
-    public void addAnimated(String type, int x, int y, int noMap) {
+    private void addAnimated(String type, int x, int y, int noMap) {
     	switch (type) {
     	case GameData.ENTITY_WALKER :
     		animatedEntities.add(new Walker(x, y, 1, 1, 4, 6, 18));
@@ -534,7 +534,7 @@ public class Game {
     	
     }
     
-    public void updateEnemies() {
+    private void updateEnemies() {
     	for (int i = 1 ; i < animatedEntities.size() ; i++) 
     		if (GameData.ENEMIES_ID.contains(animatedEntities.get(i).getId())) {
     			moveEnemy(animatedEntities.get(i));
@@ -542,7 +542,7 @@ public class Game {
     		}
     }
     
-    public void moveEnemy(AnimatedEntity e) {
+    private void moveEnemy(AnimatedEntity e) {
     	if (this.playerIsDetected || this.playerDetection(GameData.ENEMY_RANGE, e)) {
     		
     		this.playerIsDetected = true;
@@ -564,7 +564,7 @@ public class Game {
     	
     }
     
-    public boolean playerDetection(int range, AnimatedEntity e) {
+    private boolean playerDetection(int range, AnimatedEntity e) {
     	if (player.getX().get() >= e.getX().get() - range && player.getX().get() <= e.getX().get() + range &&
     		player.getY().get() >= e.getY().get() - range && player.getY().get() <= e.getX().get() + range)
     		return true;

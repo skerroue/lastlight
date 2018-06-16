@@ -9,14 +9,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public abstract class Entity {
 	
-	protected final static int LEFT = 0;
-	protected final static int UP = 1;
-	protected final static int RIGHT = 2;
-	protected final static int DOWN = 3;
-	
-	protected final static int LEFT_TOP_LIMIT = 31;
-	protected final static int RIGHT_BOTTOM_LIMIT = 768;
-	
 	protected String id;
 	protected DoubleProperty x;
 	protected DoubleProperty y;

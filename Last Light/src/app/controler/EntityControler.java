@@ -14,6 +14,7 @@ import app.vue.entity.NPCView;
 import app.vue.entity.PlayerView;
 import app.vue.entity.RockView;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;

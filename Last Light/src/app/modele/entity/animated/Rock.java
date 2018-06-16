@@ -12,13 +12,13 @@ public class Rock extends AnimatedEntity {
 	public boolean push(int DIRECTION) {
 		
 		switch (DIRECTION) {
-		case LEFT :
+		case GameData.LEFT :
 			return this.moveLeft();
-		case UP :
+		case GameData.UP :
 			return this.moveUp();
-		case RIGHT :
+		case GameData.RIGHT :
 			return this.moveRight();
-		case DOWN :
+		case GameData.DOWN :
 			return this.moveDown();
 		default :
 			return false;

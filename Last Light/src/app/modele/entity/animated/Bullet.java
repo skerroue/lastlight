@@ -21,16 +21,16 @@ public class Bullet extends Entity {
 			this.die();
 		
 		switch (this.orientation.get()) {
-		case LEFT :
+		case GameData.LEFT :
 			this.x.set(this.x.get() - velocity);
 			break;
-		case UP :
+		case GameData.UP :
 			this.y.set(this.y.get() - velocity);
 			break;
-		case RIGHT :
+		case GameData.RIGHT :
 			this.x.set(this.x.get() + velocity);
 			break;
-		case DOWN :
+		case GameData.DOWN :
 			this.y.set(this.y.get() + velocity);
 			break;
 		default :
@@ -42,22 +42,22 @@ public class Bullet extends Entity {
 	public AnimatedEntity isCollidingWith(ObservableList<AnimatedEntity> entities) {
 		
 		switch (this.orientation.get()) {
-		case LEFT :
+		case GameData.LEFT :
 			for (int i = 1 ; i < entities.size() ; i++)
 				if (entities.get(i).getX().get() == this.getX().get() - 32 && entities.get(i).getY().get() >= this.getY().get() - 32 && entities.get(i).getY().get() <= this.getY().get() + 32)
 					return entities.get(i);
 			break;
-		case UP :
+		case GameData.UP :
 			for (int i = 1 ; i < entities.size() ; i++)
 				if (entities.get(i).getY().get() == this.getY().get() - 32 && entities.get(i).getX().get() >= this.getX().get() - 32 && entities.get(i).getX().get() <= this.getX().get() + 32)
 					return entities.get(i);
 			break;
-		case RIGHT :
+		case GameData.RIGHT :
 			for (int i = 1 ; i < entities.size() ; i++)
 				if (entities.get(i).getX().get() == this.getX().get() + 32 && entities.get(i).getY().get() >= this.getY().get() - 32 && entities.get(i).getY().get() <= this.getY().get() + 32)
 					return entities.get(i);
 			break;
-		case DOWN :
+		case GameData.DOWN :
 			for (int i = 1 ; i < entities.size() ; i++)
 				if (entities.get(i).getY().get() == this.getY().get() + 32 && entities.get(i).getX().get() >= this.getX().get() - 32 && entities.get(i).getX().get() <= this.getX().get() + 32)
 					return entities.get(i);

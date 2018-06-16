@@ -1,7 +1,7 @@
 package app.modele.entity.animated;
 
 import app.modele.Game;
-import javafx.collections.ObservableList;
+import app.modele.GameData;
 
 public class Enemy extends AnimatedEntity {
 
@@ -14,22 +14,22 @@ public class Enemy extends AnimatedEntity {
 		Player p = Game.getPlayer();
 		
 		switch (this.getOrientation().get()) {
-		case LEFT :
+		case GameData.LEFT :
     		if (this.getX().get() == p.getX().get() + 32 && 
     			this.getY().get() >= p.getY().get() - 31 && this.getY().get() <= p.getY().get() + 31)
 	    		p.loseHP(this.attaque);
 			break;
-		case UP :
+		case GameData.UP :
     		if (this.getY().get() == p.getY().get() + 32 && 
     			this.getX().get() >= p.getX().get() - 31 && this.getX().get() <= p.getX().get() + 31)
     			p.loseHP(this.attaque);
 			break;
-		case RIGHT :
+		case GameData.RIGHT :
     		if (this.getX().get() == p.getX().get() - 32 && 
     			this.getY().get() >= p.getY().get() - 31 && this.getY().get() <= p.getY().get() + 31)
 	    		p.loseHP(this.attaque);
 			break;
-		case DOWN :
+		case GameData.DOWN :
     		if (this.getY().get() == p.getY().get() - 32 && 
     			this.getX().get() >= p.getX().get() - 31 && this.getX().get() <= p.getX().get() + 31)
 	    		p.loseHP(this.attaque);

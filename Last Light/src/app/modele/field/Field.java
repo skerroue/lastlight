@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.image.ImageView;
-
 public class Field {
 	
 	private int[][] field;

@@ -1,7 +1,6 @@
 package app.modele.entity.animated;
 
 import app.modele.GameData;
-import javafx.collections.ObservableList;
 
 public class Walker extends Enemy {
 
