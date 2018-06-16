@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import app.modele.entity.AnimatedEntity;
-import app.modele.entity.Player;
+import app.modele.Game;
+import app.modele.entity.animated.AnimatedEntity;
+import app.modele.entity.animated.Player;
 import app.modele.field.Field;
 import app.modele.field.Tile;
 
@@ -48,21 +49,22 @@ public class BFS {
 			if (y > 0) {
 				this.adjTiles.add(field.getNextTile(y-1, x));
 			}
-			if (x < 24) {
+			if (x < Game.getMap().getFieldSize() - 1) {
 				this.adjTiles.add(field.getNextTile(y, x+1));
 			}
-			if (y < 24) {
+			if (y < Game.getMap().getFieldSize() - 1) {
 				this.adjTiles.add(field.getNextTile(y+1, x));
 			}
 			
-			for (int i = 0 ; i < adjTiles.size() ; i++) {
-				
-				if (!this.parents.containsKey(adjTiles.get(i))) {
-					this.parents.put(this.adjTiles.get(i), temp);
-					this.queue.add(this.adjTiles.get(i));
-				}
-				
-			}
+			/*
+			for (Tile t : adjTiles) 
+				if (t.isCrossable() && this.parents.putIfAbsent(t, temp) == null) 
+					this.queue.add(t);
+			*/
+			
+			for (Tile t : adjTiles) 
+				if (this.parents.putIfAbsent(t, temp) == null) 
+					this.queue.add(t);
 			
 			this.adjTiles.clear();
 		}

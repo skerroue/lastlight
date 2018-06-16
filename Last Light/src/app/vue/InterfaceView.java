@@ -1,10 +1,13 @@
 package app.vue;
 
-import app.modele.entity.Player;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import app.modele.entity.animated.Player; 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class InterfaceView {
 	
@@ -12,6 +15,8 @@ public class InterfaceView {
 	private ObservableList<ComponentView> hearts;
 	private ObservableList<ComponentView> potions;
 	private ObservableList<ComponentView> money;
+	private ImageView ammunitionImageView;
+	private Label ammunitionLabel;
 	
 	public InterfaceView(Player player) {		
 		this.player = player;
@@ -19,13 +24,16 @@ public class InterfaceView {
 		this.hearts = FXCollections.observableArrayList();
 		this.potions = FXCollections.observableArrayList();
 		this.money = FXCollections.observableArrayList();
+		this.ammunitionImageView = new ImageView();
+		this.ammunitionLabel = new Label();
 		
 		initializeHearts();
 		initializePotions();
 		initializeMoney();
+		initializeAmmunition();
 	}
 	
-	public void initializeHearts() {
+	private void initializeHearts() {
 		
 		for (int i = 0 ; i < player.getPotentialHP().get() ; i++) {
 			hearts.add(new ComponentView("h"));
@@ -40,7 +48,7 @@ public class InterfaceView {
 		
 	}
 
-	public void initializePotions() {
+	private void initializePotions() {
 		
 		for (int i = 0 ; i < player.getMaxPotion().get() ; i++) {
 			potions.add(new ComponentView("soda"));
@@ -52,7 +60,7 @@ public class InterfaceView {
 		
 	}
 	
-	public void initializeMoney() {
+	private void initializeMoney() {
 		
 		for (int i = 0 ; i < player.getMaxMoney().get() ; i++) {
 			money.add(new ComponentView("money"));
@@ -62,6 +70,18 @@ public class InterfaceView {
 			money.get(i).setTranslateY(10);
 		}
 		
+	}
+	
+	private void initializeAmmunition() {
+		this.ammunitionImageView.setImage(new Image("file:src/img/ammo.png"));
+		this.ammunitionImageView.setTranslateX(448);
+		this.ammunitionImageView.setTranslateY(480);
+		
+		this.ammunitionLabel.textProperty().bind(player.getAmmunitionProperty());
+		this.ammunitionLabel.setTranslateX(480);
+		this.ammunitionLabel.setTranslateY(488);
+		this.ammunitionLabel.setTextFill(Color.WHITE);
+		this.ammunitionLabel.setFont(new Font("Arial", 18));
 	}
 	
 	public ObservableList<ComponentView> getHearts() {
@@ -74,6 +94,14 @@ public class InterfaceView {
 	
 	public ObservableList<ComponentView> getMoney() {
 		return money;
+	}
+	
+	public ImageView getAmmunitionImageView() {
+		return ammunitionImageView;
+	}
+	
+	public Label getAmmunitionLabel() {
+		return ammunitionLabel;
 	}
 	
 	public Player getPlayer() {

@@ -1,32 +1,26 @@
 package app.controler;
 
-import java.net.URL;  
+import java.io.File;
+import java.net.URL;   
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import app.modele.Game;
-import app.modele.entity.Entity;
 import app.vue.FieldView;
 import app.vue.InterfaceView;
-import app.vue.entity.AnimatedEntityView;
-import app.vue.entity.BulletView;
 import app.vue.entity.EntityView;
-import app.vue.entity.InanimatedEntityView;
 import app.vue.entity.PlayerView;
-import javafx.animation.FadeTransition;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class Controler implements Initializable {
 	
@@ -37,8 +31,6 @@ public class Controler implements Initializable {
 
 	@FXML
 	private Pane pausePane;
-	private Button resumeButton;
-	private Button quitButton;
 	
     @FXML
     private Pane tileContainer;
@@ -65,6 +57,11 @@ public class Controler implements Initializable {
     @FXML
     private Label dialogContainer;
     
+    
+    private Media sound;
+   
+    private MediaPlayer player;
+    
     public Controler() {	
     	
     	this.game = new Game();
@@ -78,8 +75,8 @@ public class Controler implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
-		// Creation de la map visuellement
-		FieldControler.initializeField(tileContainer, field, interfaceContainer);
+		// Initialisation de la map et du scrolling
+		FieldControler.initializeScrollField(playerView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer, interfaceContainer);
 		
 		// Creation de l'interface et liaison avec les caracteristiques du joueur
 		InterfaceControler.initializeInterface(interfaceContainer, hud);
@@ -91,108 +88,73 @@ public class Controler implements Initializable {
 		
 		// Lancement de la gameloop
 		this.game.playGameLoop();
-		
-		// Initialisation de la Scroll Map
-		FieldControler.initializeScrollField(playerView, field, game, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH, tileContainer, entityContainer);
         
-        // Animation
+        // Animation de début de jeu
         FieldControler.AnimationTransitionMap(1.0);
+        
+        // Musiques
+        launchMusic();
 		
 	}
 
     @FXML
-    void onKeyPressed(KeyEvent event) {
-    	switch (event.getCode()) {
-    	case UP:
+    private void onKeyPressed(KeyEvent event) {
+    	
+    	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
     		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
-    			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
-    		}
-    		break;
-    	case DOWN:
-    		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2 + 1 > 0 && entitiesView.get(0).getTranslateY() + SCROLL_HEIGHT / 2 < PANE_HEIGHT) {
-    			setScrollY((int) entitiesView.get(0).getTranslateY() - SCROLL_HEIGHT / 2);
-    		}
-    		break;
-    	case LEFT:
-    		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
-    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
-    		}
-    		break;
-    	case RIGHT:
-    		game.movePlayer(event.getCode());
-    		if (entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2 + 1 > 0 && entitiesView.get(0).getTranslateX() + SCROLL_WIDTH / 2 < PANE_WIDTH) {
-    			setScrollX((int) entitiesView.get(0).getTranslateX() - SCROLL_WIDTH / 2);
-    		}
-    		break;
-    	case D :
-    		this.game.getPlayer().loseHP(1);
-    		this.game.getPlayer().earnPotion();
-    		this.game.getPlayer().earnMoney(1);
-    		break;
-    	case X :
-    		this.game.getPlayer().usePotion();
-    		break;
-    	case SPACE :
-    		if (!this.game.playerInteraction())
-    			this.game.getPlayer().attack(game.getEntities());
-    		else 
-    			if (!(this.dialogContainer.getText() == null))
-    				if (!this.dialogContainer.getText().equals(""))
-    					this.showText();
-    		break;
-    	case ESCAPE:
-    		showPauseMenu();
-    		break;
-    	case TAB :
-    		this.game.getPlayer().nextWeapon();
-    		break;
-    	case R :
-    		this.game.getPlayer().reload();
-    		break;
-    	case M :
-    		this.game.getPlayer().earnMoney(1);
-    		break;
-		default:
-			break;
-    	}
+    	else 
+	    	switch (event.getCode()) {
+	    	case SHIFT :
+	    		game.getPlayer().usePotion();
+	    		break;
+	    	case E :
+	    		if (!this.game.playerInteraction())
+	    			game.getPlayer().attack(game.getAnimatedEntities());
+	    		else 
+	    			if (!(this.dialogContainer.getText() == null))
+	    				if (!this.dialogContainer.getText().equals(""))
+	    					this.showText();
+	    		break;
+	    	case ESCAPE :
+	    		showPauseMenu();
+	    		break;
+	    	case TAB :
+	    		game.getPlayer().nextWeapon();
+	    		break;
+	    	case R :
+	    		if (game.getPlayer().loseAmmunition())
+	    			game.getPlayer().reload();
+	    		break;
+	    	case M :
+	    		game.getPlayer().earnMoney(1);
+	    		break;
+	    	case A :
+	    		game.getPlayer().useNecklace();
+	    		break;
+	    	case SPACE :
+	    		game.getPlayer().useBoots();
+	    		break;
+			default:
+				break;
+	    	}
     	
     }
 
     @FXML
-    void onKeyReleased(KeyEvent event) {
+    private void onKeyReleased(KeyEvent event) {
     	
     	if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT)
     		playerView.resetImage();
     	
-    	switch (event.getCode()) {
-    	case SPACE :
-    		break;
-		default :
-			break;
-    	}
-    	
-    }
-    
-    private void setScrollX(int a) {
-    	tileContainer.setTranslateX(-a);
-		entityContainer.setTranslateX(-a);
-    }
-    
-    private void setScrollY(int a) {
-    	tileContainer.setTranslateY(-a);
-		entityContainer.setTranslateY(-a);
     }
     
     @FXML
-    void quit(ActionEvent event) {	
+    private void quit(ActionEvent event) {	
     	System.exit(0);
     }
 
     @FXML
-    void resume(ActionEvent event) {
+    private void resume(ActionEvent event) {
     	this.pausePane.setVisible(false);
     	this.game.playGameLoop();
     }
@@ -204,7 +166,7 @@ public class Controler implements Initializable {
     }
     
     @FXML
-    void closeText(KeyEvent event) {
+    private void closeText(KeyEvent event) {
     	if (event.getCode() == KeyCode.SPACE) {
     		this.dialogPane.setVisible(false);
         	this.game.playGameLoop();
@@ -215,6 +177,13 @@ public class Controler implements Initializable {
     	this.dialogPane.setVisible(true);
     	this.game.pauseGameLoop();
     	this.dialogPane.requestFocus();
+    }
+    
+    private void launchMusic() {
+    	this.sound = new Media(new File("src/music/game.mp3").toURI().toString());
+    	this.player = new MediaPlayer(this.sound);
+    	this.player.setCycleCount(Timeline.INDEFINITE);
+    	this.player.play();
     }
     	
 }

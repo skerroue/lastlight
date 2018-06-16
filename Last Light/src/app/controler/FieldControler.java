@@ -1,10 +1,7 @@
 package app.controler;
 
-import java.util.ArrayList;
-
 import app.modele.Game;
 import app.vue.FieldView;
-import app.vue.entity.AnimatedEntityView;
 import app.vue.entity.EntityView;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
@@ -16,44 +13,17 @@ import javafx.util.Duration;
 
 public class FieldControler {
 	
-    private static FadeTransition ft;
-    private static Rectangle rec;
+    private static FadeTransition mapChangeTransition;
+    private static Rectangle mapChangeTransitionNode;
     
-	 public static void AnimationTransitionMap(Double i) {
-	    	ft.setDuration(Duration.seconds(i));
-			ft.play();
-	    }
-	 
-	private static void creatingAnimation(Pane interfaceContainer) {
-		interfaceContainer.getChildren().add(rec);
-		rec.setFill(Color.BLACK);
-        ft.setFromValue(1.0);
-		ft.setToValue(0.0);
-		ft.setNode(rec);
-	}
-    
-    public static void initializeField(Pane tileContainer, FieldView field, Pane interfaceContainer) {
-      
+    protected static void initializeScrollField(EntityView playerView, FieldView field, Game game, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH, Pane tileContainer, Pane entityContainer, Pane interfaceContainer) {
     	
     	// Map transition
-        ft = new FadeTransition();
-        rec = new Rectangle(600,600);
+        mapChangeTransition = new FadeTransition();
+        mapChangeTransitionNode = new Rectangle(600,600);
         creatingAnimation(interfaceContainer);
         
     	tileContainer.getChildren().addAll(field.getFieldView());
-    	
-    	Game.getMapChanged().addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-				field.refreshField();
-			}
-			
-		});
-    	
-    }
-    
-    public static void initializeScrollField(EntityView playerView, FieldView field, Game game, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH, Pane tileContainer, Pane entityContainer) {
     	
     	setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
 		setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
@@ -107,6 +77,38 @@ public class FieldControler {
 			}
     		
     	});
+    	
+    	moveScroll(playerView, tileContainer, game, field, entityContainer, SCROLL_WIDTH, SCROLL_HEIGHT, PANE_HEIGHT, PANE_WIDTH);
+    	
+    }
+    
+    private static void moveScroll(EntityView playerView, Pane tileContainer, Game game, FieldView field, Pane entityContainer, int SCROLL_WIDTH, int SCROLL_HEIGHT, int PANE_HEIGHT, int PANE_WIDTH) {
+    	
+    	game.getPlayer().getX().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+	    		setScrollX((int) playerView.getTranslateX() - SCROLL_WIDTH / 2, tileContainer, entityContainer);
+	    		if (getScrollX(tileContainer) < 0)
+	    			setScrollX(0, tileContainer, entityContainer);
+	    		else if (getScrollX(tileContainer) + SCROLL_WIDTH > PANE_WIDTH)
+	    			setScrollX(PANE_WIDTH - SCROLL_WIDTH, tileContainer, entityContainer);
+			}
+    		
+		});
+    	
+    	game.getPlayer().getY().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+	    		setScrollY((int) playerView.getTranslateY() - SCROLL_HEIGHT / 2, tileContainer, entityContainer);
+	    		if (getScrollY(tileContainer) < 0)
+	    			setScrollY(0, tileContainer, entityContainer);
+	    		else if (getScrollY(tileContainer) + SCROLL_HEIGHT > PANE_HEIGHT)
+	    			setScrollY(PANE_HEIGHT - SCROLL_HEIGHT, tileContainer, entityContainer);
+			}
+		});
+    	
     }
     
     private static void setScrollX(int a, Pane tileContainer, Pane entityContainer) {
@@ -118,6 +120,28 @@ public class FieldControler {
     	tileContainer.setTranslateY(-a);
 		entityContainer.setTranslateY(-a);
     }
+    
+    private static int getScrollX(Pane container) {
+    	return - (int) container.getTranslateX();
+    }
+    
+    private static int getScrollY(Pane container) {
+    	return - (int) container.getTranslateY();
+    }
+    
+	protected static void AnimationTransitionMap(Double i) {
+	   	mapChangeTransition.setDuration(Duration.seconds(i));
+		mapChangeTransition.play();
+	}
+	 
+	private static void creatingAnimation(Pane interfaceContainer) {
+		mapChangeTransition.setFromValue(1.0);
+		mapChangeTransition.setToValue(0.0);
+		mapChangeTransition.setNode(mapChangeTransitionNode);
+		
+		mapChangeTransitionNode.setFill(Color.BLACK);
+		interfaceContainer.getChildren().add(mapChangeTransitionNode);
+	}
 	
 
 }

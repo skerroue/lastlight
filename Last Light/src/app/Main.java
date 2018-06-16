@@ -2,6 +2,7 @@ package app;
 
 import java.io.File;
 import java.net.URL;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,10 +16,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
 		FXMLLoader loader = new FXMLLoader();
-		URL url = new File("src/app/vue/vueMenu.fxml").
-		toURI().toURL();
+		URL url = new File("src/app/vue/vueMenu.fxml").toURI().toURL();
 		loader.setLocation(url);
 		System.out.println(loader.getLocation());
 		Pane root = new Pane();

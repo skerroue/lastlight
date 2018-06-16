@@ -1,14 +1,11 @@
 package app.vue.entity;
 
-import app.modele.entity.InanimatedEntity;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import app.modele.entity.inanimated.InanimatedEntity;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class InanimatedEntityView extends EntityView {
 	
-	private InanimatedEntity inanimatedEntity;
+	protected InanimatedEntity inanimatedEntity;
 
 	public InanimatedEntityView(InanimatedEntity i) {
 		super(i);
@@ -16,5 +13,5 @@ public class InanimatedEntityView extends EntityView {
 		
 		this.setImage(new Image("file:src/img/" + this.inanimatedEntity.getId() + ".png"));
 	}
-
+	
 }

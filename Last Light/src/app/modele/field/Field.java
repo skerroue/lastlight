@@ -8,14 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.image.ImageView;
-
 public class Field {
 	
 	private int[][] field;
 	private Tile[][] tileField;
-	private ArrayList<Integer> crossableTiles;
 	private int i, j; // coordonnées dans la grande map
 	
 	public Field(int i, int j, int fileIndex, int height, int width, ArrayList<Integer> crossableTiles) {
@@ -23,11 +19,10 @@ public class Field {
 		this.i = i;
 		this.j = j;
 		
-		this.crossableTiles = crossableTiles;
-		this.tileField = new Tile[25][25];
-		for (int k = 0 ; k < 25 ; k++) 
-			for (int l = 0 ; l < 25 ; l++) 
-				this.tileField[k][l] = new Tile(field[k][l], crossableTiles.contains(field[k][l]), k, l);
+		this.tileField = new Tile[height][width];
+		for (int line = 0 ; line < height ; line++) 
+			for (int column = 0 ; column < width ; column++) 
+				this.tileField[line][column] = new Tile(field[line][column], crossableTiles.contains(field[line][column]), line, column);
 	}
 	
 	private int[][] readFile(int fileIndex, int height, int width) {
@@ -50,10 +45,11 @@ public class Field {
 				fr.close();
 				
 				lines.set(4, lines.get(4).substring(17, lines.get(4).length() - 2));
+				@SuppressWarnings("resource")
 				Scanner s = new Scanner(lines.get(4)).useDelimiter(", ");
 												
-				for (int i = 0; i < 25; i++) {
-					for (int j = 0; j < 25; j++) {
+				for (int i = 0; i < height; i++) {
+					for (int j = 0; j < width; j++) {
 						field[i][j] = s.nextInt();
 					}
 				}
@@ -91,13 +87,17 @@ public class Field {
 		return this.j;
 	}
 	
-	public ImageView intToTiles(ImageView img, int fieldValue) {
-    	
-		int x = 32 * ((fieldValue-1)%8);
-		int y = 32 * ((fieldValue-1)/8);
-		img.setViewport(new Rectangle2D(x, y, 32, 32));
-
-    	return img;
-    }
+	public void makeATileCrossable(int id) {
+		for (int i = 0 ; i < this.tileField.length ; i++)
+			for (int j = 0 ; j < this.tileField[i].length ; j++)
+				if (this.tileField[i][j].getId() == id)
+					this.tileField[i][j].setCrossable();
+	}
 	
+	public void makeATileUncrossable(int id) {
+		for (int i = 0 ; i < this.tileField.length ; i++)
+			for (int j = 0 ; j < this.tileField[i].length ; j++)
+				if (this.tileField[i][j].getId() == id)
+					this.tileField[i][j].setUncrossable();
+	}
 }

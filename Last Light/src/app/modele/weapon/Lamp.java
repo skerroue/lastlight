@@ -1,43 +1,44 @@
 package app.modele.weapon;
 
-import app.modele.entity.AnimatedEntity;
-import app.modele.entity.Bullet;
+import app.modele.GameData;
+import app.modele.entity.animated.AnimatedEntity;
+import app.modele.entity.animated.Bullet;
 import javafx.collections.ObservableList;
 
-public class Lamp extends Weapon{
+public class Lamp extends Weapon {
 	
 	public Lamp(int a, int d){
-		super(a, d);
+		super(GameData.ENTITY_LAMP , a, d);
 		this.id = "lamp";
 	}
 
 	@Override
-	public void attack(ObservableList<AnimatedEntity> entities, int orientation, int x, int y) {
+	public void attack(int orientation, int x, int y, ObservableList<AnimatedEntity> animatedEntities) {
 		
 		switch (orientation) {
-		case LEFT :
-			for (AnimatedEntity e : entities)
-	    		if (x <= e.getX().get() + 2*(this.distance.get()*TILE_SIZE) && x >= e.getX().get() + this.distance.get()*TILE_SIZE && 
-	    			y >= e.getY().get() - TILE_SIZE && y <= e.getY().get() + TILE_SIZE)
+		case GameData.LEFT :
+			for (AnimatedEntity e : animatedEntities)
+	    		if (x <= e.getX().get() + 2*(this.distance.get()*GameData.TILE_SIZE) && x >= e.getX().get() + this.distance.get()*GameData.TILE_SIZE && 
+	    			y >= e.getY().get() - GameData.TILE_SIZE && y <= e.getY().get() + GameData.TILE_SIZE)
 	    			e.loseHP(this.att.get());
 			break;
-		case UP :
-			for (AnimatedEntity e : entities)
-	    		if (y <= e.getY().get() + 2*(this.distance.get()*TILE_SIZE) && y >= e.getY().get() + this.distance.get()*TILE_SIZE && 
-	    			x >= e.getX().get() - TILE_SIZE && x <= e.getX().get() + TILE_SIZE)
+		case GameData.UP :
+			for (AnimatedEntity e : animatedEntities)
+	    		if (y <= e.getY().get() + 2*(this.distance.get()*GameData.TILE_SIZE) && y >= e.getY().get() + this.distance.get()*GameData.TILE_SIZE && 
+	    			x >= e.getX().get() - GameData.TILE_SIZE && x <= e.getX().get() + GameData.TILE_SIZE)
 	    			e.loseHP(this.att.get());
 			break;
-		case RIGHT :
-			for (AnimatedEntity e : entities) {
-				if (x >= e.getX().get() - 2*(this.distance.get()*TILE_SIZE) && x <= e.getX().get() - this.distance.get()*TILE_SIZE && 
-		    		y >= e.getY().get() - TILE_SIZE && y <= e.getY().get() + TILE_SIZE)
+		case GameData.RIGHT :
+			for (AnimatedEntity e : animatedEntities) {
+				if (x >= e.getX().get() - 2*(this.distance.get()*GameData.TILE_SIZE) && x <= e.getX().get() - this.distance.get()*GameData.TILE_SIZE && 
+		    		y >= e.getY().get() - GameData.TILE_SIZE && y <= e.getY().get() + GameData.TILE_SIZE)
 					e.loseHP(this.att.get());
 			}
 			break;
-		case DOWN :
-			for (AnimatedEntity e : entities)
-	    		if (y >= e.getY().get() - 2*(this.distance.get()*TILE_SIZE) && y <= e.getY().get() - this.distance.get()*TILE_SIZE && 
-	    			x >= e.getX().get() - TILE_SIZE && x <= e.getX().get() + TILE_SIZE)
+		case GameData.DOWN :
+			for (AnimatedEntity e : animatedEntities)
+	    		if (y >= e.getY().get() - 2*(this.distance.get()*GameData.TILE_SIZE) && y <= e.getY().get() - this.distance.get()*GameData.TILE_SIZE && 
+	    			x >= e.getX().get() - GameData.TILE_SIZE && x <= e.getX().get() + GameData.TILE_SIZE)
 	    			e.loseHP(this.att.get());
 			break;
 		default :
@@ -48,7 +49,25 @@ public class Lamp extends Weapon{
 	}
 
 	@Override
-	public void update(ObservableList<AnimatedEntity> entities) {
+	public void update(ObservableList<AnimatedEntity> animatedEntities) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void killAllBullets() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ObservableList<Bullet> getBullets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void reload() {
 		// TODO Auto-generated method stub
 		
 	}

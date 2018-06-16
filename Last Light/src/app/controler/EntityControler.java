@@ -1,11 +1,12 @@
 package app.controler;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;   
 
 import app.modele.Game;
+import app.modele.GameData;
 import app.modele.entity.Entity;
-import app.vue.entity.AnimatedEntityView;
 import app.vue.entity.BulletView;
+import app.vue.entity.ButtonView;
 import app.vue.entity.EnemyView;
 import app.vue.entity.EntityView;
 import app.vue.entity.InanimatedEntityView;
@@ -13,29 +14,29 @@ import app.vue.entity.NPCView;
 import app.vue.entity.PlayerView;
 import app.vue.entity.RockView;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 public class EntityControler {
 	
-	private static FadeTransition enemyDisappearance;
+	private static FadeTransition entityDisappearance;
 	private static FadeTransition attackAnimation;
 	private static boolean attackAnimationActive = false;
 	
-    public static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<EntityView> entitiesView) {
+	protected static void initializeEntities(Pane entityContainer, Game game, PlayerView playerView, ArrayList<EntityView> entitiesView) {
     	
-    	enemyDisappearance = new FadeTransition();
-    	enemyDisappearance.setFromValue(1.0);
- 		enemyDisappearance.setToValue(0.0);
- 		enemyDisappearance.setDuration(Duration.seconds(0.05));
- 		enemyDisappearance.setOnFinished(event -> {
-			entitiesView.remove(enemyDisappearance.getNode());
-			enemyDisappearance.setNode(null);
+    	entityDisappearance = new FadeTransition();
+    	entityDisappearance.setFromValue(1.0);
+ 		entityDisappearance.setToValue(0.0);
+ 		entityDisappearance.setDuration(Duration.seconds(0.05));
+ 		entityDisappearance.setOnFinished(event -> {
+			entitiesView.remove(entityDisappearance.getNode());
+			entityDisappearance.setNode(null);
 		});
  		
  		attackAnimation = new FadeTransition();
@@ -53,22 +54,25 @@ public class EntityControler {
     	entitiesView.add(playerView);
     	entityContainer.getChildren().add(playerView);
     	
-    	game.getEntities().addListener(new ListChangeListener<Entity>() {
+    	game.getAnimatedEntities().addListener(new ListChangeListener<Entity>() {
 
 			@Override
 			public void onChanged(Change<? extends Entity> c) {
 				
 				while (c.next()) {
 					if (c.wasAdded()) {
-						switch (game.getEntities().get(game.getEntities().size() - 1).getId()) {
-						case "walker" :
-							entitiesView.add(new EnemyView(game.getEntities().get(game.getEntities().size() - 1)));
+						switch (game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1).getId()) {
+						case GameData.ENTITY_WALKER :
+							entitiesView.add(new EnemyView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
 							break;
-						case "rock" :
-							entitiesView.add(new RockView(game.getEntities().get(game.getEntities().size() - 1)));
+						case GameData.ENTITY_FLYING :
+							entitiesView.add(new EnemyView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
 							break;
-						case "sprite" :
-							entitiesView.add(new NPCView(game.getEntities().get(game.getEntities().size() - 1)));
+						case GameData.ENTITY_ROCK :
+							entitiesView.add(new RockView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
+							break;
+						case GameData.ENTITY_NPC :
+							entitiesView.add(new NPCView(game.getAnimatedEntities().get(game.getAnimatedEntities().size() - 1)));
 						default :
 							break;
 						}
@@ -88,7 +92,15 @@ public class EntityControler {
 				
 				while (c.next()) {
 					if (c.wasAdded()) {
-						entitiesView.add(new InanimatedEntityView(game.getInanimatedEntities().get(game.getInanimatedEntities().size()-1)));
+						switch (game.getInanimatedEntities().get(game.getInanimatedEntities().size() - 1).getId()) {
+						case GameData.ENTITY_BUTTON :
+							entitiesView.add(new ButtonView(game.getInanimatedEntities().get(game.getInanimatedEntities().size()-1)));
+							break;
+						default :
+							entitiesView.add(new InanimatedEntityView(game.getInanimatedEntities().get(game.getInanimatedEntities().size()-1)));
+							break;
+						}
+						
 						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
 					}
 				}
@@ -100,30 +112,16 @@ public class EntityControler {
     	playerView.getBullets().addListener(new ListChangeListener<BulletView>() {
 
 			@Override
-			public void onChanged(Change c) {
+			public void onChanged(Change<? extends BulletView> c) {
 				while (c.next())
 					if (c.wasAdded()) {
 						entitiesView.add(playerView.getBullets().get(playerView.getBullets().size()-1));
 						entityContainer.getChildren().add(entitiesView.get(entitiesView.size()-1));
 					}
-			}
-    		
-    	});
-    	
-    	/*
-    	bullets.getBulletsNodes().addListener(new ListChangeListener<Circle>() {
-
-			@Override
-			public void onChanged(Change c) {
 				
-				while (c.next()) 
-					if (c.wasAdded()) 
-						entityContainer.getChildren().add(bullets.getBulletsNodes().get(bullets.getBulletsNodes().size()-1));
-					
 			}
     		
     	});
-    	*/
     	
     	game.getPlayer().getIsAttacking().addListener(new ChangeListener<Boolean>() {
 
@@ -131,73 +129,69 @@ public class EntityControler {
             public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldValue, Boolean newValue) {
 
                 if (newValue.booleanValue()) {
-                    switch (game.getPlayer().getOrientation().get()) {
-                    case 0 :
-                        playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() - 32);
-                        playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 5);
-                        playerView.getAttackImage().setRotate(-90);
-                        break;
-                    case 1 :
-                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX());
-                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() - 32);
-                    	playerView.getAttackImage().setRotate(0);
-                        break;
-                    case 2 : 
-                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX() + 32);
-                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 5);
-                    	playerView.getAttackImage().setRotate(90);
-                        break;
-                    case 3 :
-                    	playerView.getAttackImage().setTranslateX(entitiesView.get(0).getTranslateX());
-                    	playerView.getAttackImage().setTranslateY(entitiesView.get(0).getTranslateY() + 32);
-                    	playerView.getAttackImage().setRotate(180);
-                        break;
-                    default :
-                        break;
-                    }
+                	
+                	rotatePlayerAttack(playerView.getAttackImage(), game.getPlayer());
+                	
+                	switch (game.getPlayer().getOrientation().get()) {
+                	case GameData.LEFT :
+                		translatePlayerAttack(playerView.getAttackImage(), game.getPlayer(), -32, 5);
+                		break;
+                	case GameData.UP :
+                		translatePlayerAttack(playerView.getAttackImage(), game.getPlayer(), 0, -32);
+                		break;
+                	case GameData.RIGHT :
+                		translatePlayerAttack(playerView.getAttackImage(), game.getPlayer(), 32, 5);
+                		break;
+                	case GameData.DOWN :
+                		translatePlayerAttack(playerView.getAttackImage(), game.getPlayer(), 0, 32);
+                		break;
+                	default : break;
+                	}
                     
                 }
 
             }
 
         });
+        
     	
     	game.addKeyFrame(e -> {
+		
+    		if (game.getPlayer().getIsDead().get())
+    			Platform.exit();
     		
     		for (int i = 0 ; i < entitiesView.size() ; i++)
     			entitiesView.get(i).update();
     		
-    		/*
-    		for (int i = 0 ; i < bullets.getBullets().size() ; i++)
-    			if (bullets.getBullets().get(i).getIsDead().get()) {
-    				game.getPlayer().attack(game.getEntities(), (int)bullets.getBullets().get(i).getX().get(), (int)bullets.getBullets().get(i).getY().get());
-    				entityContainer.getChildren().remove(bullets.getBulletsNodes().get(i));
-    				bullets.getBulletsNodes().remove(i);
-    				bullets.getBullets().remove(i);
-    			}
-    		
-    		for (int i = 0 ; i < bullets.getBulletsNodes().size() ; i++)
-    			bullets.update(entitiesView);
-    		*/
-    		
     		for (int i = 0 ; i < entitiesView.size() ; i++) 
     			if (entitiesView.get(i).getIsDead()) {
-     				enemyDisappearance.setNode(entitiesView.get(i));
+     				entityDisappearance.setNode(entitiesView.get(i));
      				break;
     			}
     		
-    		enemyDisappearance.play();
+    		entityDisappearance.play();
     		
-    		if (game.getPlayer().getIsAttacking().get()) 
+    		if (game.getPlayer().getIsAttacking().get()) { 
+    			playerView.resetImage();
     			if (!attackAnimationActive) {
     				playerView.animationAttack();
     				attackAnimationActive = true; 
     				entityContainer.getChildren().add(attackAnimation.getNode());
     				attackAnimation.play();
     			}
+    		}
     		
  		}, 0.017);
     	
     }
+    
+	private static void rotatePlayerAttack(Node n, Entity e) {
+		n.setRotate((e.getOrientation().get()-1)*90);
+	}
+	
+	private static void translatePlayerAttack(Node n, Entity e, int x, int y) {
+		n.setTranslateX(e.getX().get() + x);
+        n.setTranslateY(e.getY().get() + y);
+	}
 	
 }

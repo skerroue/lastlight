@@ -1,7 +1,6 @@
 package app.vue.entity;
 
-import app.modele.entity.AnimatedEntity;
-import app.modele.entity.Player;
+import app.modele.entity.animated.AnimatedEntity; 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Rectangle2D;

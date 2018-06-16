@@ -1,16 +1,14 @@
 package app.vue.entity;
-
-import app.modele.entity.AnimatedEntity;
-import app.modele.entity.Bullet;
-import app.modele.entity.Entity;
-import app.modele.entity.Player;
+ 
+import app.modele.GameData;
+import app.modele.entity.animated.Bullet; 
+import app.modele.entity.animated.Player;
 import app.modele.weapon.Weapon;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -22,9 +20,9 @@ public class PlayerView extends AnimatedEntityView {
 	
 	private ObservableList<BulletView> bullets;
 	
-	private Image tileset = new Image("file:src/img/tilesetplayer.png");
-	private Image tilesetLamp = new Image("file:src/img/tilesetplayerlamp.png");
-	private Image tilesetTaser = new Image("file:src/img/tilesetplayertaser.png");
+	private Image tileset = new Image("file:src/img/tileset" + GameData.ENTITY_PLAYER + ".png");
+	private Image tilesetLamp = new Image("file:src/img/tilesetplayer" + GameData.ENTITY_LAMP + ".png");
+	private Image tilesetTaser = new Image("file:src/img/tilesetplayer" + GameData.ENTITY_TASER + ".png");
 
 	public PlayerView(Player e) {
 		super(e);
@@ -47,10 +45,10 @@ public class PlayerView extends AnimatedEntityView {
 			public void changed(ObservableValue<? extends Number> arg0, Number oldValue, Number newValue) {
 				
 				switch (player.getWeaponName()) {
-				case "lamp" :
+				case GameData.ENTITY_LAMP :
 					setImage(tilesetLamp);
 					break;
-				case "pistol" :
+				case GameData.ENTITY_TASER :
 					setImage(tilesetTaser);
 					break;
 				default :
@@ -66,11 +64,23 @@ public class PlayerView extends AnimatedEntityView {
 		this.player.getWeapons().addListener(new ListChangeListener<Weapon>() {
 
 			@Override
-			public void onChanged(Change c) {
+			public void onChanged(Change<? extends Weapon> c) {
 				while (c.next())
 					if (c.wasAdded())
-						if (player.getWeapons().get(player.getWeapons().size()-1).getId().equals("pistol"))
+						if (player.getWeapons().get(player.getWeapons().size()-1).getId().equals(GameData.ENTITY_TASER))
 							initializeBullets();
+			}
+			
+		});
+		
+		this.player.necklaceIsActive().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue)
+					setOpacity(0.5);
+				else
+					setOpacity(1);
 			}
 			
 		});
@@ -89,12 +99,12 @@ public class PlayerView extends AnimatedEntityView {
 		return this.attaque;
 	}
 	
-	public void initializeBullets() {
+	private void initializeBullets() {
 		
 		player.getBullets().addListener(new ListChangeListener<Bullet>() {
 
 			@Override
-			public void onChanged(Change c) {
+			public void onChanged(Change<? extends Bullet> c) {
 				while (c.next()) 
 					if (c.wasAdded()) 
 						bullets.add(new BulletView(player.getBullets().get(player.getBullets().size()-1)));
