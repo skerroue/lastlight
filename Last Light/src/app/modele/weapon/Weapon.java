@@ -26,9 +26,9 @@ public abstract class Weapon {
 		return this.id;
 	}
 	
-	public abstract void attack(int orientation, int x, int y, ObservableList<AnimatedEntity> animatedEntities);
+	public abstract boolean attack(int orientation, int x, int y, ObservableList<AnimatedEntity> animatedEntities);
 	
-	public abstract void update(ObservableList<AnimatedEntity> animatedEntities);
+	public abstract boolean update(ObservableList<AnimatedEntity> animatedEntities);
 	
 	public abstract void killAllBullets();
 	

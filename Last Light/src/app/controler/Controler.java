@@ -111,7 +111,7 @@ public class Controler implements Initializable {
 	    		if (!this.game.playerInteraction())
 	    			game.getPlayer().attack(game.getAnimatedEntities());
 	    		else 
-	    			if (!(this.dialogContainer.getText() == null))
+	    			if (this.dialogContainer.getText() != null)
 	    				if (!this.dialogContainer.getText().equals(""))
 	    					this.showText();
 	    		break;

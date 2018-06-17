@@ -1,5 +1,6 @@
 package app.modele.entity;
 
+import app.modele.GameData;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -35,11 +36,11 @@ public abstract class Entity {
 	}
 	
 	public int getIndiceX() {
-		return (int)x.get()/32;
+		return (int)x.get()/GameData.TILE_SIZE;
 	}
 
 	public int getIndiceY() {
-		return (int)y.get()/32;
+		return (int)y.get()/GameData.TILE_SIZE;
 	}
 	
 	public void setX(int x) {

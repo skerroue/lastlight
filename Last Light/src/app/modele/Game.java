@@ -98,14 +98,17 @@ public class Game {
 		spawnEntities();
 		
 		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {	
-			
+		
 			for (AnimatedEntity animated : animatedEntities)
 				animated.update(animatedEntities, inanimatedEntities, bfs);
 			
-			if (player.getActiveWeaponIndex().get() > -1)
+			// Fais avancer les balles du taser, et permets de gagner des pieces a la mort des ennemis
+			if (this.player.getActiveWeaponIndex().get() > -1)
 				for (Weapon w : this.player.getWeapons())
-					w.update(animatedEntities);
+					if (w.update(animatedEntities))
+						this.player.lootMoney();
 			
+			// Nettoie le jeu des entites mortes
 			for (int k = 0; k < getAnimatedEntities().size(); k++)
 				if (getAnimatedEntities().get(k).getIsDead().get()) 
 					getAnimatedEntities().remove(getAnimatedEntities().get(k));
@@ -221,13 +224,11 @@ public class Game {
 			try {
 				
 				line = br.readLine();
-				Scanner current = new Scanner(line).useDelimiter(",");
-				int currentInt = current.nextInt();
+				int currentInt = Integer.parseInt(readNoMap(line));
 				
 				while (br.ready() && currentInt != noMap) {
 					line = br.readLine();
-					current = new Scanner(line).useDelimiter(",");
-					currentInt = current.nextInt();
+					currentInt = Integer.parseInt(readNoMap(line));
 				}
 				
 				if (currentInt == noMap) {
@@ -276,12 +277,14 @@ public class Game {
 						case 13 :
 							this.addInanimated(GameData.ENTITY_HEART, s.nextInt(), s.nextInt(), noMap);
 							break;
+						case 14 :
+							this.addInanimated(GameData.ENTITY_AMMUNITION, s.nextInt(), s.nextInt(), noMap);
+							break;
 						default : break;
 						}
 					}
 					
 					s.close();
-					current.close();
 				}
 				
 				br.close();
@@ -306,9 +309,12 @@ public class Game {
     	case GameData.ENTITY_BUTTON :
     		inanimatedEntities.add(new Button(x, y, "", inanimatedEntities.get(inanimatedEntities.size() - 1)));
     		break;
+    	case GameData.ENTITY_DOOR :
+    		inanimatedEntities.add(new ItemEntity(type, x, y, ""));
+    		break;
     	default : 
-    		if (!takenItem(type, noMap))
-    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
+    		if (!takenItem(type, noMap)) 
+    			inanimatedEntities.add(new ItemEntity(type, x, y, readNPCDialog(noMap)));
     		break;
     	}
     	
@@ -345,18 +351,11 @@ public class Game {
 			BufferedReader br = new BufferedReader(fr);
 			
 			line = br.readLine();
-			Scanner current;
-			int currentInt = 0;
-			
-			if (line != null) {
-				current = new Scanner(line).useDelimiter(",");
-				currentInt = current.nextInt();
-			}
+			int currentInt = Integer.parseInt(readNoMap(line));
 			
 			while (br.ready() && currentInt != noMap) {
 				line = br.readLine();
-				current = new Scanner(line).useDelimiter(",");
-				currentInt = current.nextInt();
+				currentInt = Integer.parseInt(readNoMap(line));
 			}
 			
 			if (currentInt == noMap) {
@@ -394,18 +393,11 @@ public class Game {
 			BufferedReader br = new BufferedReader(fr);
 			
 			line = br.readLine();
-			Scanner current;
-			int currentInt = 0;
-			
-			if (line != null) {
-				current = new Scanner(line).useDelimiter(",");
-				currentInt = current.nextInt();
-			}
+			int currentInt = Integer.parseInt(readNoMap(line));
 			
 			while (br.ready() && currentInt != noMap) {
 				line = br.readLine();
-				current = new Scanner(line).useDelimiter(",");
-				currentInt = current.nextInt();
+				currentInt = Integer.parseInt(readNoMap(line));
 			}
 			
 			if (currentInt == noMap) {
@@ -413,6 +405,8 @@ public class Game {
 				s.next();
 				
 				NPCDialog = s.next();
+				while (s.hasNext())
+					NPCDialog += "\n" + s.next();
 				
 				s.close();
 			}
@@ -579,6 +573,21 @@ public class Game {
 	
 	public static void setPlayerUndetected() {
 		playerIsDetected = false;
+	}
+	
+	private String readNoMap(String line) {
+		if (line == null)
+			return "0";
+		
+		String str = "" + line.charAt(0);
+		
+		int i = 1;
+		while (line.charAt(i) != ',') {
+			str = str + line.charAt(i);
+			i++;
+		}
+		
+		return str;
 	}
 	
 }

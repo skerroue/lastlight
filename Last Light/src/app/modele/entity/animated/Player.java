@@ -252,6 +252,11 @@ public class Player extends AnimatedEntity {
 		this.money.set(this.money.getValue() + a);
 	}
 	
+	public void lootMoney() {
+		if (Math.random() < GameData.MONEY_DROP_RATE)
+			this.earnMoney(1);
+	}
+	
 	// TODO Vérifier que l'on ne passe pas en négatif
 	public void spendMoney(int a) {
 		if (this.money.get() - a < 0)
@@ -264,7 +269,8 @@ public class Player extends AnimatedEntity {
 		
 		if (this.weapons.size() > 0  && this.activeWeaponIndex.get() > -1) {
 			this.isAttacking.set(true);
-			this.weapons.get(this.activeWeaponIndex.get()).attack(this.orientation.get(), (int)this.getX().get(), (int)this.getY().get(), animatedEntities);
+			if (this.weapons.get(this.activeWeaponIndex.get()).attack(this.orientation.get(), (int)this.getX().get(), (int)this.getY().get(), animatedEntities))
+				this.lootMoney();
 		}
 		
 	}

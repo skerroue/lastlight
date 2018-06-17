@@ -13,6 +13,7 @@ public abstract class InanimatedEntity extends Entity {
 	public InanimatedEntity(String id, int x, int y, String dialog) {
 		super(id, x, y);
 		this.isInteracting = new SimpleBooleanProperty(false);
+		this.dialog = dialog;
 	}
 
 	public abstract boolean interact(Player p);
