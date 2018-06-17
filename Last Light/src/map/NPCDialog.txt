@@ -1,1 +1,1 @@
-2,leDefiDeMalcom
+2,Vous recuperez une lampe torche tachee de sang...,(TAB pour vous en equiper et E pour l'utiliser)
