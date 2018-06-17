@@ -53,7 +53,6 @@ public class ItemEntity extends InanimatedEntity {
 			this.die();
 			break;
  		default : 
- 			this.die();
  			hasInteracted = false;
  			break;
 		}
