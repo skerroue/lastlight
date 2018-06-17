@@ -158,10 +158,10 @@ public class Player extends AnimatedEntity {
 		this.bootsIsActive = false;
 	}
 	
-    public void useBoots() {
-    	if (!this.bootsIsActive() && this.hasBoots())
-    		this.setBootsActive();
-    }
+    	public void useBoots() {
+		if (!this.bootsIsActive() && this.hasBoots())
+			this.setBootsActive();
+    	}
 	
 	public ObservableList<Weapon> getWeapons() {
 		return this.weapons;
@@ -247,9 +247,9 @@ public class Player extends AnimatedEntity {
 	}
 	
 	public void earnMoney(int a) {
-        if (this.money.get() + a <= this.maxMoney.get())
-            this.money.set(this.money.getValue() + a);
-    }
+        	if (this.money.get() + a <= this.maxMoney.get())
+            		this.money.set(this.money.getValue() + a);
+   	}
 	
 	public void lootMoney() {
 		if (Math.random() < GameData.MONEY_DROP_RATE)
