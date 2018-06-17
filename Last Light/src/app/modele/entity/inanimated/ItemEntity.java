@@ -48,6 +48,10 @@ public class ItemEntity extends InanimatedEntity {
 			p.unlockHeart();
 			this.die();
 			break;
+		case GameData.ENTITY_AMMUNITION :
+			p.earnAmmunition();
+			this.die();
+			break;
  		default : 
  			this.die();
  			hasInteracted = false;
