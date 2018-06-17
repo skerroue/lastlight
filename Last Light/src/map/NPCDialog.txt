@@ -1,1 +1,7 @@
-2,leDefiDeMalcom
+2,Vous recuperez une lampe torche tachee de sang...,(TAB pour vous en equiper et E pour l'utiliser)
+4,Vous recuperez une canette de soda,(SHIFT pour la boire)
+17,Vous trouvez des bottes,(ESPACE pour dasher vers l'avant)
+21,Vous trouvez un taser encore en etat de marche...,(TAB pour vous en equiper et E pour l'utiliser)
+23,Cela ressemble a une cartouche pour le taser,(R pour recharger)
+25,Vous recuperez un etrange collier...,Lorsque vous appuyez sur la pierre vous semblez disparaitre,(A pour l'utiliser)
+26,Ne te pense pas superieur a eux...,Tu n'es rien de plus qu'un mort qui s'ignore encore.
