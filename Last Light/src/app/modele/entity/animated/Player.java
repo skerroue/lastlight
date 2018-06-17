@@ -130,13 +130,13 @@ public class Player extends AnimatedEntity {
 		this.necklaceIsActive.set(false);
 	}
 	
-    public void useNecklace() {
-    	if (!this.necklaceIsActive().get() && this.hasNecklace() && this.canUseNecklace) {
-    		Game.getMap().makeATileCrossable(GameData.NECKLACE_WALL);
-    		this.setNecklaceActive();
-    		this.necklaceUse.play();
-    	}
-    }
+    	public void useNecklace() {
+		if (!this.necklaceIsActive().get() && this.hasNecklace() && this.canUseNecklace) {
+			Game.getMap().makeATileCrossable(GameData.NECKLACE_WALL);
+			this.setNecklaceActive();
+			this.necklaceUse.play();
+		}
+ 	}
 	
 	public void setBoots(boolean b) {
 		this.boots.set(b);
