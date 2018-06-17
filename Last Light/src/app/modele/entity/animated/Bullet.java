@@ -44,22 +44,26 @@ public class Bullet extends Entity {
 		switch (this.orientation.get()) {
 		case GameData.LEFT :
 			for (int i = 1 ; i < entities.size() ; i++)
-				if (entities.get(i).getX().get() == this.getX().get() - 32 && entities.get(i).getY().get() >= this.getY().get() - 32 && entities.get(i).getY().get() <= this.getY().get() + 32)
+				if (entities.get(i).getX().get() >= this.getX().get() - GameData.TILE_SIZE && entities.get(i).getX().get() <= this.getX().get() && 
+					entities.get(i).getY().get() >= this.getY().get() - GameData.TILE_SIZE && entities.get(i).getY().get() <= this.getY().get() + GameData.TILE_SIZE)
 					return entities.get(i);
 			break;
 		case GameData.UP :
 			for (int i = 1 ; i < entities.size() ; i++)
-				if (entities.get(i).getY().get() == this.getY().get() - 32 && entities.get(i).getX().get() >= this.getX().get() - 32 && entities.get(i).getX().get() <= this.getX().get() + 32)
+				if (entities.get(i).getY().get() >= this.getY().get() - GameData.TILE_SIZE && entities.get(i).getY().get() <= this.getY().get() && 
+					entities.get(i).getX().get() >= this.getX().get() - GameData.TILE_SIZE && entities.get(i).getX().get() <= this.getX().get() + GameData.TILE_SIZE)
 					return entities.get(i);
 			break;
 		case GameData.RIGHT :
 			for (int i = 1 ; i < entities.size() ; i++)
-				if (entities.get(i).getX().get() == this.getX().get() + 32 && entities.get(i).getY().get() >= this.getY().get() - 32 && entities.get(i).getY().get() <= this.getY().get() + 32)
+				if (entities.get(i).getX().get() <= this.getX().get() + GameData.TILE_SIZE && entities.get(i).getX().get() >= this.getX().get() && 
+					entities.get(i).getY().get() >= this.getY().get() - GameData.TILE_SIZE && entities.get(i).getY().get() <= this.getY().get() + GameData.TILE_SIZE)
 					return entities.get(i);
 			break;
 		case GameData.DOWN :
 			for (int i = 1 ; i < entities.size() ; i++)
-				if (entities.get(i).getY().get() == this.getY().get() + 32 && entities.get(i).getX().get() >= this.getX().get() - 32 && entities.get(i).getX().get() <= this.getX().get() + 32)
+				if (entities.get(i).getY().get() <= this.getY().get() + GameData.TILE_SIZE && entities.get(i).getY().get() >= this.getY().get() + GameData.TILE_SIZE && 
+					entities.get(i).getX().get() >= this.getX().get() - GameData.TILE_SIZE && entities.get(i).getX().get() <= this.getX().get() + GameData.TILE_SIZE)
 					return entities.get(i);
 			break;
 		default :
