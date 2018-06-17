@@ -57,8 +57,8 @@ public class GameData {
 	public static int[][] mapsOfMap;
 	final static int FILE_MAP_HEIGHT = 7;
 	final static int FILE_MAP_WIDTH = 9;
-	public final static int STARTING_MAP_LINE = 2;
-	public final static int STARTING_MAP_COLUMN = 0;
+	public final static int STARTING_MAP_LINE = 8;
+	public final static int STARTING_MAP_COLUMN = 3;
 	
 	public GameData() {
 		ENEMIES_ID = new ArrayList<String>();
