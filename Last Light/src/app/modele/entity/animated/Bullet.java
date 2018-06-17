@@ -11,7 +11,7 @@ public class Bullet extends Entity {
 	public Bullet(int x, int y, int orientation) {
 		super(GameData.ENTITY_BULLET, x, y);
 		this.orientation = new SimpleIntegerProperty(orientation);
-		this.velocity = 4;
+		this.velocity = GameData.BULLET_SPEED;
 	}
 	
 	public void update() {
