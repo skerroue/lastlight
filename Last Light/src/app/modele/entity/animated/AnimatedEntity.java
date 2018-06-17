@@ -308,14 +308,15 @@ public abstract class AnimatedEntity extends Entity {
 		return this.hp;
 	}
 	
-	public void loseHP(int a) {
-		
+	public boolean loseHP(int a) {
+		boolean died = false;
 		if (!this.isInvicible) {
 			
 			this.hp.set(this.hp.get() - a);
 			
 			if (this.hp.get() <= 0) {
 				this.die();
+				died = true;
 			}
 			
 			if (!this.getIsDead().get()) {
@@ -324,6 +325,8 @@ public abstract class AnimatedEntity extends Entity {
 			}
 			
 		}
+		
+		return died;
 	}
 
 }

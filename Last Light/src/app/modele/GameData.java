@@ -20,9 +20,6 @@ public class GameData {
 	public final static int LEFT_TOP_LIMIT = 0;
 	public final static int RIGHT_BOTTOM_LIMIT = 768;
 	
-	final static int FILE_MAP_WIDTH = 6;
-	final static int FILE_MAP_HEIGHT = 5;
-	
 	public final static int PLAYER_SPEED = 8;
 	public final static int ENEMY_SPEED = 4;
 	
@@ -39,7 +36,7 @@ public class GameData {
 	public final static String ENTITY_TASER = "taser";
 	public final static String ENTITY_SODA = "soda";
 	public final static String ENTITY_ROCK = "rock";
-	public final static String ENTITY_DOOR = "door";
+	public final static String ENTITY_DOOR = "spikes";
 	public final static String ENTITY_BUTTON = "button";
 	public final static String ENTITY_NPC = "npc";
 	public final static String ENTITY_DISPENSER = "dispenser";
@@ -57,7 +54,9 @@ public class GameData {
 	public static ArrayList<Integer> crossableTiles;
 	
 	public static int[][] mapsOfMap;
-	public final static int STARTING_MAP_LINE = 4;
+	final static int FILE_MAP_HEIGHT = 7;
+	final static int FILE_MAP_WIDTH = 9;
+	public final static int STARTING_MAP_LINE = 6;
 	public final static int STARTING_MAP_COLUMN = 3;
 	
 	public GameData() {

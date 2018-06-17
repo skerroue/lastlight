@@ -28,7 +28,7 @@ public class Taser extends Weapon {
 	}
 
 	@Override
-	public void attack(int orientation, int x, int y, ObservableList<AnimatedEntity> animatedEntities) {
+	public boolean attack(int orientation, int x, int y, ObservableList<AnimatedEntity> animatedEntities) {
 		
 		if (this.bullets.size() < this.magSize && this.canShoot) {
 			this.addBullet(x, y, orientation);
@@ -36,22 +36,24 @@ public class Taser extends Weapon {
 			this.bufferTime.play();
 		}
 		
+		return false;
 	}
 	
 	@Override
-	public void update(ObservableList<AnimatedEntity> animatedEntities) {
+	public boolean update(ObservableList<AnimatedEntity> animatedEntities) {
 		
 		for (Bullet b : bullets) 
 			if (!b.getIsDead().get()) {
 				b.update();
 				this.hittedEntity = b.isCollidingWith(animatedEntities);
 				if (this.hittedEntity != null) {
-					this.hittedEntity.loseHP(this.att.get());
 					b.die();
+					return this.hittedEntity.loseHP(this.att.get());
 				}
 				
 			}
 		
+		return false;
 	}
 	
 	public void reload() {

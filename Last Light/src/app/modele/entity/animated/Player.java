@@ -264,7 +264,8 @@ public class Player extends AnimatedEntity {
 		
 		if (this.weapons.size() > 0  && this.activeWeaponIndex.get() > -1) {
 			this.isAttacking.set(true);
-			this.weapons.get(this.activeWeaponIndex.get()).attack(this.orientation.get(), (int)this.getX().get(), (int)this.getY().get(), animatedEntities);
+			if (this.weapons.get(this.activeWeaponIndex.get()).attack(this.orientation.get(), (int)this.getX().get(), (int)this.getY().get(), animatedEntities))
+				this.earnMoney(1);
 		}
 		
 	}

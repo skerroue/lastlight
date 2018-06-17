@@ -98,14 +98,17 @@ public class Game {
 		spawnEntities();
 		
 		KeyFrame updateEntities = new KeyFrame(Duration.seconds(0.035), e -> {	
-			
+		
 			for (AnimatedEntity animated : animatedEntities)
 				animated.update(animatedEntities, inanimatedEntities, bfs);
 			
-			if (player.getActiveWeaponIndex().get() > -1)
+			// Fais avancer les balles du taser, et permets de gagner des pieces a la mort des ennemis
+			if (this.player.getActiveWeaponIndex().get() > -1)
 				for (Weapon w : this.player.getWeapons())
-					w.update(animatedEntities);
+					if (w.update(animatedEntities))
+						this.player.earnMoney(1);
 			
+			// Nettoie le jeu des entites mortes
 			for (int k = 0; k < getAnimatedEntities().size(); k++)
 				if (getAnimatedEntities().get(k).getIsDead().get()) 
 					getAnimatedEntities().remove(getAnimatedEntities().get(k));
@@ -221,23 +224,11 @@ public class Game {
 			try {
 				
 				line = br.readLine();
-				String str = "" + line.charAt(0);
-				int i = 1;
-				while (line.charAt(i) != ',') {
-					str = str + line.charAt(i);
-					i++;
-				}
-				int currentInt = Integer.parseInt(str);
+				int currentInt = Integer.parseInt(readNoMap(line));
 				
 				while (br.ready() && currentInt != noMap) {
 					line = br.readLine();
-					str = "" + line.charAt(0);
-					i = 1;
-					while (line.charAt(i) != ',') {
-						str = str + line.charAt(i);
-						i++;
-					}
-					currentInt = Integer.parseInt(str);
+					currentInt = Integer.parseInt(readNoMap(line));
 				}
 				
 				if (currentInt == noMap) {
@@ -316,8 +307,8 @@ public class Game {
     		inanimatedEntities.add(new Button(x, y, "", inanimatedEntities.get(inanimatedEntities.size() - 1)));
     		break;
     	default : 
-    		if (!takenItem(type, noMap))
-    			inanimatedEntities.add(new ItemEntity(type, x, y, ""));
+    		if (!takenItem(type, noMap)) 
+    			inanimatedEntities.add(new ItemEntity(type, x, y, readNPCDialog(noMap)));
     		break;
     	}
     	
@@ -354,18 +345,11 @@ public class Game {
 			BufferedReader br = new BufferedReader(fr);
 			
 			line = br.readLine();
-			Scanner current;
-			int currentInt = 0;
-			
-			if (line != null) {
-				current = new Scanner(line).useDelimiter(",");
-				currentInt = current.nextInt();
-			}
+			int currentInt = Integer.parseInt(readNoMap(line));
 			
 			while (br.ready() && currentInt != noMap) {
 				line = br.readLine();
-				current = new Scanner(line).useDelimiter(",");
-				currentInt = current.nextInt();
+				currentInt = Integer.parseInt(readNoMap(line));
 			}
 			
 			if (currentInt == noMap) {
@@ -403,18 +387,11 @@ public class Game {
 			BufferedReader br = new BufferedReader(fr);
 			
 			line = br.readLine();
-			Scanner current;
-			int currentInt = 0;
-			
-			if (line != null) {
-				current = new Scanner(line).useDelimiter(",");
-				currentInt = current.nextInt();
-			}
+			int currentInt = Integer.parseInt(readNoMap(line));
 			
 			while (br.ready() && currentInt != noMap) {
 				line = br.readLine();
-				current = new Scanner(line).useDelimiter(",");
-				currentInt = current.nextInt();
+				currentInt = Integer.parseInt(readNoMap(line));
 			}
 			
 			if (currentInt == noMap) {
@@ -422,6 +399,8 @@ public class Game {
 				s.next();
 				
 				NPCDialog = s.next();
+				while (s.hasNext())
+					NPCDialog += "\n" + s.next();
 				
 				s.close();
 			}
@@ -588,6 +567,21 @@ public class Game {
 	
 	public static void setPlayerUndetected() {
 		playerIsDetected = false;
+	}
+	
+	private String readNoMap(String line) {
+		if (line == null)
+			return "0";
+		
+		String str = "" + line.charAt(0);
+		
+		int i = 1;
+		while (line.charAt(i) != ',') {
+			str = str + line.charAt(i);
+			i++;
+		}
+		
+		return str;
 	}
 	
 }
