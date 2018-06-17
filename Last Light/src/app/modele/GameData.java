@@ -45,6 +45,7 @@ public class GameData {
 	public final static String ENTITY_BULLET = "bullet";
 	public final static String ENTITY_PLAYER = "player";
 	public final static String ENTITY_HEART = "h-full";
+	public final static String ENTITY_AMMUNITION = "ammo";
 	
 	public static ArrayList<String> ENEMIES_ID;
 	private final String[] ENEMIES_ID_ARRAY = {ENTITY_WALKER, ENTITY_FLYING};

@@ -277,6 +277,9 @@ public class Game {
 						case 13 :
 							this.addInanimated(GameData.ENTITY_HEART, s.nextInt(), s.nextInt(), noMap);
 							break;
+						case 14 :
+							this.addInanimated(GameData.ENTITY_AMMUNITION, s.nextInt(), s.nextInt(), noMap);
+							break;
 						default : break;
 						}
 					}
