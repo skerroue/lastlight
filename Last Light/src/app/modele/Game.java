@@ -106,7 +106,7 @@ public class Game {
 			if (this.player.getActiveWeaponIndex().get() > -1)
 				for (Weapon w : this.player.getWeapons())
 					if (w.update(animatedEntities))
-						this.player.earnMoney(1);
+						this.player.lootMoney();
 			
 			// Nettoie le jeu des entites mortes
 			for (int k = 0; k < getAnimatedEntities().size(); k++)

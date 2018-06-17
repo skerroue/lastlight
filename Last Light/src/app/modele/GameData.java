@@ -50,7 +50,7 @@ public class GameData {
 	public static ArrayList<String> ENEMIES_ID;
 	private final String[] ENEMIES_ID_ARRAY = {ENTITY_WALKER, ENTITY_FLYING};
 	public static final int ENEMY_RANGE = 4 * TILE_SIZE;
-	public static final double MONEY_DROP_RATE = 0.25;
+	public static final double MONEY_DROP_RATE = 0.5;
 	
 	public static ArrayList<Integer> crossableTiles;
 	
