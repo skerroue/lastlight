@@ -21,7 +21,7 @@ public class GameData {
 	public final static int RIGHT_BOTTOM_LIMIT = 768;
 	
 	public final static int PLAYER_SPEED = 8;
-	public final static int ENEMY_SPEED = 4;
+	public final static int ENEMY_SPEED = 2;
 	
 	public final static double NECKLACE_TIME = 4;
 	public final static double NECKLACE_DOWNTIME = 8;
