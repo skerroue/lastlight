@@ -247,7 +247,8 @@ public class Player extends AnimatedEntity {
 	}
 	
 	public void earnMoney(int a) {
-		this.money.set(this.money.getValue() + a);
+		if (this.money.get() + a <= this.maxMoney.get())
+			this.money.set(this.money.getValue() + a);
 	}
 	
 	public void lootMoney() {
