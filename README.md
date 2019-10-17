@@ -1,7 +1,8 @@
 # Last Light
 
-## What is Last Light ?
-Last Light is a school project. The goal is to create a Zelda-like.
+- **Project type :** School Project
+- **Description :** Last Light is a Zelda-like game
+- **Language(s) :** Java
 
 ## Who made this ?
 * Kerroué Sébastien
